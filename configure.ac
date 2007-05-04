@@ -35,6 +35,9 @@ AC_C_INLINE
 AC_FUNC_STRTOD
 AC_CHECK_FUNCS([pow sqrt strcasecmp strtol strtoul strtoull])
 
+# Boost Base autoconf check
+AX_BOOST_BASE([1.33.0])
+
 # check for Boost.Spirit
 AC_CHECK_HEADER([boost/spirit/core.hpp], [],
     AC_MSG_ERROR([
@@ -83,5 +86,6 @@ fi
 
 AC_CONFIG_FILES([Makefile
                  libstx-eparser/Makefile
-	         testsuite/Makefile])
+	         testsuite/Makefile
+		 wxparserdemo/Makefile])
 AC_OUTPUT

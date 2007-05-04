@@ -700,6 +700,8 @@ GREP
 EGREP
 POW_LIB
 LIBOBJS
+BOOST_CPPFLAGS
+BOOST_LDFLAGS
 CPPUNIT_CONFIG
 CPPUNIT_CFLAGS
 CPPUNIT_LIBS
@@ -1311,6 +1313,8 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-boost[=DIR]      use boost (default is No) - it is possible to
+                          specify the root directory for boost (optional)
   --with-cppunit-prefix=PFX   Prefix where CppUnit is installed (optional)
   --with-cppunit-exec-prefix=PFX  Exec prefix where CppUnit is installed (optional)
   --with-wxdir=PATH       Use uninstalled version of wxWidgets in PATH
@@ -5262,6 +5266,280 @@ fi
 done
 
 
+# Boost Base autoconf check
+
+
+# Check whether --with-boost was given.
+if test "${with_boost+set}" = set; then
+  withval=$with_boost;
+    if test "$withval" = "no"; then
+		want_boost="no"
+    elif test "$withval" = "yes"; then
+        want_boost="yes"
+        ac_boost_path=""
+    else
+	    want_boost="yes"
+        ac_boost_path="$withval"
+	fi
+
+else
+  want_boost="yes"
+fi
+
+
+if test "x$want_boost" = "xyes"; then
+	boost_lib_version_req=1.33.0
+	boost_lib_version_req_shorten=`expr $boost_lib_version_req : '\([0-9]*\.[0-9]*\)'`
+	boost_lib_version_req_major=`expr $boost_lib_version_req : '\([0-9]*\)'`
+	boost_lib_version_req_minor=`expr $boost_lib_version_req : '[0-9]*\.\([0-9]*\)'`
+	boost_lib_version_req_sub_minor=`expr $boost_lib_version_req : '[0-9]*\.[0-9]*\.\([0-9]*\)'`
+	if test "x$boost_lib_version_req_sub_minor" = "x" ; then
+		boost_lib_version_req_sub_minor="0"
+    	fi
+	WANT_BOOST_VERSION=`expr $boost_lib_version_req_major \* 100000 \+  $boost_lib_version_req_minor \* 100 \+ $boost_lib_version_req_sub_minor`
+	{ echo "$as_me:$LINENO: checking for boostlib >= $boost_lib_version_req" >&5
+echo $ECHO_N "checking for boostlib >= $boost_lib_version_req... $ECHO_C" >&6; }
+	succeeded=no
+
+				if test "$ac_boost_path" != ""; then
+		BOOST_LDFLAGS="-L$ac_boost_path/lib"
+		BOOST_CPPFLAGS="-I$ac_boost_path/include"
+	else
+		for ac_boost_path_tmp in /usr /usr/local /opt ; do
+			if test -d "$ac_boost_path_tmp/include/boost" && test -r "$ac_boost_path_tmp/include/boost"; then
+				BOOST_LDFLAGS="-L$ac_boost_path_tmp/lib"
+				BOOST_CPPFLAGS="-I$ac_boost_path_tmp/include"
+				break;
+			fi
+		done
+	fi
+
+	CPPFLAGS_SAVED="$CPPFLAGS"
+	CPPFLAGS="$CPPFLAGS $BOOST_CPPFLAGS"
+	export CPPFLAGS
+
+	LDFLAGS_SAVED="$LDFLAGS"
+	LDFLAGS="$LDFLAGS $BOOST_LDFLAGS"
+	export LDFLAGS
+
+	ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+     	cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+	#include <boost/version.hpp>
+
+int
+main ()
+{
+
+	#if BOOST_VERSION >= $WANT_BOOST_VERSION
+	// Everything is okay
+	#else
+	#  error Boost version is too old
+	#endif
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+
+        { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+	succeeded=yes
+	found_system=yes
+
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+	ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+
+
+			if test "x$succeeded" != "xyes"; then
+		_version=0
+		if test "$ac_boost_path" != ""; then
+               		BOOST_LDFLAGS="-L$ac_boost_path/lib"
+			if test -d "$ac_boost_path" && test -r "$ac_boost_path"; then
+				for i in `ls -d $ac_boost_path/include/boost-* 2>/dev/null`; do
+					_version_tmp=`echo $i | sed "s#$ac_boost_path##" | sed 's/\/include\/boost-//' | sed 's/_/./'`
+					V_CHECK=`expr $_version_tmp \> $_version`
+					if test "$V_CHECK" = "1" ; then
+						_version=$_version_tmp
+					fi
+					VERSION_UNDERSCORE=`echo $_version | sed 's/\./_/'`
+					BOOST_CPPFLAGS="-I$ac_boost_path/include/boost-$VERSION_UNDERSCORE"
+				done
+			fi
+		else
+			for ac_boost_path in /usr /usr/local /opt ; do
+				if test -d "$ac_boost_path" && test -r "$ac_boost_path"; then
+					for i in `ls -d $ac_boost_path/include/boost-* 2>/dev/null`; do
+						_version_tmp=`echo $i | sed "s#$ac_boost_path##" | sed 's/\/include\/boost-//' | sed 's/_/./'`
+						V_CHECK=`expr $_version_tmp \> $_version`
+						if test "$V_CHECK" = "1" ; then
+							_version=$_version_tmp
+	               					best_path=$ac_boost_path
+						fi
+					done
+				fi
+			done
+
+			VERSION_UNDERSCORE=`echo $_version | sed 's/\./_/'`
+			BOOST_CPPFLAGS="-I$best_path/include/boost-$VERSION_UNDERSCORE"
+			BOOST_LDFLAGS="-L$best_path/lib"
+
+	    		if test "x$BOOST_ROOT" != "x"; then
+				if test -d "$BOOST_ROOT" && test -r "$BOOST_ROOT" && test -d "$BOOST_ROOT/stage/lib" && test -r "$BOOST_ROOT/stage/lib"; then
+					version_dir=`expr //$BOOST_ROOT : '.*/\(.*\)'`
+					stage_version=`echo $version_dir | sed 's/boost_//' | sed 's/_/./g'`
+			        	stage_version_shorten=`expr $stage_version : '\([0-9]*\.[0-9]*\)'`
+					V_CHECK=`expr $stage_version_shorten \>\= $_version`
+				        if test "$V_CHECK" = "1" ; then
+						{ echo "$as_me:$LINENO: We will use a staged boost library from $BOOST_ROOT" >&5
+echo "$as_me: We will use a staged boost library from $BOOST_ROOT" >&6;}
+						BOOST_CPPFLAGS="-I$BOOST_ROOT"
+						BOOST_LDFLAGS="-L$BOOST_ROOT/stage/lib"
+					fi
+				fi
+	    		fi
+		fi
+
+		CPPFLAGS="$CPPFLAGS $BOOST_CPPFLAGS"
+		export CPPFLAGS
+		LDFLAGS="$LDFLAGS $BOOST_LDFLAGS"
+		export LDFLAGS
+
+		ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+	     	cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+		#include <boost/version.hpp>
+
+int
+main ()
+{
+
+		#if BOOST_VERSION >= $WANT_BOOST_VERSION
+		// Everything is okay
+		#else
+		#  error Boost version is too old
+		#endif
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+
+        	{ echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+		succeeded=yes
+		found_system=yes
+
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+		ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+	fi
+
+	if test "$succeeded" != "yes" ; then
+		if test "$_version" = "0" ; then
+			{ { echo "$as_me:$LINENO: error: We could not detect the boost libraries (version $boost_lib_version_req_shorten or higher). If you have a staged boost library (still not installed) please specify \$BOOST_ROOT in your environment and do not give a PATH to --with-boost option.  If you are sure you have boost installed, then check your version number looking in <boost/version.hpp>. See http://randspringer.de/boost for more documentation." >&5
+echo "$as_me: error: We could not detect the boost libraries (version $boost_lib_version_req_shorten or higher). If you have a staged boost library (still not installed) please specify \$BOOST_ROOT in your environment and do not give a PATH to --with-boost option.  If you are sure you have boost installed, then check your version number looking in <boost/version.hpp>. See http://randspringer.de/boost for more documentation." >&2;}
+   { (exit 1); exit 1; }; }
+		else
+			{ echo "$as_me:$LINENO: Your boost libraries seems to old (version $_version)." >&5
+echo "$as_me: Your boost libraries seems to old (version $_version)." >&6;}
+		fi
+	else
+
+
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_BOOST
+_ACEOF
+
+	fi
+
+        CPPFLAGS="$CPPFLAGS_SAVED"
+       	LDFLAGS="$LDFLAGS_SAVED"
+fi
+
+
+
 # check for Boost.Spirit
 if test "${ac_cv_header_boost_spirit_core_hpp+set}" = set; then
   { echo "$as_me:$LINENO: checking for boost/spirit/core.hpp" >&5
@@ -5984,7 +6262,7 @@ fi
 
 # Checks for library functions.
 
-ac_config_files="$ac_config_files Makefile libstx-eparser/Makefile testsuite/Makefile"
+ac_config_files="$ac_config_files Makefile libstx-eparser/Makefile testsuite/Makefile wxparserdemo/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -6603,6 +6881,7 @@ do
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "libstx-eparser/Makefile") CONFIG_FILES="$CONFIG_FILES libstx-eparser/Makefile" ;;
     "testsuite/Makefile") CONFIG_FILES="$CONFIG_FILES testsuite/Makefile" ;;
+    "wxparserdemo/Makefile") CONFIG_FILES="$CONFIG_FILES wxparserdemo/Makefile" ;;
 
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
@@ -6751,6 +7030,8 @@ GREP!$GREP$ac_delim
 EGREP!$EGREP$ac_delim
 POW_LIB!$POW_LIB$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
+BOOST_CPPFLAGS!$BOOST_CPPFLAGS$ac_delim
+BOOST_LDFLAGS!$BOOST_LDFLAGS$ac_delim
 CPPUNIT_CONFIG!$CPPUNIT_CONFIG$ac_delim
 CPPUNIT_CFLAGS!$CPPUNIT_CFLAGS$ac_delim
 CPPUNIT_LIBS!$CPPUNIT_LIBS$ac_delim
@@ -6759,8 +7040,6 @@ HAVE_CPPUNIT_FALSE!$HAVE_CPPUNIT_FALSE$ac_delim
 WX_CONFIG_PATH!$WX_CONFIG_PATH$ac_delim
 WX_CPPFLAGS!$WX_CPPFLAGS$ac_delim
 WX_CFLAGS!$WX_CFLAGS$ac_delim
-WX_CXXFLAGS!$WX_CXXFLAGS$ac_delim
-WX_CFLAGS_ONLY!$WX_CFLAGS_ONLY$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -6802,6 +7081,8 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+WX_CXXFLAGS!$WX_CXXFLAGS$ac_delim
+WX_CFLAGS_ONLY!$WX_CFLAGS_ONLY$ac_delim
 WX_CXXFLAGS_ONLY!$WX_CXXFLAGS_ONLY$ac_delim
 WX_LIBS!$WX_LIBS$ac_delim
 WX_LIBS_STATIC!$WX_LIBS_STATIC$ac_delim
@@ -6811,7 +7092,7 @@ HAVE_WXWIDGETS_FALSE!$HAVE_WXWIDGETS_FALSE$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 7; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 9; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
