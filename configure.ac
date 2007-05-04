@@ -82,5 +82,6 @@ fi
 # Checks for library functions.
 
 AC_CONFIG_FILES([Makefile
-                 libstx-eparser/Makefile])
+                 libstx-eparser/Makefile
+	         testsuite/Makefile])
 AC_OUTPUT
