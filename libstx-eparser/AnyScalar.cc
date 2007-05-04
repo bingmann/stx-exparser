@@ -9,22 +9,6 @@
 
 namespace stx {
 
-#if defined(__GNUC__)
-
-inline int g_strcasecmp(const char *a, const char *b)
-{
-    return strcasecmp(a,b);
-}
-
-#else
-
-inline g_strcasecmp(const char *a, const char *b)
-{
-    return _stricmp(a,b);
-}
-
-#endif
-
 bool AnyScalar::operator==(const AnyScalar &a) const
 {
     if (atype != a.atype) return false;
@@ -69,36 +53,39 @@ bool AnyScalar::operator==(const AnyScalar &a) const
 
 AnyScalar::attrtype_t AnyScalar::stringToType(const char* s)
 {
+    std::string str = s;
+    std::transform(str.begin(), str.end(), str.begin(), tolower);
+
     // Stupid method, but maybe faster than using a biggy std::map with a
     // case-insensitive equality.
 
-    if (g_strcasecmp(s, "bool") == 0)
+    if (str == "bool")
 	return ATTRTYPE_BOOL;
 
-    if (g_strcasecmp(s, "char") == 0)
+    if (str == "char")
 	return ATTRTYPE_CHAR;
-    if (g_strcasecmp(s, "short") == 0)
+    if (str == "short")
 	return ATTRTYPE_SHORT;
-    if (g_strcasecmp(s, "integer") == 0 || g_strcasecmp(s, "int") == 0)
+    if (str == "integer" || str == "int")
 	return ATTRTYPE_INTEGER;
-    if (g_strcasecmp(s, "long") == 0)
+    if (str == "long")
 	return ATTRTYPE_LONG;
 
-    if (g_strcasecmp(s, "byte") == 0)
+    if (str == "byte")
 	return ATTRTYPE_BYTE;
-    if (g_strcasecmp(s, "word") == 0)
+    if (str == "word")
 	return ATTRTYPE_WORD;
-    if (g_strcasecmp(s, "dword") == 0)
+    if (str == "dword")
 	return ATTRTYPE_DWORD;
-    if (g_strcasecmp(s, "qword") == 0)
+    if (str == "qword")
 	return ATTRTYPE_QWORD;
     
-    if (g_strcasecmp(s, "float") == 0)
+    if (str == "float")
 	return ATTRTYPE_FLOAT;
-    if (g_strcasecmp(s, "double") == 0)
+    if (str == "double")
 	return ATTRTYPE_DOUBLE;
 
-    if (g_strcasecmp(s, "string") == 0)
+    if (str == "string")
 	return ATTRTYPE_STRING;
 
     throw(ConversionException("Invalid type name."));

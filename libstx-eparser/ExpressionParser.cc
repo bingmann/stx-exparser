@@ -61,6 +61,8 @@ distinct_parser<> keyword_p("a-zA-Z0-9_");
 /// The boost::spirit expression parser grammar
 struct ExpressionGrammar : public grammar<ExpressionGrammar>
 {
+    /// The boost::spirit expression parser grammar definition (for a specific
+    /// scanner) with two entry points.
     template <typename ScannerT>
     struct definition : public grammar_def<rule<ScannerT, parser_context<>, parser_tag<expr_id> >,
 					   rule<ScannerT, parser_context<>, parser_tag<exprlist_id> > >
@@ -138,20 +140,19 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
 		;
 
 	    cast_spec
-		= as_lower_d[
-		    discard_node_d[ keyword_p("cast") ] >>
-		    (
-			keyword_p("bool") |
-			keyword_p("char") | keyword_p("short") | keyword_p("integer") | keyword_p("long") |
-			keyword_p("byte") | keyword_p("word") | keyword_p("dword") | keyword_p("qword") |
-			keyword_p("float") | keyword_p("double") |
-			keyword_p("string")
-		     )
-		    ]
+		= discard_node_d[ ch_p('(') ]
+		>> (
+		    keyword_p("bool") |
+		    keyword_p("char") | keyword_p("short") | keyword_p("int") | keyword_p("integer") | keyword_p("long") |
+		    keyword_p("byte") | keyword_p("word") | keyword_p("dword") | keyword_p("qword") |
+		    keyword_p("float") | keyword_p("double") |
+		    keyword_p("string")
+		    )
+		>> discard_node_d[ ch_p(')') ]
 		;
 
             cast_expr
-		= add_expr >> root_node_d[ !cast_spec ]
+		= root_node_d[ !cast_spec ] >> add_expr
 		;
 
 	    comp_expr
@@ -642,7 +643,7 @@ public:
     /// c-like representation of the cast
     virtual std::string toString() const
     {
-	return std::string("(") + operand->toString() + " cast " + AnyScalar::getTypeString(type) + std::string(")");
+	return std::string("((") + AnyScalar::getTypeString(type) + ")" + operand->toString() + ")";
     }
 };
 
