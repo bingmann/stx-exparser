@@ -45,10 +45,11 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES =
 PROGRAMS = $(noinst_PROGRAMS)
 am__testsuite_SOURCES_DIST = TestTrue.cc TestRunner.cc \
-	AnyScalarTest.cc
+	AnyScalarTest.cc ExpressionParserTest.cc
 @HAVE_CPPUNIT_FALSE@am_testsuite_OBJECTS = TestTrue.$(OBJEXT)
 @HAVE_CPPUNIT_TRUE@am_testsuite_OBJECTS = TestRunner.$(OBJEXT) \
-@HAVE_CPPUNIT_TRUE@	AnyScalarTest.$(OBJEXT)
+@HAVE_CPPUNIT_TRUE@	AnyScalarTest.$(OBJEXT) \
+@HAVE_CPPUNIT_TRUE@	ExpressionParserTest.$(OBJEXT)
 testsuite_OBJECTS = $(am_testsuite_OBJECTS)
 testsuite_LDADD = $(LDADD)
 testsuite_DEPENDENCIES =  \
@@ -171,8 +172,9 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 @HAVE_CPPUNIT_FALSE@testsuite_SOURCES = TestTrue.cc
-@HAVE_CPPUNIT_TRUE@testsuite_SOURCES = TestRunner.cc AnyScalarTest.cc
-AM_CXXFLAGS = -W -Wall -Wold-style-cast -Wshadow -I$(top_srcdir)/libstx-eparser @CPPUNIT_CFLAGS@
+@HAVE_CPPUNIT_TRUE@testsuite_SOURCES = TestRunner.cc AnyScalarTest.cc \
+@HAVE_CPPUNIT_TRUE@	ExpressionParserTest.cc
+AM_CXXFLAGS = -W -Wall -Wold-style-cast -I$(top_srcdir)/libstx-eparser @CPPUNIT_CFLAGS@
 LDADD = @CPPUNIT_LIBS@ $(top_srcdir)/libstx-eparser/libstx-eparser.a
 all: all-am
 
@@ -221,6 +223,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AnyScalarTest.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ExpressionParserTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TestRunner.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TestTrue.Po@am__quote@
 

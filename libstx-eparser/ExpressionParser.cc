@@ -1091,6 +1091,7 @@ static const ParseNode* build_expr(TreeIterT const& i)
 	assert(i->children.size() == 2);
 
 	std::string logicop(i->value.begin(), i->value.end());
+	std::transform(logicop.begin(), logicop.end(), logicop.begin(), tolower);
 
 	// auto_ptr needed because of possible parse exceptions in build_expr.
 
@@ -1152,7 +1153,7 @@ static const ParseNode* build_expr(TreeIterT const& i)
 	{
 	    TreeIterT const& paramlistchild = i->children.begin();
 
-	    if (i->value.id().to_long() == exprlist_id)
+	    if (paramlistchild->value.id().to_long() == exprlist_id)
 	    {
 		try
 		{
@@ -1422,7 +1423,7 @@ AnyScalar BasicSymbolTable::processFunction(const std::string &_funcname,
     }
     else if (funcname == "POW")
     {
-	if (paramlist.size() != 1)
+	if (paramlist.size() != 2)
 	    throw(BadFunctionCallException("Function POW() takes exactly two parameters"));
 	
 	return AnyScalar( pow(paramlist[0].getDouble(), paramlist[1].getDouble()) );
