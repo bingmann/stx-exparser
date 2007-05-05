@@ -1,16 +1,18 @@
+# $Id$
 
-SWIG_INTERFACE = stx-eparser.i
+if HAVE_SWIG
 
+EXTRA_DIST = stx-eparser.i
 BUILT_SOURCES = stx-eparser_wrap.cpp
 
-stx-eparser_wrap.cpp: $(SWIG_INTERFACE)
+stx-eparser_wrap.cpp: stx-eparser.i
 	$(SWIG) -Wall -Wallkw -perl5 -I$(top_srcdir)/libstx-eparser -o $@ $<
 
 CLEANFILES = stx-eparser_wrap.cpp ExpressionParser.pm STX/ExpressionParser.pm ExpressionParser.so
 
 lib_LTLIBRARIES = ExpressionParser.la
 
-ExpressionParser_la_SOURCES = stx-eparser_wrap.cpp
+nodist_ExpressionParser_la_SOURCES = stx-eparser_wrap.cpp
 
 ExpressionParser_la_LIBADD = ../libstx-eparser/libstx-eparser.a
 
@@ -23,4 +25,6 @@ all-local:
 	ln -sf .libs/ExpressionParser.so
 
 clean-local:
-	rmdir -v STX
+	rmdir STX || true
+
+endif

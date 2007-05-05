@@ -14,6 +14,8 @@
 
 @SET_MAKE@
 
+# $Id$
+
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
@@ -49,14 +51,16 @@ am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
 am__installdirs = "$(DESTDIR)$(libdir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
-ExpressionParser_la_DEPENDENCIES = ../libstx-eparser/libstx-eparser.a
-am_ExpressionParser_la_OBJECTS =  \
-	ExpressionParser_la-stx-eparser_wrap.lo
-ExpressionParser_la_OBJECTS = $(am_ExpressionParser_la_OBJECTS)
+@HAVE_SWIG_TRUE@ExpressionParser_la_DEPENDENCIES =  \
+@HAVE_SWIG_TRUE@	../libstx-eparser/libstx-eparser.a
+@HAVE_SWIG_TRUE@nodist_ExpressionParser_la_OBJECTS =  \
+@HAVE_SWIG_TRUE@	ExpressionParser_la-stx-eparser_wrap.lo
+ExpressionParser_la_OBJECTS = $(nodist_ExpressionParser_la_OBJECTS)
 ExpressionParser_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) \
 	$(ExpressionParser_la_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
+@HAVE_SWIG_TRUE@am_ExpressionParser_la_rpath = -rpath $(libdir)
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/scripts/depcomp
 am__depfiles_maybe = depfiles
@@ -69,8 +73,8 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(ExpressionParser_la_SOURCES)
-DIST_SOURCES = $(ExpressionParser_la_SOURCES)
+SOURCES = $(nodist_ExpressionParser_la_SOURCES)
+DIST_SOURCES =
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -197,13 +201,13 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SWIG_INTERFACE = stx-eparser.i
-BUILT_SOURCES = stx-eparser_wrap.cpp
-CLEANFILES = stx-eparser_wrap.cpp ExpressionParser.pm STX/ExpressionParser.pm ExpressionParser.so
-lib_LTLIBRARIES = ExpressionParser.la
-ExpressionParser_la_SOURCES = stx-eparser_wrap.cpp
-ExpressionParser_la_LIBADD = ../libstx-eparser/libstx-eparser.a
-ExpressionParser_la_CXXFLAGS = -I$(top_srcdir)/libstx-eparser `perl -MExtUtils::Embed -e ccopts`
+@HAVE_SWIG_TRUE@EXTRA_DIST = stx-eparser.i
+@HAVE_SWIG_TRUE@BUILT_SOURCES = stx-eparser_wrap.cpp
+@HAVE_SWIG_TRUE@CLEANFILES = stx-eparser_wrap.cpp ExpressionParser.pm STX/ExpressionParser.pm ExpressionParser.so
+@HAVE_SWIG_TRUE@lib_LTLIBRARIES = ExpressionParser.la
+@HAVE_SWIG_TRUE@nodist_ExpressionParser_la_SOURCES = stx-eparser_wrap.cpp
+@HAVE_SWIG_TRUE@ExpressionParser_la_LIBADD = ../libstx-eparser/libstx-eparser.a
+@HAVE_SWIG_TRUE@ExpressionParser_la_CXXFLAGS = -I$(top_srcdir)/libstx-eparser `perl -MExtUtils::Embed -e ccopts`
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -266,7 +270,7 @@ clean-libLTLIBRARIES:
 	  rm -f "$${dir}/so_locations"; \
 	done
 ExpressionParser.la: $(ExpressionParser_la_OBJECTS) $(ExpressionParser_la_DEPENDENCIES) 
-	$(ExpressionParser_la_LINK) -rpath $(libdir) $(ExpressionParser_la_OBJECTS) $(ExpressionParser_la_LIBADD) $(LIBS)
+	$(ExpressionParser_la_LINK) $(am_ExpressionParser_la_rpath) $(ExpressionParser_la_OBJECTS) $(ExpressionParser_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -387,6 +391,7 @@ distdir: $(DISTFILES)
 check-am: all-am
 check: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) check-am
+@HAVE_SWIG_FALSE@all-local:
 all-am: Makefile $(LTLIBRARIES) all-local
 installdirs:
 	for dir in "$(DESTDIR)$(libdir)"; do \
@@ -419,6 +424,7 @@ maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
 	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
+@HAVE_SWIG_FALSE@clean-local:
 clean: clean-am
 
 clean-am: clean-generic clean-libLTLIBRARIES clean-libtool clean-local \
@@ -495,17 +501,17 @@ uninstall-am: uninstall-libLTLIBRARIES
 	tags uninstall uninstall-am uninstall-libLTLIBRARIES
 
 
-stx-eparser_wrap.cpp: $(SWIG_INTERFACE)
-	$(SWIG) -Wall -Wallkw -perl5 -I$(top_srcdir)/libstx-eparser -o $@ $<
+@HAVE_SWIG_TRUE@stx-eparser_wrap.cpp: stx-eparser.i
+@HAVE_SWIG_TRUE@	$(SWIG) -Wall -Wallkw -perl5 -I$(top_srcdir)/libstx-eparser -o $@ $<
 
-all-local:
-	rm -rvf STX/
-	mkdir STX/
-	cp -L ExpressionParser.pm STX/
-	ln -sf .libs/ExpressionParser.so
+@HAVE_SWIG_TRUE@all-local:
+@HAVE_SWIG_TRUE@	rm -rvf STX/
+@HAVE_SWIG_TRUE@	mkdir STX/
+@HAVE_SWIG_TRUE@	cp -L ExpressionParser.pm STX/
+@HAVE_SWIG_TRUE@	ln -sf .libs/ExpressionParser.so
 
-clean-local:
-	rmdir -v STX
+@HAVE_SWIG_TRUE@clean-local:
+@HAVE_SWIG_TRUE@	rmdir STX || true
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
