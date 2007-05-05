@@ -928,7 +928,7 @@ public:
 // *** Functions which translate the resulting parse tree into our expression
 // *** tree, simultaneously folding constants.
 
-typedef char const* InputIterT;
+typedef std::string::const_iterator InputIterT;
 
 typedef tree_match<InputIterT> ParseTreeMatchT;
 
@@ -1253,19 +1253,20 @@ const ParseNode* parseExpressionString(const std::string &input)
     BOOST_SPIRIT_DEBUG_GRAMMAR(g);
 #endif
 
-    Grammar::tree_parse_info<> info =
-	boost::spirit::ast_parse(input.c_str(),
+    Grammar::tree_parse_info<Grammar::InputIterT> info =
+	boost::spirit::ast_parse(input.begin(), input.end(),
 				 g.use_parser<0>(),	// use first entry point: expr
 				 boost::spirit::space_p);
 
     if (not info.full)
     {
-	char synstr[256];
-	snprintf(synstr, sizeof(synstr),
-		   "Syntax error at position %d near %.10s",
-		   static_cast<int>(info.stop - input.c_str()),
-		   info.stop);
-	throw (BadSyntaxException(synstr));
+	std::ostringstream oss;
+	oss << "Syntax error at position "
+	    << static_cast<int>(info.stop - input.begin())
+	    << " near " 
+	    << std::string(info.stop, input.end());
+
+	throw(BadSyntaxException(oss.str()));
     }
 
     return Grammar::build_expr(info.trees.begin());
@@ -1280,19 +1281,20 @@ std::string parseExpressionStringXML(const std::string &input)
     BOOST_SPIRIT_DEBUG_GRAMMAR(g);
 #endif
 
-    Grammar::tree_parse_info<> info =
-	boost::spirit::ast_parse(input.c_str(),
+    Grammar::tree_parse_info<Grammar::InputIterT> info =
+	boost::spirit::ast_parse(input.begin(), input.end(),
 				 g.use_parser<0>(),	// use first entry point: expr
 				 boost::spirit::space_p);
 
     if (not info.full)
     {
-	char synstr[256];
-	snprintf(synstr, sizeof(synstr),
-		   "Syntax error at position %d near %.10s",
-		   static_cast<int>(info.stop - input.c_str()),
-		   info.stop);
-	throw (BadSyntaxException(synstr));
+	std::ostringstream oss;
+	oss << "Syntax error at position "
+	    << static_cast<int>(info.stop - input.begin())
+	    << " near " 
+	    << std::string(info.stop, input.end());
+
+	throw(BadSyntaxException(oss.str()));
     }
 
     std::ostringstream oss;
@@ -1309,19 +1311,20 @@ std::vector<const class ParseNode*> parseExpressionListString(const std::string 
     BOOST_SPIRIT_DEBUG_GRAMMAR(g);
 #endif
 
-    Grammar::tree_parse_info<> info =
-	boost::spirit::ast_parse(input.c_str(),
+    Grammar::tree_parse_info<Grammar::InputIterT> info =
+	boost::spirit::ast_parse(input.begin(), input.end(),
 				 g.use_parser<1>(),	// use first entry point: exprlist
 				 boost::spirit::space_p);
 
     if (not info.full)
     {
-	char synstr[256];
-	snprintf(synstr, sizeof(synstr),
-		   "Syntax error at position %d near %.10s",
-		   static_cast<int>(info.stop - input.c_str()),
-		   info.stop);
-	throw(BadSyntaxException(synstr));
+	std::ostringstream oss;
+	oss << "Syntax error at position "
+	    << static_cast<int>(info.stop - input.begin())
+	    << " near " 
+	    << std::string(info.stop, input.end());
+
+	throw(BadSyntaxException(oss.str()));
     }
 
     return Grammar::build_exprlist(info.trees.begin());
