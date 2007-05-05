@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <cmath>
 
 // #define STX_DEBUG_PARSER
 
@@ -587,7 +588,7 @@ public:
 	    *dest = vl / vr;
 	}
 
-	return (bl and br);
+	return (bl && br);
     }
 
     /// String representing (operandA op operandB)
@@ -672,7 +673,7 @@ public:
 	: ParseNode(),
 	  left(_left), right(_right), opstr(_op)
     {
-	if (_op == "==" or _op == "=")
+	if (_op == "==" || _op == "=")
 	    op = EQUAL;
 	else if (_op == "!=")
 	    op = NOTEQUAL;
@@ -680,9 +681,9 @@ public:
 	    op = LESS;
 	else if (_op == ">")
 	    op = GREATER;
-	else if (_op == "<=" or _op == "=<")
+	else if (_op == "<=" || _op == "=<")
 	    op = LESSEQUAL;
-	else if (_op == ">=" or _op == "=>")
+	else if (_op == ">=" || _op == "=>")
 	    op = GREATEREQUAL;
 	else
 	    throw(BadSyntaxException("Program Error: invalid binary comparision operator."));
@@ -778,7 +779,7 @@ public:
 	    assert(0);
 	}
 
-	return (bl and br);
+	return (bl && br);
     }
 
     /// String (operandA op operandB)
@@ -810,9 +811,9 @@ public:
 	: ParseNode(),
 	  left(_left), right(_right)
     {
-	if (_op == "and" or _op == "&&")
+	if (_op == "and" || _op == "&&")
 	    op = OP_AND;
-	else if (_op == "or" or _op == "||")
+	else if (_op == "or" || _op == "||")
 	    op = OP_OR;
 	else
 	    throw(BadSyntaxException("Program Error: invalid binary logic operator."));
@@ -888,13 +889,13 @@ public:
 	{
 	    // true if either both ops are themselves constant, or if either of
 	    // the ops are constant and evaluates to false.
-	    return (bl and br) or (bl and !bvl) or (br and !bvr);
+	    return (bl && br) || (bl && !bvl) || (br && !bvr);
 	}
 	else if (op == OP_OR)
 	{
 	    // true if either both ops are themselves constant, or if either of
 	    // the ops is constant and evaluates to true.
-	    return (bl and br) or (bl and bvl) or (br and bvr);
+	    return (bl && br) || (bl && bvl) || (br && bvr);
 	}
 	else {
 	    assert(0);
@@ -1004,7 +1005,7 @@ static const ParseNode* build_expr(TreeIterT const& i)
 	std::auto_ptr<const ParseNode> left( build_expr(i->children.begin()) );
 	std::auto_ptr<const ParseNode> right( build_expr(i->children.begin()+1) );
 
-	if (left->evaluate_const(NULL) and right->evaluate_const(NULL))
+	if (left->evaluate_const(NULL) && right->evaluate_const(NULL))
 	{
 	    // construct a constant node
 	    PNBinaryArithmExpr tmpnode(left.release(), right.release(), arithop);
@@ -1064,7 +1065,7 @@ static const ParseNode* build_expr(TreeIterT const& i)
 	std::auto_ptr<const ParseNode> left( build_expr(i->children.begin()) );
 	std::auto_ptr<const ParseNode> right( build_expr(i->children.begin()+1) );
 
-	if (left->evaluate_const(NULL) and right->evaluate_const(NULL))
+	if (left->evaluate_const(NULL) && right->evaluate_const(NULL))
 	{
 	    // construct a constant node
 	    PNBinaryComparisonExpr tmpnode(left.release(), right.release(), arithop);
@@ -1105,7 +1106,7 @@ static const ParseNode* build_expr(TreeIterT const& i)
 	// construct a calculation node and check later.
 	std::auto_ptr<PNBinaryLogicExpr> node( new PNBinaryLogicExpr(left.release(), right.release(), logicop) );
 
-	if (constleft or constright)
+	if (constleft || constright)
 	{
 	    AnyScalar both(AnyScalar::ATTRTYPE_INVALID);
 
@@ -1258,7 +1259,7 @@ const ParseNode* parseExpressionString(const std::string &input)
 				 g.use_parser<0>(),	// use first entry point: expr
 				 boost::spirit::space_p);
 
-    if (not info.full)
+    if (!info.full)
     {
 	std::ostringstream oss;
 	oss << "Syntax error at position "
@@ -1286,7 +1287,7 @@ std::string parseExpressionStringXML(const std::string &input)
 				 g.use_parser<0>(),	// use first entry point: expr
 				 boost::spirit::space_p);
 
-    if (not info.full)
+    if (!info.full)
     {
 	std::ostringstream oss;
 	oss << "Syntax error at position "
@@ -1316,7 +1317,7 @@ std::vector<const class ParseNode*> parseExpressionListString(const std::string 
 				 g.use_parser<1>(),	// use first entry point: exprlist
 				 boost::spirit::space_p);
 
-    if (not info.full)
+    if (!info.full)
     {
 	std::ostringstream oss;
 	oss << "Syntax error at position "
@@ -1372,28 +1373,28 @@ AnyScalar BasicSymbolTable::processFunction(const std::string &_funcname,
 	if (paramlist.size() != 0)
 	    throw(BadFunctionCallException("Function PI() does not take any parameter"));
 
-	return AnyScalar(M_PI);
+	return AnyScalar(3.14159265358979323846);
     }
     else if (funcname == "SIN")
     {
 	if (paramlist.size() != 1)
 	    throw(BadFunctionCallException("Function SIN() takes exactly one parameter"));
 	
-	return AnyScalar( sin(paramlist[0].getDouble()) );
+	return AnyScalar( std::sin(paramlist[0].getDouble()) );
     }
     else if (funcname == "COS")
     {
 	if (paramlist.size() != 1)
 	    throw(BadFunctionCallException("Function COS() takes exactly one parameter"));
 	
-	return AnyScalar( cos(paramlist[0].getDouble()) );
+	return AnyScalar( std::cos(paramlist[0].getDouble()) );
     }
     else if (funcname == "TAN")
     {
 	if (paramlist.size() != 1)
 	    throw(BadFunctionCallException("Function COS() takes exactly one parameter"));
 	
-	return AnyScalar( tan(paramlist[0].getDouble()) );
+	return AnyScalar( std::tan(paramlist[0].getDouble()) );
     }
     else if (funcname == "ABS")
     {
@@ -1401,10 +1402,10 @@ AnyScalar BasicSymbolTable::processFunction(const std::string &_funcname,
 	    throw(BadFunctionCallException("Function ABS() takes exactly one parameter"));
 
 	if (paramlist[0].isIntegerType()) {
-	    return AnyScalar( abs(paramlist[0].getInteger()) );
+	    return AnyScalar( std::abs(paramlist[0].getInteger()) );
 	}
 	else if (paramlist[0].isFloatingType()) {
-	    return AnyScalar( fabs(paramlist[0].getDouble()) );
+	    return AnyScalar( std::fabs(paramlist[0].getDouble()) );
 	}
 	else {
 	    throw(BadFunctionCallException("Function ABS() takes exactly one parameter"));
@@ -1415,28 +1416,28 @@ AnyScalar BasicSymbolTable::processFunction(const std::string &_funcname,
 	if (paramlist.size() != 1)
 	    throw(BadFunctionCallException("Function EXP() takes exactly one parameter"));
 	
-	return AnyScalar( exp(paramlist[0].getDouble()) );
+	return AnyScalar( std::exp(paramlist[0].getDouble()) );
     }
     else if (funcname == "LOGN")
     {
 	if (paramlist.size() != 1)
 	    throw(BadFunctionCallException("Function LOGN() takes exactly one parameter"));
 	
-	return AnyScalar( log(paramlist[0].getDouble()) );
+	return AnyScalar( std::log(paramlist[0].getDouble()) );
     }
     else if (funcname == "POW")
     {
 	if (paramlist.size() != 2)
 	    throw(BadFunctionCallException("Function POW() takes exactly two parameters"));
 	
-	return AnyScalar( pow(paramlist[0].getDouble(), paramlist[1].getDouble()) );
+	return AnyScalar( std::pow(paramlist[0].getDouble(), paramlist[1].getDouble()) );
     }
     else if (funcname == "SQRT")
     {
 	if (paramlist.size() != 1)
 	    throw(BadFunctionCallException("Function SQRT() takes exactly one parameter"));
 	
-	return AnyScalar( sqrt(paramlist[0].getDouble()) );
+	return AnyScalar( std::sqrt(paramlist[0].getDouble()) );
     }
 
     throw(UnknownSymbolException(std::string("Unknown function ") + funcname));

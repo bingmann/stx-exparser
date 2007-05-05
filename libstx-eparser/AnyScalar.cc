@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include <functional>
+#include <algorithm>
 
 #include <boost/lexical_cast.hpp>
 
@@ -250,7 +251,7 @@ bool AnyScalar::setInteger(int i)
 	return true;
 
     case ATTRTYPE_CHAR:
-	if (SCHAR_MIN <= i and i <= SCHAR_MAX) {
+	if (SCHAR_MIN <= i && i <= SCHAR_MAX) {
 	    val._int = i;
 	    return true;
 	}
@@ -268,7 +269,7 @@ bool AnyScalar::setInteger(int i)
 	return false;
 
     case ATTRTYPE_SHORT:
-	if (SHRT_MIN <= i and i <= SHRT_MAX) {
+	if (SHRT_MIN <= i && i <= SHRT_MAX) {
 	    val._int = i;
 	    return true;
 	}
@@ -286,7 +287,7 @@ bool AnyScalar::setInteger(int i)
 	return false;
 
     case ATTRTYPE_INTEGER:
-	if (INT_MIN <= i and i <= INT_MAX) {
+	if (INT_MIN <= i && i <= INT_MAX) {
 	    val._int = i;
 	    return true;
 	}
@@ -341,7 +342,7 @@ bool AnyScalar::setLong(long long l)
 	return true;
 
     case ATTRTYPE_CHAR:
-	if (SCHAR_MIN <= l and l <= SCHAR_MAX) {
+	if (SCHAR_MIN <= l && l <= SCHAR_MAX) {
 	    val._int = static_cast<char>(l);
 	    return true;
 	}
@@ -350,7 +351,7 @@ bool AnyScalar::setLong(long long l)
 	return false;
 
     case ATTRTYPE_BYTE:
-	if (0 <= l and l <= UCHAR_MAX) {
+	if (0 <= l && l <= UCHAR_MAX) {
 	    val._uint = static_cast<unsigned char>(l);
 	    return true;
 	}
@@ -359,7 +360,7 @@ bool AnyScalar::setLong(long long l)
 	return false;
 
     case ATTRTYPE_SHORT:
-	if (SHRT_MIN <= l and l <= SHRT_MAX) {
+	if (SHRT_MIN <= l && l <= SHRT_MAX) {
 	    val._int = static_cast<short>(l);
 	    return true;
 	}
@@ -377,8 +378,8 @@ bool AnyScalar::setLong(long long l)
 	return false;
 
     case ATTRTYPE_INTEGER:
-	if (INT_MIN <= l and l <= INT_MAX) {
-	    val._int = l;
+	if (INT_MIN <= l && l <= INT_MAX) {
+	    val._int = static_cast<int>(l);
 	    return true;
 	}
 	if (INT_MIN > l) val._int = INT_MIN;
@@ -387,7 +388,7 @@ bool AnyScalar::setLong(long long l)
 
     case ATTRTYPE_DWORD:
 	if (static_cast<unsigned int>(l) <= UINT_MAX) {
-	    val._uint = l;
+	    val._uint = static_cast<unsigned int>(l);
 	    return true;
 	}
 	if (0 > l) val._uint = 0;
@@ -429,11 +430,11 @@ bool AnyScalar::setDouble(double d)
 	return false;
 
     case ATTRTYPE_BOOL:
-	if (0 <= d and d < 0.5) {
+	if (0 <= d && d < 0.5) {
 	    val._int = 0;
 	    return true;
 	}
-	if (0.5 <= d and d <= 1) {
+	if (0.5 <= d && d <= 1) {
 	    val._int = 1;
 	    return true;
 	}
@@ -483,11 +484,11 @@ bool AnyScalar::setString(const std::string &s)
 	return false;
 
     case ATTRTYPE_BOOL:
-	if (s == "0" or s == "f" or s == "false" or s == "n" or s == "no") {
+	if (s == "0" || s == "f" || s == "false" || s == "n" || s == "no") {
 	    val._int = 0;
 	    return true;
 	}
-	if (s == "1" or s == "t" or s == "true" or s == "y" or s == "yes") {
+	if (s == "1" || s == "t" || s == "true" || s == "y" || s == "yes") {
 	    val._int = 1;
 	    return true;
 	}
@@ -499,7 +500,7 @@ bool AnyScalar::setString(const std::string &s)
     {
 	char *endptr;
 	long i = strtol(s.c_str(), &endptr, 10);
-	if (endptr != NULL and *endptr == 0)
+	if (endptr != NULL && *endptr == 0)
 	    return setInteger(i);
 	return false;
     }
@@ -507,8 +508,12 @@ bool AnyScalar::setString(const std::string &s)
     case ATTRTYPE_LONG:
     {
 	char *endptr;
+#ifndef _MSC_VER
 	long long l = strtoll(s.c_str(), &endptr, 10);
-	if (endptr != NULL and *endptr == 0)
+#else
+	long long l = _strtoi64(s.c_str(), &endptr, 10);
+#endif
+	if (endptr != NULL && *endptr == 0)
 	    return setLong(l);
 	return false;
     }
@@ -519,7 +524,7 @@ bool AnyScalar::setString(const std::string &s)
     {
 	char *endptr;
 	unsigned long u = strtoul(s.c_str(), &endptr, 10);
-	if (endptr != NULL and *endptr == 0)
+	if (endptr != NULL && *endptr == 0)
 	    return setInteger(u);
 	return false;
     }
@@ -527,8 +532,12 @@ bool AnyScalar::setString(const std::string &s)
     case ATTRTYPE_QWORD:
     {
 	char *endptr;
+#ifndef _MSC_VER
 	unsigned long long u = strtoull(s.c_str(), &endptr, 10);
-	if (endptr != NULL and *endptr == 0)
+#else
+	unsigned long long u = _strtoui64(s.c_str(), &endptr, 10);
+#endif
+	if (endptr != NULL && *endptr == 0)
 	    return setLong(u);
 	return false;
     }
@@ -537,7 +546,7 @@ bool AnyScalar::setString(const std::string &s)
     {
 	char *endptr;
 	float f = static_cast<float>(strtod(s.c_str(), &endptr));
-	if (endptr != NULL and *endptr == 0) {
+	if (endptr != NULL && *endptr == 0) {
 	    val._float = f;
 	    return true;
 	}
@@ -548,7 +557,7 @@ bool AnyScalar::setString(const std::string &s)
     {
 	char *endptr;
 	double d = strtod(s.c_str(), &endptr);
-	if (endptr != NULL and *endptr == 0) {
+	if (endptr != NULL && *endptr == 0) {
 	    val._double = d;
 	    return true;
 	}
@@ -649,12 +658,12 @@ bool AnyScalar::getBoolean() const
     {
 	assert(val._string);
 
-	if (*val._string == "0" or *val._string == "f" or *val._string == "false"
-	    or *val._string == "n" or *val._string == "no") {
+	if (*val._string == "0" || *val._string == "f" || *val._string == "false"
+	    || *val._string == "n" || *val._string == "no") {
 	    return false;
 	}
-	if (*val._string == "1" or *val._string == "t" or *val._string == "true"
-	    or *val._string == "y" or *val._string == "yes") {
+	if (*val._string == "1" || *val._string == "t" || *val._string == "true"
+	    || *val._string == "y" || *val._string == "yes") {
 	    return true;
 	}
 
@@ -708,7 +717,7 @@ int AnyScalar::getInteger() const
 	assert(val._string);
 	char *endptr;
 	long i = strtol(val._string->c_str(), &endptr, 10);
-	if (endptr != NULL and *endptr == 0)
+	if (endptr != NULL && *endptr == 0)
 	    return i;
 
 	throw(ConversionException("Cannot convert string to integer."));
@@ -755,7 +764,7 @@ unsigned int AnyScalar::getUnsignedInteger() const
 	assert(val._string);
 	char *endptr;
 	unsigned long i = strtoul(val._string->c_str(), &endptr, 10);
-	if (endptr != NULL and *endptr == 0)
+	if (endptr != NULL && *endptr == 0)
 	    return i;
 
 	throw(ConversionException("Cannot convert string to unsigned integer."));
@@ -799,8 +808,12 @@ long long AnyScalar::getLong() const
     {
 	assert(val._string);
 	char *endptr;
+#ifndef _MSC_VER
 	long long l = strtoll(val._string->c_str(), &endptr, 10);
-	if (endptr != NULL and *endptr == 0)
+#else
+	long long l = _strtoi64(val._string->c_str(), &endptr, 10);
+#endif
+	if (endptr != NULL && *endptr == 0)
 	    return l;
 
 	throw(ConversionException("Cannot convert string to long long."));
@@ -846,9 +859,13 @@ unsigned long long AnyScalar::getUnsignedLong() const
     {
 	assert(val._string);
 	char *endptr;
-	unsigned long long l = strtoull(val._string->c_str(), &endptr, 10);
-	if (endptr != NULL and *endptr == 0)
-	    return l;
+#ifndef _MSC_VER
+	unsigned long long u = strtoull(val._string->c_str(), &endptr, 10);
+#else
+	unsigned long long u = _strtoui64(val._string->c_str(), &endptr, 10);
+#endif
+	if (endptr != NULL && *endptr == 0)
+	    return u;
 
 	throw(ConversionException("Cannot convert string to unsigned long long."));
     }
@@ -891,7 +908,7 @@ double AnyScalar::getDouble() const
 	assert(val._string);
 	char *endptr;
 	double d = strtod(val._string->c_str(), &endptr);
-	if (endptr != NULL and *endptr == 0)
+	if (endptr != NULL && *endptr == 0)
 	    return d;
 
 	throw(ConversionException("Cannot convert string to double."));
@@ -1203,7 +1220,7 @@ AnyScalar AnyScalar::binary_arith_op(const AnyScalar &b) const
 	{
 	    AnyScalar bc = b;
 	    
-	    if (not bc.convertType(ATTRTYPE_INTEGER))
+	    if (!bc.convertType(ATTRTYPE_INTEGER))
 		throw(ConversionException(std::string("Could not convert string to integer for binary operator ")+OpName+"."));
 
 	    Operator<int> op;
@@ -1271,7 +1288,7 @@ AnyScalar AnyScalar::binary_arith_op(const AnyScalar &b) const
 	{
 	    AnyScalar bc = b;
 	    
-	    if (not bc.convertType(ATTRTYPE_DWORD))
+	    if (!bc.convertType(ATTRTYPE_DWORD))
 		throw(ConversionException(std::string("Could not convert string to unsigned integer for binary operator ")+OpName+"."));
 
 	    Operator<unsigned int> op;
@@ -1337,7 +1354,7 @@ AnyScalar AnyScalar::binary_arith_op(const AnyScalar &b) const
 	{
 	    AnyScalar bc = b;
 	    
-	    if (not bc.convertType(ATTRTYPE_LONG))
+	    if (!bc.convertType(ATTRTYPE_LONG))
 		throw(ConversionException(std::string("Could not convert string to long for binary operator ")+OpName+"."));
 
 	    Operator<long long> op;
@@ -1403,7 +1420,7 @@ AnyScalar AnyScalar::binary_arith_op(const AnyScalar &b) const
 	{
 	    AnyScalar bc = b;
 	    
-	    if (not bc.convertType(ATTRTYPE_QWORD))
+	    if (!bc.convertType(ATTRTYPE_QWORD))
 		throw(ConversionException(std::string("Could not convert string to unsigned long long for binary operator ")+OpName+"."));
 
 	    Operator<unsigned long long> op;
@@ -1469,7 +1486,7 @@ AnyScalar AnyScalar::binary_arith_op(const AnyScalar &b) const
 	{
 	    AnyScalar bc = b;
 	    
-	    if (not bc.convertType(ATTRTYPE_FLOAT))
+	    if (!bc.convertType(ATTRTYPE_FLOAT))
 		throw(ConversionException(std::string("Could not convert string to float for binary operator ")+OpName+"."));
 
 	    Operator<float> op;
@@ -1536,7 +1553,7 @@ AnyScalar AnyScalar::binary_arith_op(const AnyScalar &b) const
 	{
 	    AnyScalar bc = b;
 	    
-	    if (not bc.convertType(ATTRTYPE_DOUBLE))
+	    if (!bc.convertType(ATTRTYPE_DOUBLE))
 		throw(ConversionException(std::string("Could not convert string to double for binary operator ")+OpName+"."));
 
 	    Operator<double> op;
@@ -1656,60 +1673,6 @@ bool AnyScalar::binary_comp_op(const AnyScalar &b) const
 
 	default:
 	    throw(ConversionException(std::string("Binary operator ")+OpNameArray[OpNum]+" is not permitted on bool values."));
-
-#if TODO
-	case ATTRTYPE_CHAR:
-	case ATTRTYPE_SHORT:
-	case ATTRTYPE_INTEGER:
-	{
-	    Operator<int> op;
-	    return op(val._int, b.val._int);
-	}
-
-	case ATTRTYPE_BYTE:
-	case ATTRTYPE_WORD:
-	case ATTRTYPE_DWORD:
-	{
-	    Operator<int> op;
-	    return op(val._int, static_cast<signed int>(b.val._uint));
-	}
-	    
-	case ATTRTYPE_LONG:
-	{
-	    Operator<long long> op;
-	    return op(val._int, b.val._long);
-	}
-
-	case ATTRTYPE_QWORD:
-	{
-	    Operator<long long> op;
-	    return op(val._int, static_cast<signed long long>(b.val._ulong));
-	}
-
-	case ATTRTYPE_FLOAT:
-	{
-	    Operator<float> op;
-	    return op(static_cast<float>(val._int), b.val._float);
-	}
-
-	case ATTRTYPE_DOUBLE:
-	{
-	    Operator<double> op;
-	    return op(static_cast<double>(val._int), b.val._double);
-	}
-
-	case ATTRTYPE_STRING:
-	{
-	    AnyScalar bc = b;
-	    
-	    if (not bc.convertType(ATTRTYPE_BOOL))
-		throw(ConversionException(std::string("Could not convert string to bool for binary operator ")+OpNameArray[OpNum]+"."));
-
-	    Operator<int> op;
-
-	    return op(val._int, bc.getInteger());
-	}
-#endif
 	}
 	break;
     }
@@ -1771,7 +1734,7 @@ bool AnyScalar::binary_comp_op(const AnyScalar &b) const
 	{
 	    AnyScalar bc = b;
 	    
-	    if (not bc.convertType(ATTRTYPE_INTEGER))
+	    if (!bc.convertType(ATTRTYPE_INTEGER))
 		throw(ConversionException(std::string("Could not convert string to integer for binary operator ")+OpNameArray[OpNum]+"."));
 
 	    Operator<int> op;
@@ -1839,7 +1802,7 @@ bool AnyScalar::binary_comp_op(const AnyScalar &b) const
 	{
 	    AnyScalar bc = b;
 	    
-	    if (not bc.convertType(ATTRTYPE_DWORD))
+	    if (!bc.convertType(ATTRTYPE_DWORD))
 		throw(ConversionException(std::string("Could not convert string to unsigned integer for binary operator ")+OpNameArray[OpNum]+"."));
 
 	    Operator<unsigned int> op;
@@ -1902,7 +1865,7 @@ bool AnyScalar::binary_comp_op(const AnyScalar &b) const
 	{
 	    AnyScalar bc = b;
 	    
-	    if (not bc.convertType(ATTRTYPE_LONG))
+	    if (!bc.convertType(ATTRTYPE_LONG))
 		throw(ConversionException(std::string("Could not convert string to long long for binary operator ")+OpNameArray[OpNum]+"."));
 
 	    Operator<long long> op;
@@ -1965,7 +1928,7 @@ bool AnyScalar::binary_comp_op(const AnyScalar &b) const
 	{
 	    AnyScalar bc = b;
 	    
-	    if (not bc.convertType(ATTRTYPE_QWORD))
+	    if (!bc.convertType(ATTRTYPE_QWORD))
 		throw(ConversionException(std::string("Could not convert string to unsigned long long for binary operator ")+OpNameArray[OpNum]+"."));
 
 	    Operator<unsigned long long> op;
@@ -2028,7 +1991,7 @@ bool AnyScalar::binary_comp_op(const AnyScalar &b) const
 	{
 	    AnyScalar bc = b;
 	    
-	    if (not bc.convertType(ATTRTYPE_FLOAT))
+	    if (!bc.convertType(ATTRTYPE_FLOAT))
 		throw(ConversionException(std::string("Could not convert string to float for binary operator ")+OpNameArray[OpNum]+"."));
 
 	    Operator<float> op;
@@ -2092,7 +2055,7 @@ bool AnyScalar::binary_comp_op(const AnyScalar &b) const
 	{
 	    AnyScalar bc = b;
 	    
-	    if (not bc.convertType(ATTRTYPE_DOUBLE))
+	    if (!bc.convertType(ATTRTYPE_DOUBLE))
 		throw(ConversionException(std::string("Could not convert string to double for binary operator ")+OpNameArray[OpNum]+"."));
 
 	    Operator<double> op;
