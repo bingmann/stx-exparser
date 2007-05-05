@@ -20,6 +20,7 @@ fi
 AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_RANLIB
+AC_PROG_LIBTOOL
 
 AC_LANG([C++])
 
@@ -61,8 +62,7 @@ if test x$CPPUNIT_CONFIG == xno; then
     ])
 fi
 
-dnl Check for wxWidgets 2.6.0 or later
-
+# Check for wxWidgets 2.6.0 or later
 AM_OPTIONS_WXCONFIG
 
 AM_PATH_WXCONFIG(2.6.0, wxWin=1)
@@ -82,10 +82,19 @@ if test "$wxWin" != 1; then
     ])
 fi
 
+# Check for SWIG
+AC_PROG_SWIG(1.3.31)
+
+SWIG_ENABLE_CXX
+AC_CHECK_PROG(PERL,perl,perl)
+
+AM_CONDITIONAL(HAVE_SWIG, test x"$SWIG" != x)
+
 # Checks for library functions.
 
 AC_CONFIG_FILES([Makefile
                  libstx-eparser/Makefile
 	         testsuite/Makefile
-		 wxparserdemo/Makefile])
+		 wxparserdemo/Makefile
+		 perl-binding/Makefile])
 AC_OUTPUT

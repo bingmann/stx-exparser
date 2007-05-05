@@ -103,7 +103,7 @@ private:
     
 public:
     /// Create a new empty AnyScalar object of given type.
-    explicit inline AnyScalar(attrtype_t t)
+    explicit inline AnyScalar(attrtype_t t = ATTRTYPE_INVALID)
 	: atype(t)
     { 
 	if (atype == ATTRTYPE_STRING) {
@@ -635,6 +635,7 @@ public:
     // These will convert the two operands to the largest common type of the
     // same field.
 
+#ifndef SWIG
 private:
     /** Binary arithmetic template operator. Converts the two AnyScalars into the
      * largest type of their common field. If a string cannot be converted to a
@@ -660,6 +661,7 @@ private:
     */
     template <template <typename Type> class Operator, char OpName>
     AnyScalar		binary_arith_op(const AnyScalar &b) const;
+#endif
     
 public:
     /// Instantiation of binary_arith_op for "+" plus.
@@ -686,6 +688,31 @@ public:
 	return binary_arith_op<std::divides, '/'>(b);
     }
 
+    /// Alias for operator+ in script languages
+    inline AnyScalar	add(const AnyScalar &b) const
+    {
+	return (*this + b);
+    }
+
+    /// Alias for operator- in script languages
+    inline AnyScalar	subtract(const AnyScalar &b) const
+    {
+	return (*this - b);
+    }
+
+    /// Alias for operator* in script languages
+    inline AnyScalar	multiply(const AnyScalar &b) const
+    {
+	return (*this * b);
+    }
+
+    /// Alias for operator/ in script languages
+    inline AnyScalar	divide(const AnyScalar &b) const
+    {
+	return (*this / b);
+    }
+
+#ifndef SWIG
 private:
     /** Binary comparison template operator. Converts the two AnyScalars into the
      * largest type of their common field. If a string cannot be converted to a
@@ -714,6 +741,7 @@ private:
     */
     template <template <typename Type> class Operator, int OpNum>
     bool		binary_comp_op(const AnyScalar &b) const;
+#endif
 
     // *** Don't use the operators themselves, because operator== is defined
     // *** differently above.

@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS = libstx-eparser testsuite . wxparserdemo
+SUBDIRS = libstx-eparser testsuite . wxparserdemo perl-binding
 
 noinst_PROGRAMS = test
 
