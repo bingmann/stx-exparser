@@ -6,5 +6,8 @@ my $pn = STX::ExpressionParser::parseExpressionString(join(" ", @ARGV));
 
 print "Parsed.toString(): ".$pn->toString()."\n";
 
-print "Evaluated: ".$pn->evaluate()->getString()."\n";
+my $bst = STX::ExpressionParser::BasicSymbolTable->new();
+$bst->setVariables({ x => 42 });
+
+print "Evaluated: ".$pn->evaluate($bst)->getString()."\n";
 

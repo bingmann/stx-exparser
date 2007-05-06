@@ -30,9 +30,13 @@ int main(int argc, char *argv[])
 	return 0;
     }
 
+
+    BasicSymbolTable bst;
+    bst.setVariable("x", 42);
+
     try
     {
-	AnyScalar val = pn->evaluate();
+	AnyScalar val = pn->evaluate(bst);
 
 	std::cout << "evaluated: " << val << "\n";
     }

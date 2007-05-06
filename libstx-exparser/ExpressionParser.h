@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include "AnyScalar.h"
 
 /// STX - Some Template Extensions namespace
@@ -67,6 +68,9 @@ public:
 class SymbolTable
 {
 public:
+    /// STL container type used for parameter lists: a vector
+    typedef std::vector<AnyScalar>	paramlist_type;
+
     /// Required for virtual functions.
     virtual ~SymbolTable();
 
@@ -76,15 +80,85 @@ public:
     /// Called when a program-defined function needs to be evaluated within an
     /// expression.
     virtual AnyScalar	processFunction(const std::string &funcname,
-					const std::vector<AnyScalar> paramlist) const = 0;
+					const paramlist_type &paramlist) const = 0;
 };
 
-/// Base (abstract) class representing variables and functions placeholders
-/// within an expression. This base class contains no variables, but it does
-/// contain a basic set of basic mathematic functions.
+/// Class representing variables and functions placeholders within an
+/// expression. This base class contain two tables of variables and
+/// functions. Variables may be filled into the STL map by the program. The
+/// class also contains a set of basic mathematic functions.
 class BasicSymbolTable : public SymbolTable
 {
 public:
+    /// Signature of a function used in the symbol table.
+    typedef AnyScalar	(*functionptr_type)(const paramlist_type& paramlist);
+
+protected:
+
+    /// Container used to save a map of variable names
+    typedef std::map<std::string, AnyScalar>	variablemap_type;
+
+    /// Extra info about a function: the valid arguments.
+    struct FunctionInfo
+    {
+	/// Number of arguments this function takes: either >= 0 for a fixed
+	/// number of -1 for no checking.
+	int		arguments;
+
+	/// Function pointer to call.
+	functionptr_type func;
+
+	/// Initializing Constructor
+	FunctionInfo(int _arguments = 0, functionptr_type _func = NULL)
+	    : arguments(_arguments), func(_func)
+	{
+	}
+    };
+
+    /// Container used to save a map of function names
+    typedef std::map<std::string, struct FunctionInfo>	functionmap_type;
+
+private:
+    /// Variable map which can be filled by the user-application
+    variablemap_type	variablemap;
+
+    /// Function map used to lookup standard or user-added function
+    functionmap_type	functionmap;
+
+protected:
+    // *** Lots of Standard Functions
+
+    /// Return the value of PI as a double AnyScalar
+    static AnyScalar	funcPI(const paramlist_type& paramlist);
+
+    /// Return the value of sin(x) as a double AnyScalar
+    static AnyScalar	funcSIN(const paramlist_type& paramlist);
+
+    /// Return the value of cos(x) as a double AnyScalar
+    static AnyScalar	funcCOS(const paramlist_type& paramlist);
+
+    /// Return the value of tan(x) as a double AnyScalar
+    static AnyScalar	funcTAN(const paramlist_type& paramlist);
+
+    /// Return the value of abs(x) or fabs(f)
+    static AnyScalar	funcABS(const paramlist_type& paramlist);
+
+    /// Return the value of exp(x) as a double AnyScalar
+    static AnyScalar	funcEXP(const paramlist_type& paramlist);
+
+    /// Return the value of log(x) as a double AnyScalar
+    static AnyScalar	funcLOGN(const paramlist_type& paramlist);
+
+    /// Return the value of pow(x,y) as a double AnyScalar
+    static AnyScalar	funcPOW(const paramlist_type& paramlist);
+
+    /// Return the value of sqrt(x) as a double AnyScalar
+    static AnyScalar	funcSQRT(const paramlist_type& paramlist);
+
+public:
+    /// Fills in the functionmap with the standard functions.
+    BasicSymbolTable();
+
     /// Required for virtual functions.
     virtual ~BasicSymbolTable();
 
@@ -95,7 +169,22 @@ public:
     /// Called when a program-defined function needs to be evaluated within an
     /// expression.
     virtual AnyScalar	processFunction(const std::string &funcname,
-					const std::vector<AnyScalar> paramlist) const;
+					const paramlist_type &paramlist) const;
+
+    /// Add or replace a variable to the symbol table
+    void	setVariable(const std::string& varname, const AnyScalar &value);
+
+    /// Add or replace a function to the symbol table
+    void	setFunction(const std::string& funcname, int arguments, functionptr_type funcptr);
+
+    /// Clear variables table
+    void	clearVariables();
+
+    /// Clear function table
+    void	clearFunctions();
+
+    /// Add set of standard mathematic functions
+    void	addStandardFunctions();
 };
 
 /** ParseNode is the abstract node interface of different parse nodes. From

@@ -34,3 +34,16 @@ using namespace stx;
 %include "AnyScalar.h"
 %include "ExpressionParser.h"
 
+%perlcode %{
+package STX::ExpressionParser::BasicSymbolTable;
+
+# Nicer Function to add a hash of variables to the symbol table
+sub setVariables($\%) {
+    my ($self,$hashref) = (@_);
+
+    foreach my $k (keys %$hashref) {
+	$self->setVariable($k, STX::ExpressionParser::AnyScalar->new($$hashref{$k}));
+    }
+}
+
+%}

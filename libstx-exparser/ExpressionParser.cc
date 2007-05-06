@@ -1410,94 +1410,155 @@ SymbolTable::~SymbolTable()
 {
 }
 
+BasicSymbolTable::BasicSymbolTable()
+{
+    addStandardFunctions();
+}
+
 BasicSymbolTable::~BasicSymbolTable()
 {
 }
 
-AnyScalar BasicSymbolTable::lookupVariable(const std::string &varname) const
+void BasicSymbolTable::setVariable(const std::string& varname, const AnyScalar &value)
 {
+    std::string vn = varname;
+    std::transform(vn.begin(), vn.end(), vn.begin(), tolower);
+
+    variablemap[vn] = value;
+}
+
+void BasicSymbolTable::setFunction(const std::string& funcname, int arguments, functionptr_type funcptr)
+{
+    std::string fn = funcname;
+    std::transform(fn.begin(), fn.end(), fn.begin(), toupper);
+
+    functionmap[fn] = FunctionInfo(arguments, funcptr);
+}
+
+void BasicSymbolTable::clearVariables()
+{
+    variablemap.clear();
+}
+
+void BasicSymbolTable::clearFunctions()
+{
+    functionmap.clear();
+}
+
+AnyScalar BasicSymbolTable::funcPI(const std::vector<AnyScalar> &)
+{
+    return AnyScalar(3.14159265358979323846);
+}
+
+AnyScalar BasicSymbolTable::funcSIN(const std::vector<AnyScalar> &paramlist)
+{
+    return AnyScalar( std::sin(paramlist[0].getDouble()) );
+}
+
+AnyScalar BasicSymbolTable::funcCOS(const std::vector<AnyScalar> &paramlist)
+{
+    return AnyScalar( std::cos(paramlist[0].getDouble()) );
+}
+
+AnyScalar BasicSymbolTable::funcTAN(const std::vector<AnyScalar> &paramlist)
+{
+    return AnyScalar( std::tan(paramlist[0].getDouble()) );
+}
+
+AnyScalar BasicSymbolTable::funcABS(const std::vector<AnyScalar> &paramlist)
+{
+    if (paramlist[0].isIntegerType()) {
+	return AnyScalar( std::abs(paramlist[0].getInteger()) );
+    }
+    else if (paramlist[0].isFloatingType()) {
+	return AnyScalar( std::fabs(paramlist[0].getDouble()) );
+    }
+    else {
+	throw(BadFunctionCallException("Function ABS() takes exactly one parameter"));
+    }
+}
+
+AnyScalar BasicSymbolTable::funcEXP(const std::vector<AnyScalar> &paramlist)
+{
+    return AnyScalar( std::exp(paramlist[0].getDouble()) );
+}
+
+AnyScalar BasicSymbolTable::funcLOGN(const std::vector<AnyScalar> &paramlist)
+{
+    return AnyScalar( std::log(paramlist[0].getDouble()) );
+}
+
+AnyScalar BasicSymbolTable::funcPOW(const std::vector<AnyScalar> &paramlist)
+{
+    return AnyScalar( std::pow(paramlist[0].getDouble(), paramlist[1].getDouble()) );
+}
+
+AnyScalar BasicSymbolTable::funcSQRT(const std::vector<AnyScalar> &paramlist)
+{
+    return AnyScalar( std::sqrt(paramlist[0].getDouble()) );
+}
+
+void BasicSymbolTable::addStandardFunctions()
+{
+    setFunction("PI", 0, funcPI);
+
+    setFunction("SIN", 1, funcSIN);
+    setFunction("COS", 1, funcCOS);
+    setFunction("TAN", 1, funcTAN);
+
+    setFunction("ABS", 1, funcABS);
+    setFunction("EXP", 1, funcEXP);
+    setFunction("LOGN", 1, funcLOGN);
+    setFunction("POW", 2, funcPOW);
+    setFunction("SQRT", 1, funcSQRT);
+}
+
+AnyScalar BasicSymbolTable::lookupVariable(const std::string &_varname) const
+{
+    std::string varname = _varname;
+    std::transform(varname.begin(), varname.end(), varname.begin(), tolower);
+
+    variablemap_type::const_iterator fi = variablemap.find(varname);
+
+    if (fi != variablemap.end())
+    {
+	return fi->second;
+    }
+
     throw(UnknownSymbolException(std::string("Unknown variable ") + varname));
 }
 
 AnyScalar BasicSymbolTable::processFunction(const std::string &_funcname,
-					    const std::vector<AnyScalar> paramlist) const
+					    const std::vector<AnyScalar> &paramlist) const
 {
     std::string funcname = _funcname;
     std::transform(funcname.begin(), funcname.end(), funcname.begin(), toupper);
 
-    if (funcname == "PI")
-    {
-	if (paramlist.size() != 0)
-	    throw(BadFunctionCallException("Function PI() does not take any parameter"));
+    functionmap_type::const_iterator fi = functionmap.find(funcname);
 
-	return AnyScalar(3.14159265358979323846);
-    }
-    else if (funcname == "SIN")
+    if (fi != functionmap.end())
     {
-	if (paramlist.size() != 1)
-	    throw(BadFunctionCallException("Function SIN() takes exactly one parameter"));
-	
-	return AnyScalar( std::sin(paramlist[0].getDouble()) );
-    }
-    else if (funcname == "COS")
-    {
-	if (paramlist.size() != 1)
-	    throw(BadFunctionCallException("Function COS() takes exactly one parameter"));
-	
-	return AnyScalar( std::cos(paramlist[0].getDouble()) );
-    }
-    else if (funcname == "TAN")
-    {
-	if (paramlist.size() != 1)
-	    throw(BadFunctionCallException("Function COS() takes exactly one parameter"));
-	
-	return AnyScalar( std::tan(paramlist[0].getDouble()) );
-    }
-    else if (funcname == "ABS")
-    {
-	if (paramlist.size() != 1)
-	    throw(BadFunctionCallException("Function ABS() takes exactly one parameter"));
-
-	if (paramlist[0].isIntegerType()) {
-	    return AnyScalar( std::abs(paramlist[0].getInteger()) );
+	if (fi->second.arguments >= 0)
+	{
+	    if (fi->second.arguments == 0 && paramlist.size() != 0)
+	    {
+		throw(BadFunctionCallException(std::string("Function ") + funcname + "() does not take any parameter."));
+	    }
+	    else if (fi->second.arguments == 1 && paramlist.size() != 1)
+	    {
+		throw(BadFunctionCallException(std::string("Function ") + funcname + "() takes exactly one parameter."));
+	    }
+	    else if (static_cast<unsigned int>(fi->second.arguments) != paramlist.size())
+	    {
+		std::ostringstream oss;
+		oss << "Function " << funcname << "() takes exactly " << fi->second.arguments << " parameters.";
+		throw(BadFunctionCallException(oss.str()));
+	    }
 	}
-	else if (paramlist[0].isFloatingType()) {
-	    return AnyScalar( std::fabs(paramlist[0].getDouble()) );
-	}
-	else {
-	    throw(BadFunctionCallException("Function ABS() takes exactly one parameter"));
-	}
-    }
-    else if (funcname == "EXP")
-    {
-	if (paramlist.size() != 1)
-	    throw(BadFunctionCallException("Function EXP() takes exactly one parameter"));
-	
-	return AnyScalar( std::exp(paramlist[0].getDouble()) );
-    }
-    else if (funcname == "LOGN")
-    {
-	if (paramlist.size() != 1)
-	    throw(BadFunctionCallException("Function LOGN() takes exactly one parameter"));
-	
-	return AnyScalar( std::log(paramlist[0].getDouble()) );
-    }
-    else if (funcname == "POW")
-    {
-	if (paramlist.size() != 2)
-	    throw(BadFunctionCallException("Function POW() takes exactly two parameters"));
-	
-	return AnyScalar( std::pow(paramlist[0].getDouble(), paramlist[1].getDouble()) );
-    }
-    else if (funcname == "SQRT")
-    {
-	if (paramlist.size() != 1)
-	    throw(BadFunctionCallException("Function SQRT() takes exactly one parameter"));
-	
-	return AnyScalar( std::sqrt(paramlist[0].getDouble()) );
+	return fi->second.func(paramlist);
     }
 
-    throw(UnknownSymbolException(std::string("Unknown function ") + funcname));
+    throw(UnknownSymbolException(std::string("Unknown function ") + funcname + "()"));
 }
 
 } // namespace stx
