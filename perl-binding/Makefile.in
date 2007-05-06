@@ -52,9 +52,9 @@ am__installdirs = "$(DESTDIR)$(libdir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 @HAVE_SWIG_TRUE@ExpressionParser_la_DEPENDENCIES =  \
-@HAVE_SWIG_TRUE@	../libstx-eparser/libstx-eparser.a
+@HAVE_SWIG_TRUE@	../libstx-exparser/libstx-exparser.a
 @HAVE_SWIG_TRUE@nodist_ExpressionParser_la_OBJECTS =  \
-@HAVE_SWIG_TRUE@	ExpressionParser_la-stx-eparser_wrap.lo
+@HAVE_SWIG_TRUE@	ExpressionParser_la-stx-exparser_wrap.lo
 ExpressionParser_la_OBJECTS = $(nodist_ExpressionParser_la_OBJECTS)
 ExpressionParser_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) \
@@ -201,13 +201,13 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-@HAVE_SWIG_TRUE@EXTRA_DIST = stx-eparser.i
-@HAVE_SWIG_TRUE@BUILT_SOURCES = stx-eparser_wrap.cpp
-@HAVE_SWIG_TRUE@CLEANFILES = stx-eparser_wrap.cpp ExpressionParser.pm STX/ExpressionParser.pm ExpressionParser.so
+@HAVE_SWIG_TRUE@EXTRA_DIST = stx-exparser.i
+@HAVE_SWIG_TRUE@BUILT_SOURCES = stx-exparser_wrap.cpp
+@HAVE_SWIG_TRUE@CLEANFILES = stx-exparser_wrap.cpp ExpressionParser.pm STX/ExpressionParser.pm ExpressionParser.so
 @HAVE_SWIG_TRUE@lib_LTLIBRARIES = ExpressionParser.la
-@HAVE_SWIG_TRUE@nodist_ExpressionParser_la_SOURCES = stx-eparser_wrap.cpp
-@HAVE_SWIG_TRUE@ExpressionParser_la_LIBADD = ../libstx-eparser/libstx-eparser.a
-@HAVE_SWIG_TRUE@ExpressionParser_la_CXXFLAGS = -I$(top_srcdir)/libstx-eparser `perl -MExtUtils::Embed -e ccopts`
+@HAVE_SWIG_TRUE@nodist_ExpressionParser_la_SOURCES = stx-exparser_wrap.cpp
+@HAVE_SWIG_TRUE@ExpressionParser_la_LIBADD = ../libstx-exparser/libstx-exparser.a
+@HAVE_SWIG_TRUE@ExpressionParser_la_CXXFLAGS = -I$(top_srcdir)/libstx-exparser `perl -MExtUtils::Embed -e ccopts`
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -278,7 +278,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ExpressionParser_la-stx-eparser_wrap.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ExpressionParser_la-stx-exparser_wrap.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -301,12 +301,12 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
 
-ExpressionParser_la-stx-eparser_wrap.lo: stx-eparser_wrap.cpp
-@am__fastdepCXX_TRUE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ExpressionParser_la_CXXFLAGS) $(CXXFLAGS) -MT ExpressionParser_la-stx-eparser_wrap.lo -MD -MP -MF $(DEPDIR)/ExpressionParser_la-stx-eparser_wrap.Tpo -c -o ExpressionParser_la-stx-eparser_wrap.lo `test -f 'stx-eparser_wrap.cpp' || echo '$(srcdir)/'`stx-eparser_wrap.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/ExpressionParser_la-stx-eparser_wrap.Tpo $(DEPDIR)/ExpressionParser_la-stx-eparser_wrap.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='stx-eparser_wrap.cpp' object='ExpressionParser_la-stx-eparser_wrap.lo' libtool=yes @AMDEPBACKSLASH@
+ExpressionParser_la-stx-exparser_wrap.lo: stx-exparser_wrap.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ExpressionParser_la_CXXFLAGS) $(CXXFLAGS) -MT ExpressionParser_la-stx-exparser_wrap.lo -MD -MP -MF $(DEPDIR)/ExpressionParser_la-stx-exparser_wrap.Tpo -c -o ExpressionParser_la-stx-exparser_wrap.lo `test -f 'stx-exparser_wrap.cpp' || echo '$(srcdir)/'`stx-exparser_wrap.cpp
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/ExpressionParser_la-stx-exparser_wrap.Tpo $(DEPDIR)/ExpressionParser_la-stx-exparser_wrap.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='stx-exparser_wrap.cpp' object='ExpressionParser_la-stx-exparser_wrap.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ExpressionParser_la_CXXFLAGS) $(CXXFLAGS) -c -o ExpressionParser_la-stx-eparser_wrap.lo `test -f 'stx-eparser_wrap.cpp' || echo '$(srcdir)/'`stx-eparser_wrap.cpp
+@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ExpressionParser_la_CXXFLAGS) $(CXXFLAGS) -c -o ExpressionParser_la-stx-exparser_wrap.lo `test -f 'stx-exparser_wrap.cpp' || echo '$(srcdir)/'`stx-exparser_wrap.cpp
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -501,8 +501,8 @@ uninstall-am: uninstall-libLTLIBRARIES
 	tags uninstall uninstall-am uninstall-libLTLIBRARIES
 
 
-@HAVE_SWIG_TRUE@stx-eparser_wrap.cpp: stx-eparser.i
-@HAVE_SWIG_TRUE@	$(SWIG) -Wall -Wallkw -perl5 -I$(top_srcdir)/libstx-eparser -o $@ $<
+@HAVE_SWIG_TRUE@stx-exparser_wrap.cpp: stx-exparser.i
+@HAVE_SWIG_TRUE@	$(SWIG) -Wall -Wallkw -perl5 -I$(top_srcdir)/libstx-exparser -o $@ $<
 
 @HAVE_SWIG_TRUE@all-local:
 @HAVE_SWIG_TRUE@	rm -rvf STX/

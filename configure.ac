@@ -3,7 +3,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(stx-eparser, 0.7)
+AC_INIT(stx-exparser, 0.7)
 AC_CONFIG_SRCDIR([test.cc])
 AC_CONFIG_AUX_DIR(scripts)
 
@@ -95,7 +95,7 @@ AM_CONDITIONAL(HAVE_SWIG, test x"$SWIG" != x)
 # Checks for library functions.
 
 AC_CONFIG_FILES([Makefile
-                 libstx-eparser/Makefile
+                 libstx-exparser/Makefile
 	         testsuite/Makefile
 		 wxparserdemo/Makefile
 		 perl-binding/Makefile])

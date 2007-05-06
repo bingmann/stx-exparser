@@ -51,7 +51,7 @@ am__wxParserDemo_SOURCES_DIST = WMain.cpp WMain.h WMain_wxg.cpp
 @HAVE_WXWIDGETS_TRUE@	WMain_wxg.$(OBJEXT)
 wxParserDemo_OBJECTS = $(am_wxParserDemo_OBJECTS)
 wxParserDemo_LDADD = $(LDADD)
-@HAVE_WXWIDGETS_TRUE@wxParserDemo_DEPENDENCIES = $(top_srcdir)/libstx-eparser/libstx-eparser.a
+@HAVE_WXWIDGETS_TRUE@wxParserDemo_DEPENDENCIES = $(top_srcdir)/libstx-exparser/libstx-exparser.a
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/scripts/depcomp
 am__depfiles_maybe = depfiles
@@ -203,8 +203,8 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 @HAVE_WXWIDGETS_TRUE@wxParserDemo_SOURCES = WMain.cpp WMain.h WMain_wxg.cpp
 @HAVE_WXWIDGETS_TRUE@AM_CFLAGS = -I/usr/include
-@HAVE_WXWIDGETS_TRUE@AM_CXXFLAGS = -I/usr/include @WX_CXXFLAGS@ -I$(top_srcdir)/libstx-eparser
-@HAVE_WXWIDGETS_TRUE@LDADD = @WX_LIBS@ $(top_srcdir)/libstx-eparser/libstx-eparser.a
+@HAVE_WXWIDGETS_TRUE@AM_CXXFLAGS = -I/usr/include @WX_CXXFLAGS@ -I$(top_srcdir)/libstx-exparser
+@HAVE_WXWIDGETS_TRUE@LDADD = @WX_LIBS@ $(top_srcdir)/libstx-exparser/libstx-exparser.a
 all: all-am
 
 .SUFFIXES:

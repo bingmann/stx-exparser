@@ -55,7 +55,7 @@ am__testsuite_SOURCES_DIST = TestTrue.cc TestRunner.cc \
 testsuite_OBJECTS = $(am_testsuite_OBJECTS)
 testsuite_LDADD = $(LDADD)
 testsuite_DEPENDENCIES =  \
-	$(top_srcdir)/libstx-eparser/libstx-eparser.a
+	$(top_srcdir)/libstx-exparser/libstx-exparser.a
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/scripts/depcomp
 am__depfiles_maybe = depfiles
@@ -199,8 +199,8 @@ top_srcdir = @top_srcdir@
 @HAVE_CPPUNIT_FALSE@testsuite_SOURCES = TestTrue.cc
 @HAVE_CPPUNIT_TRUE@testsuite_SOURCES = TestRunner.cc AnyScalarTest.cc \
 @HAVE_CPPUNIT_TRUE@	ExpressionParserTest.cc
-AM_CXXFLAGS = -W -Wall -Wold-style-cast -I$(top_srcdir)/libstx-eparser @CPPUNIT_CFLAGS@
-LDADD = @CPPUNIT_LIBS@ $(top_srcdir)/libstx-eparser/libstx-eparser.a
+AM_CXXFLAGS = -W -Wall -Wold-style-cast -I$(top_srcdir)/libstx-exparser @CPPUNIT_CFLAGS@
+LDADD = @CPPUNIT_LIBS@ $(top_srcdir)/libstx-exparser/libstx-exparser.a
 all: all-am
 
 .SUFFIXES:

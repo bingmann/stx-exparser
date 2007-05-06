@@ -1,8 +1,8 @@
 # $Id$
 
-lib_LIBRARIES = libstx-eparser.a
+lib_LIBRARIES = libstx-exparser.a
 
-libstx_eparser_a_SOURCES = AnyScalar.cc AnyScalar.h \
+libstx_exparser_a_SOURCES = AnyScalar.cc AnyScalar.h \
 	ExpressionParser.cc ExpressionParser.h
 
 AM_CFLAGS = -W -Wall

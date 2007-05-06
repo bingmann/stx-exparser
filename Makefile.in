@@ -51,7 +51,7 @@ CONFIG_CLEAN_FILES =
 PROGRAMS = $(noinst_PROGRAMS)
 am_test_OBJECTS = test.$(OBJEXT)
 test_OBJECTS = $(am_test_OBJECTS)
-test_DEPENDENCIES = $(srcdir)/libstx-eparser/libstx-eparser.a
+test_DEPENDENCIES = $(srcdir)/libstx-exparser/libstx-exparser.a
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/scripts/depcomp
 am__depfiles_maybe = depfiles
@@ -212,11 +212,11 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = libstx-eparser testsuite . wxparserdemo perl-binding
+SUBDIRS = libstx-exparser testsuite . wxparserdemo perl-binding
 test_SOURCES = test.cc
-test_LDADD = $(srcdir)/libstx-eparser/libstx-eparser.a
-AM_CFLAGS = -W -Wall -I$(srcdir)/libstx-eparser
-AM_CXXFLAGS = -W -Wall -Wold-style-cast -I$(srcdir)/libstx-eparser
+test_LDADD = $(srcdir)/libstx-exparser/libstx-exparser.a
+AM_CFLAGS = -W -Wall -I$(srcdir)/libstx-exparser
+AM_CXXFLAGS = -W -Wall -Wold-style-cast -I$(srcdir)/libstx-exparser
 all: all-recursive
 
 .SUFFIXES:

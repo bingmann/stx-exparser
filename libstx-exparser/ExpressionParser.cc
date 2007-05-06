@@ -68,6 +68,7 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
     struct definition : public grammar_def<rule<ScannerT, parser_context<>, parser_tag<expr_id> >,
 					   rule<ScannerT, parser_context<>, parser_tag<exprlist_id> > >
     {
+	/// Real definition function of the grammar.
 	definition(ExpressionGrammar const& /*self*/)
 	{
 	    // *** Constants
@@ -929,10 +930,13 @@ public:
 // *** Functions which translate the resulting parse tree into our expression
 // *** tree, simultaneously folding constants.
 
+/// Iterator type used by spirit's parsers.
 typedef std::string::const_iterator InputIterT;
 
+/// Resulting match tree after parsing
 typedef tree_match<InputIterT> ParseTreeMatchT;
 
+/// The iterator of the match tree used in build_expr()
 typedef ParseTreeMatchT::const_tree_iterator TreeIterT;
 
 /// Build_expr is the constructor method to create a parse tree from the

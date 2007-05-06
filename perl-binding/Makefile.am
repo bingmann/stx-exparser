@@ -2,21 +2,21 @@
 
 if HAVE_SWIG
 
-EXTRA_DIST = stx-eparser.i
-BUILT_SOURCES = stx-eparser_wrap.cpp
+EXTRA_DIST = stx-exparser.i
+BUILT_SOURCES = stx-exparser_wrap.cpp
 
-stx-eparser_wrap.cpp: stx-eparser.i
-	$(SWIG) -Wall -Wallkw -perl5 -I$(top_srcdir)/libstx-eparser -o $@ $<
+stx-exparser_wrap.cpp: stx-exparser.i
+	$(SWIG) -Wall -Wallkw -perl5 -I$(top_srcdir)/libstx-exparser -o $@ $<
 
-CLEANFILES = stx-eparser_wrap.cpp ExpressionParser.pm STX/ExpressionParser.pm ExpressionParser.so
+CLEANFILES = stx-exparser_wrap.cpp ExpressionParser.pm STX/ExpressionParser.pm ExpressionParser.so
 
 lib_LTLIBRARIES = ExpressionParser.la
 
-nodist_ExpressionParser_la_SOURCES = stx-eparser_wrap.cpp
+nodist_ExpressionParser_la_SOURCES = stx-exparser_wrap.cpp
 
-ExpressionParser_la_LIBADD = ../libstx-eparser/libstx-eparser.a
+ExpressionParser_la_LIBADD = ../libstx-exparser/libstx-exparser.a
 
-ExpressionParser_la_CXXFLAGS = -I$(top_srcdir)/libstx-eparser `perl -MExtUtils::Embed -e ccopts`
+ExpressionParser_la_CXXFLAGS = -I$(top_srcdir)/libstx-exparser `perl -MExtUtils::Embed -e ccopts`
 
 all-local:
 	rm -rvf STX/

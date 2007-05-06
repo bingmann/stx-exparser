@@ -34,7 +34,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-subdir = libstx-eparser
+subdir = libstx-exparser
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -52,11 +52,11 @@ am__installdirs = "$(DESTDIR)$(libdir)"
 libLIBRARIES_INSTALL = $(INSTALL_DATA)
 LIBRARIES = $(lib_LIBRARIES)
 ARFLAGS = cru
-libstx_eparser_a_AR = $(AR) $(ARFLAGS)
-libstx_eparser_a_LIBADD =
-am_libstx_eparser_a_OBJECTS = AnyScalar.$(OBJEXT) \
+libstx_exparser_a_AR = $(AR) $(ARFLAGS)
+libstx_exparser_a_LIBADD =
+am_libstx_exparser_a_OBJECTS = AnyScalar.$(OBJEXT) \
 	ExpressionParser.$(OBJEXT)
-libstx_eparser_a_OBJECTS = $(am_libstx_eparser_a_OBJECTS)
+libstx_exparser_a_OBJECTS = $(am_libstx_exparser_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/scripts/depcomp
 am__depfiles_maybe = depfiles
@@ -78,8 +78,8 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libstx_eparser_a_SOURCES)
-DIST_SOURCES = $(libstx_eparser_a_SOURCES)
+SOURCES = $(libstx_exparser_a_SOURCES)
+DIST_SOURCES = $(libstx_exparser_a_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -206,8 +206,8 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-lib_LIBRARIES = libstx-eparser.a
-libstx_eparser_a_SOURCES = AnyScalar.cc AnyScalar.h \
+lib_LIBRARIES = libstx-exparser.a
+libstx_exparser_a_SOURCES = AnyScalar.cc AnyScalar.h \
 	ExpressionParser.cc ExpressionParser.h
 
 AM_CFLAGS = -W -Wall
@@ -225,9 +225,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  libstx-eparser/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  libstx-exparser/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  libstx-eparser/Makefile
+	  $(AUTOMAKE) --foreign  libstx-exparser/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -274,10 +274,10 @@ uninstall-libLIBRARIES:
 
 clean-libLIBRARIES:
 	-test -z "$(lib_LIBRARIES)" || rm -f $(lib_LIBRARIES)
-libstx-eparser.a: $(libstx_eparser_a_OBJECTS) $(libstx_eparser_a_DEPENDENCIES) 
-	-rm -f libstx-eparser.a
-	$(libstx_eparser_a_AR) libstx-eparser.a $(libstx_eparser_a_OBJECTS) $(libstx_eparser_a_LIBADD)
-	$(RANLIB) libstx-eparser.a
+libstx-exparser.a: $(libstx_exparser_a_OBJECTS) $(libstx_exparser_a_DEPENDENCIES) 
+	-rm -f libstx-exparser.a
+	$(libstx_exparser_a_AR) libstx-exparser.a $(libstx_exparser_a_OBJECTS) $(libstx_exparser_a_LIBADD)
+	$(RANLIB) libstx-exparser.a
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
