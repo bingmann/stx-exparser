@@ -129,18 +129,6 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
 		    >> atom_expr
                 ;
 
-            mul_expr
-                = unary_expr >>
-		  *( root_node_d[ch_p('*')] >> unary_expr 
-		   | root_node_d[ch_p('/')] >> unary_expr )
-                ;
-
-	    add_expr
-		= mul_expr >>
-		  *( root_node_d[ch_p('+')] >> mul_expr
-		   | root_node_d[ch_p('-')] >> mul_expr )
-		;
-
 	    cast_spec
 		= discard_node_d[ ch_p('(') ]
 		>> (
@@ -154,20 +142,32 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
 		;
 
             cast_expr
-		= root_node_d[ !cast_spec ] >> add_expr
+		= root_node_d[ !cast_spec ] >> unary_expr
+		;
+
+            mul_expr
+                = cast_expr >>
+		  *( root_node_d[ch_p('*')] >> cast_expr 
+		   | root_node_d[ch_p('/')] >> cast_expr )
+                ;
+
+	    add_expr
+		= mul_expr >>
+		  *( root_node_d[ch_p('+')] >> mul_expr
+		   | root_node_d[ch_p('-')] >> mul_expr )
 		;
 
 	    comp_expr
-		= cast_expr >>
-		*( root_node_d[str_p("==")] >> cast_expr 
-		 | root_node_d[ch_p('=')] >> cast_expr
-		 | root_node_d[str_p("!=")] >> cast_expr
-		 | root_node_d[ch_p('<')] >> cast_expr
-		 | root_node_d[ch_p('>')] >> cast_expr
-		 | root_node_d[str_p("<=")] >> cast_expr
-		 | root_node_d[str_p(">=")] >> cast_expr
-		 | root_node_d[str_p("=<")] >> cast_expr
-		 | root_node_d[str_p("=>")] >> cast_expr
+		= add_expr >>
+		*( root_node_d[str_p("==")] >> add_expr 
+		 | root_node_d[ch_p('=')] >> add_expr
+		 | root_node_d[str_p("!=")] >> add_expr
+		 | root_node_d[ch_p('<')] >> add_expr
+		 | root_node_d[ch_p('>')] >> add_expr
+		 | root_node_d[str_p("<=")] >> add_expr
+		 | root_node_d[str_p(">=")] >> add_expr
+		 | root_node_d[str_p("=<")] >> add_expr
+		 | root_node_d[str_p("=>")] >> add_expr
 		 )
 		;
 
@@ -311,6 +311,12 @@ public:
     {
     }
 
+    /// virtual copy construtor
+    virtual ParseNode*	clone() const
+    {
+	return new PNConstant(value);
+    }
+
     /// Easiest evaluation: return the constant.
     virtual AnyScalar evaluate(const class SymbolTable &) const
     {
@@ -348,6 +354,12 @@ public:
     PNVariable(std::string _attrname)
 	: ParseNode(), attrname(_attrname)
     {
+    }
+
+    /// virtual copy construtor
+    virtual ParseNode*	clone() const
+    {
+	return new PNVariable(attrname);
     }
 
     /// Check the given symbol table for the actual value of this variable.
@@ -396,6 +408,17 @@ public:
     {
 	for(unsigned int i = 0; i < paramlist.size(); ++i)
 	    delete paramlist[i];
+    }
+
+    /// virtual copy construtor
+    virtual ParseNode*	clone() const
+    {
+	paramlist_type clonelist;
+	for(unsigned int i = 0; i < paramlist.size(); ++i)
+	{
+	    clonelist.push_back( paramlist[i]->clone() );
+	}	
+	return new PNFunction(funcname, clonelist);
     }
 
     /// Check the given symbol table for the actual value of this variable.
@@ -454,6 +477,12 @@ public:
     virtual ~PNUnaryArithmExpr()
     {
 	delete operand;
+    }
+
+    /// virtual copy construtor
+    virtual ParseNode*	clone() const
+    {
+	return new PNUnaryArithmExpr(operand->clone(), op);
     }
 
     /// Applies the operator to the recursively calculated value.
@@ -541,6 +570,12 @@ public:
 	delete right;
     }
 
+    /// virtual copy construtor
+    virtual ParseNode*	clone() const
+    {
+	return new PNBinaryArithmExpr(left->clone(), right->clone(), op);
+    }
+
     /// Applies the operator to the two recursive calculated values. The actual
     /// switching between types is handled by AnyScalar's operators.
     virtual AnyScalar evaluate(const class SymbolTable &st) const
@@ -623,6 +658,12 @@ public:
 	delete operand;
     }
 
+    /// virtual copy construtor
+    virtual ParseNode*	clone() const
+    {
+	return new PNCastExpr(operand->clone(), type);
+    }
+
     /// Recursive calculation of the value and subsequent casting via
     /// AnyScalar's convertType method.
     virtual AnyScalar evaluate(const class SymbolTable &st) const
@@ -695,6 +736,12 @@ public:
     {
 	delete left;
 	delete right;
+    }
+
+    /// virtual copy construtor
+    virtual ParseNode*	clone() const
+    {
+	return new PNBinaryComparisonExpr(left->clone(), right->clone(), opstr);
     }
 
     /// Applies the operator to the two recursive calculated values. The actual
@@ -825,6 +872,12 @@ public:
     {
 	if (left) delete left;
 	if (right) delete right;
+    }
+
+    /// virtual copy construtor
+    virtual ParseNode*	clone() const
+    {
+	return new PNBinaryLogicExpr(left->clone(), right->clone(), get_opstr());
     }
 
     /// Calculate the operator
