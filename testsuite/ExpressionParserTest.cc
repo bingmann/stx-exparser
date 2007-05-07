@@ -18,7 +18,20 @@ protected:
     inline stx::AnyScalar eval(const std::string &str)
     {
 	std::auto_ptr<const stx::ParseNode> pn (stx::parseExpressionString(str));
-	return pn->evaluate();
+
+	// test reevaluation of the toString().
+	{
+	    std::string strexpr = pn->toString();
+	    std::auto_ptr<const stx::ParseNode> pn2 (stx::parseExpressionString(strexpr));
+
+	    CPPUNIT_ASSERT( strexpr == pn2->toString() );
+	}
+
+	stx::BasicSymbolTable bst;
+	bst.setVariable("a", 42);
+	bst.setVariable("e", 2.7183);
+
+	return pn->evaluate(bst);
     }
 
     void test1()
@@ -31,13 +44,21 @@ protected:
 
 	CPPUNIT_ASSERT( eval("5 * 6 + 7 * 2 - 2") == 42 );
 
-	CPPUNIT_ASSERT( eval("((integer)(5 * 1.5 >= 1)) + 5") == 6 );
+	CPPUNIT_ASSERT( eval("(integer)(5 * 1.5)") == 7 );
 
-	CPPUNIT_ASSERT( eval("(integer) 5 * 1.5") == 7 );
+	CPPUNIT_ASSERT( eval("((integer)(5 * 1.5 >= 1)) + 5") == 6 );
 
 	CPPUNIT_ASSERT( eval(" logn(exp(21)) + sqrt(pow(21,2)) == 42 ") == true );
 
 	CPPUNIT_ASSERT( eval("10 > 5 AND 5.2 <= 42.2 OR 2 == 4") == true );
+
+	CPPUNIT_ASSERT( eval("(a * 2 + 4) / 2 == 44") == true );
+
+	CPPUNIT_ASSERT( eval("-5 + 4.5") == -0.5 );
+
+	CPPUNIT_ASSERT( eval("(0 < 1) && (4 > 2) && (1 = 1) && (2 == 2) && (2 != 4) && (1 <= 1) && (1 >= 1) && (2 =< 3) && (4 => 1)") == true );
+
+	// CPPUNIT_ASSERT( eval("!(true AND false) || (NOT true OR FALSE)") == true );
     }
 };
 

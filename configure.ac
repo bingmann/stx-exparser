@@ -16,6 +16,23 @@ if test "$CXXFLAGS" == ""; then
     CXXFLAGS="-g"
 fi
 
+AC_ARG_ENABLE(gcov,
+	      AS_HELP_STRING([--enable-gcov],
+                             [enable test coverage with gcov @<:@default=no@:>@]),
+              [case "${enableval}" in
+                 yes) gcov=true ;;
+                 no)  gcov=false ;;
+                 *)   AC_MSG_ERROR([bad value ${enableval} for --enable-gcov]) ;;
+               esac],
+              [gcov=false])
+
+AM_CONDITIONAL(GCOV, test x"$gcov" = "xtrue")
+
+if test x"$gcov" = "xtrue"; then
+    CFLAGS="$CFLAGS -fprofile-arcs -ftest-coverage"
+    CXXFLAGS="$CXXFLAGS -fprofile-arcs -ftest-coverage"
+fi
+
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC

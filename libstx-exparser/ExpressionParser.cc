@@ -96,9 +96,8 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
 	    // *** Function call and function identifier
 
             function_call
-                = root_node_d[function_identifier] >> discard_node_d[ ch_p('(') ] 
-						   >> exprlist
-						   >> discard_node_d[ ch_p(')') ]
+                = root_node_d[function_identifier]
+		>> discard_node_d[ ch_p('(') ] >> exprlist >> discard_node_d[ ch_p(')') ]
                 ;
 
             function_identifier
@@ -125,8 +124,8 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
                 ;
 
             unary_expr
-                = !( root_node_d[ch_p('+') | ch_p('-') | ch_p('!') | str_p("not")] )
-		    >> atom_expr
+                = !( root_node_d[ as_lower_d[ch_p('+') | ch_p('-') | ch_p('!') | str_p("not")] ] )
+		>> atom_expr
                 ;
 
 	    cast_spec
@@ -146,43 +145,30 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
 		;
 
             mul_expr
-                = cast_expr >>
-		  *( root_node_d[ch_p('*')] >> cast_expr 
-		   | root_node_d[ch_p('/')] >> cast_expr )
+                = cast_expr
+		>> *( root_node_d[ch_p('*') | ch_p('/')] >> cast_expr )
                 ;
 
 	    add_expr
-		= mul_expr >>
-		  *( root_node_d[ch_p('+')] >> mul_expr
-		   | root_node_d[ch_p('-')] >> mul_expr )
+		= mul_expr
+		>> *( root_node_d[ch_p('+') | ch_p('-')] >> mul_expr )
 		;
 
 	    comp_expr
-		= add_expr >>
-		*( root_node_d[str_p("==")] >> add_expr 
-		 | root_node_d[ch_p('=')] >> add_expr
-		 | root_node_d[str_p("!=")] >> add_expr
-		 | root_node_d[ch_p('<')] >> add_expr
-		 | root_node_d[ch_p('>')] >> add_expr
-		 | root_node_d[str_p("<=")] >> add_expr
-		 | root_node_d[str_p(">=")] >> add_expr
-		 | root_node_d[str_p("=<")] >> add_expr
-		 | root_node_d[str_p("=>")] >> add_expr
-		 )
+		= add_expr
+		>> *( root_node_d[( str_p("==") | str_p("!=") |
+				    str_p("<=") | str_p(">=") | str_p("=<") | str_p("=>") |
+				    ch_p('=') | ch_p('<') | ch_p('>') )] >> add_expr )
 		;
 
 	    and_expr
-		= comp_expr >>
-		*( root_node_d[ as_lower_d[ str_p("and")] ] >> comp_expr
-		 | root_node_d[ as_lower_d[ str_p("&&")] ] >> comp_expr
-		 )
+		= comp_expr
+		>> *( root_node_d[ as_lower_d[str_p("and") | str_p("&&")] ] >> comp_expr )
 		;
 
 	    or_expr
-		= and_expr >>
-		*( root_node_d[ as_lower_d[ str_p("or")] ] >> and_expr
-		 | root_node_d[ as_lower_d[ str_p("||")] ] >> and_expr
-		 )
+		= and_expr
+		>> *( root_node_d[ as_lower_d[str_p("or") | str_p("||")] ] >> and_expr )
 		;
 
 	    // *** Base Expression and List
@@ -195,8 +181,7 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
 		= infix_node_d[ !list_p(expr, ch_p(',')) ]
 		;
 
-	    // This is a special spirit feature to declare multiple grammar
-	    // entry points
+	    // Special spirit feature to declare multiple grammar entry points
 	    this->start_parsers(expr, exprlist); 
 
 #ifdef STX_DEBUG_PARSER
@@ -922,7 +907,7 @@ public:
     /// false. OR with a true operand is always true.
     virtual bool evaluate_const(AnyScalar *dest) const
     {
-	if (!dest) return false; // returns false because this node isnt always constant
+	if (!dest) return false; // returns false because this node isn't always constant
 
 	AnyScalar vl(AnyScalar::ATTRTYPE_INVALID), vr(AnyScalar::ATTRTYPE_INVALID);
 	
