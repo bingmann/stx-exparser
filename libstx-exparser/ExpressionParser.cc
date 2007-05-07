@@ -29,7 +29,8 @@ using namespace boost::spirit;
 /// This enum specifies ids for the parse tree nodes created for each rule.
 enum parser_ids
 {
-    integer_const_id = 1,
+    boolean_const_id = 1,
+    integer_const_id,
     double_const_id,
     string_const_id,
     constant_id,
@@ -76,9 +77,14 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
 	    constant
 		= double_const
 		| integer_const
+		| boolean_const
 		| string_const
 		;
 	    
+	    boolean_const
+		= as_lower_d[keyword_p("true") | keyword_p("false")]
+		;
+
 	    integer_const
 		= int_p
 		;
@@ -187,6 +193,7 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
 #ifdef STX_DEBUG_PARSER
 	    BOOST_SPIRIT_DEBUG_RULE(constant);
 
+	    BOOST_SPIRIT_DEBUG_RULE(boolean_const);
 	    BOOST_SPIRIT_DEBUG_RULE(integer_const);
 	    BOOST_SPIRIT_DEBUG_RULE(double_const);
 	    BOOST_SPIRIT_DEBUG_RULE(string_const);
@@ -218,6 +225,8 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
 	/// double_const or string_const
         rule<ScannerT, parser_context<>, parser_tag<constant_id> > 		constant;
 
+	/// Boolean value constant rule: "true" or "false"
+        rule<ScannerT, parser_context<>, parser_tag<boolean_const_id> > 	boolean_const;
 	/// Integer constant rule: "1234"
         rule<ScannerT, parser_context<>, parser_tag<integer_const_id> > 	integer_const;
 	/// Float constant rule: "1234"
@@ -287,7 +296,7 @@ public:
 	if (type == AnyScalar::ATTRTYPE_STRING)
 	    value.setStringQuoted(strvalue);
 	else
-	    value.setString(strvalue); // not a string, but an integer or double
+	    value.setString(strvalue); // not a string, but an integer or double or boolean value
     }
 
     /// constructor for folded constant values.
@@ -297,7 +306,7 @@ public:
     }
 
     /// virtual copy construtor
-    virtual ParseNode*	clone() const
+    virtual ParseNode* clone() const
     {
 	return new PNConstant(value);
     }
@@ -455,7 +464,7 @@ public:
     PNUnaryArithmExpr(const ParseNode* _operand, char _op)
 	: ParseNode(), operand(_operand), op(_op)
     {
-	if (op == 'n') op = '!';
+	if (op == 'n' || op == 'N') op = '!';
     }
 
     /// Recursively delete the parse tree.
@@ -992,6 +1001,12 @@ static const ParseNode* build_expr(TreeIterT const& i)
     {
     // *** Constant node cases
 
+    case boolean_const_id:
+    {
+	return new PNConstant(AnyScalar::ATTRTYPE_BOOL,
+			      std::string(i->value.begin(), i->value.end()));
+    }
+
     case integer_const_id:
     {
 	return new PNConstant(AnyScalar::ATTRTYPE_INTEGER,
@@ -1430,27 +1445,27 @@ void BasicSymbolTable::clearFunctions()
     functionmap.clear();
 }
 
-AnyScalar BasicSymbolTable::funcPI(const std::vector<AnyScalar> &)
+AnyScalar BasicSymbolTable::funcPI(const paramlist_type &)
 {
     return AnyScalar(3.14159265358979323846);
 }
 
-AnyScalar BasicSymbolTable::funcSIN(const std::vector<AnyScalar> &paramlist)
+AnyScalar BasicSymbolTable::funcSIN(const paramlist_type &paramlist)
 {
     return AnyScalar( std::sin(paramlist[0].getDouble()) );
 }
 
-AnyScalar BasicSymbolTable::funcCOS(const std::vector<AnyScalar> &paramlist)
+AnyScalar BasicSymbolTable::funcCOS(const paramlist_type &paramlist)
 {
     return AnyScalar( std::cos(paramlist[0].getDouble()) );
 }
 
-AnyScalar BasicSymbolTable::funcTAN(const std::vector<AnyScalar> &paramlist)
+AnyScalar BasicSymbolTable::funcTAN(const paramlist_type &paramlist)
 {
     return AnyScalar( std::tan(paramlist[0].getDouble()) );
 }
 
-AnyScalar BasicSymbolTable::funcABS(const std::vector<AnyScalar> &paramlist)
+AnyScalar BasicSymbolTable::funcABS(const paramlist_type &paramlist)
 {
     if (paramlist[0].isIntegerType()) {
 	return AnyScalar( std::abs(paramlist[0].getInteger()) );
@@ -1463,22 +1478,22 @@ AnyScalar BasicSymbolTable::funcABS(const std::vector<AnyScalar> &paramlist)
     }
 }
 
-AnyScalar BasicSymbolTable::funcEXP(const std::vector<AnyScalar> &paramlist)
+AnyScalar BasicSymbolTable::funcEXP(const paramlist_type &paramlist)
 {
     return AnyScalar( std::exp(paramlist[0].getDouble()) );
 }
 
-AnyScalar BasicSymbolTable::funcLOGN(const std::vector<AnyScalar> &paramlist)
+AnyScalar BasicSymbolTable::funcLOGN(const paramlist_type &paramlist)
 {
     return AnyScalar( std::log(paramlist[0].getDouble()) );
 }
 
-AnyScalar BasicSymbolTable::funcPOW(const std::vector<AnyScalar> &paramlist)
+AnyScalar BasicSymbolTable::funcPOW(const paramlist_type &paramlist)
 {
     return AnyScalar( std::pow(paramlist[0].getDouble(), paramlist[1].getDouble()) );
 }
 
-AnyScalar BasicSymbolTable::funcSQRT(const std::vector<AnyScalar> &paramlist)
+AnyScalar BasicSymbolTable::funcSQRT(const paramlist_type &paramlist)
 {
     return AnyScalar( std::sqrt(paramlist[0].getDouble()) );
 }
@@ -1514,7 +1529,7 @@ AnyScalar BasicSymbolTable::lookupVariable(const std::string &_varname) const
 }
 
 AnyScalar BasicSymbolTable::processFunction(const std::string &_funcname,
-					    const std::vector<AnyScalar> &paramlist) const
+					    const paramlist_type &paramlist) const
 {
     std::string funcname = _funcname;
     std::transform(funcname.begin(), funcname.end(), funcname.begin(), toupper);

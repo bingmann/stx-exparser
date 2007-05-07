@@ -58,7 +58,20 @@ protected:
 
 	CPPUNIT_ASSERT( eval("(0 < 1) && (4 > 2) && (1 = 1) && (2 == 2) && (2 != 4) && (1 <= 1) && (1 >= 1) && (2 =< 3) && (4 => 1)") == true );
 
-	// CPPUNIT_ASSERT( eval("!(true AND false) || (NOT true OR FALSE)") == true );
+	CPPUNIT_ASSERT( eval("!(true AND false) || (NOT true OR FALSE)") == true );
+
+	CPPUNIT_ASSERT_THROW( eval("5 +"), stx::ExpressionParserException );
+
+	CPPUNIT_ASSERT_THROW( eval("5 + FUNCXYZ()"), stx::UnknownSymbolException );
+
+	CPPUNIT_ASSERT_THROW( eval("5 + xyz"), stx::UnknownSymbolException );
+
+	CPPUNIT_ASSERT_THROW( eval("5 + COS(2,2)"), stx::BadFunctionCallException );
+
+	{
+	    std::string xmlstr = stx::parseExpressionStringXML("((integer)(5 * 1.5 >= 1)) + 5");
+	    CPPUNIT_ASSERT( xmlstr.size() == 1010 );
+	}
     }
 };
 

@@ -1817,9 +1817,12 @@ bool AnyScalar::binary_comp_op(const AnyScalar &b) const
     {
 	switch(b.atype)
 	{
-	case ATTRTYPE_INVALID: assert(0); throw(ConversionException(std::string("Invalid type for second operand of binary operator ")+OpNameArray[OpNum]+"."));
+	case ATTRTYPE_INVALID:
+	    assert(0);
+	    throw(ConversionException(std::string("Invalid type for second operand of binary operator ")+OpNameArray[OpNum]+"."));
 
-	case ATTRTYPE_BOOL: throw(ConversionException(std::string("Binary operator ")+OpNameArray[OpNum]+" is not permitted on bool values."));
+	case ATTRTYPE_BOOL:
+	    throw(ConversionException(std::string("Binary operator ")+OpNameArray[OpNum]+" is not permitted on bool values."));
 
 	case ATTRTYPE_CHAR:
 	case ATTRTYPE_SHORT:
@@ -1880,9 +1883,12 @@ bool AnyScalar::binary_comp_op(const AnyScalar &b) const
     {
 	switch(b.atype)
 	{
-	case ATTRTYPE_INVALID: assert(0); throw(ConversionException(std::string("Invalid type for second operand of binary operator ")+OpNameArray[OpNum]+"."));
+	case ATTRTYPE_INVALID:
+	    assert(0);
+	    throw(ConversionException(std::string("Invalid type for second operand of binary operator ")+OpNameArray[OpNum]+"."));
 
-	case ATTRTYPE_BOOL: throw(ConversionException(std::string("Binary operator ")+OpNameArray[OpNum]+" is not permitted on bool values."));
+	case ATTRTYPE_BOOL:
+	    throw(ConversionException(std::string("Binary operator ")+OpNameArray[OpNum]+" is not permitted on bool values."));
 
 	case ATTRTYPE_CHAR:
 	case ATTRTYPE_SHORT:
@@ -1943,9 +1949,12 @@ bool AnyScalar::binary_comp_op(const AnyScalar &b) const
     {
 	switch(b.atype)
 	{
-	case ATTRTYPE_INVALID: assert(0); throw(ConversionException(std::string("Invalid type for second operand of binary operator ")+OpNameArray[OpNum]+"."));
+	case ATTRTYPE_INVALID:
+	    assert(0);
+	    throw(ConversionException(std::string("Invalid type for second operand of binary operator ")+OpNameArray[OpNum]+"."));
 
-	case ATTRTYPE_BOOL: throw(ConversionException(std::string("Binary operator ")+OpNameArray[OpNum]+" is not permitted on bool values."));
+	case ATTRTYPE_BOOL:
+	    throw(ConversionException(std::string("Binary operator ")+OpNameArray[OpNum]+" is not permitted on bool values."));
 
 	case ATTRTYPE_CHAR:
 	case ATTRTYPE_SHORT:
@@ -2007,9 +2016,12 @@ bool AnyScalar::binary_comp_op(const AnyScalar &b) const
     {
 	switch(b.atype)
 	{
-	case ATTRTYPE_INVALID: assert(0); throw(ConversionException(std::string("Invalid type for second operand of binary operator ")+OpNameArray[OpNum]+"."));
+	case ATTRTYPE_INVALID:
+	    assert(0);
+	    throw(ConversionException(std::string("Invalid type for second operand of binary operator ")+OpNameArray[OpNum]+"."));
 
-	case ATTRTYPE_BOOL: throw(ConversionException(std::string("Binary operator ")+OpNameArray[OpNum]+" is not permitted on bool values."));
+	case ATTRTYPE_BOOL:
+	    throw(ConversionException(std::string("Binary operator ")+OpNameArray[OpNum]+" is not permitted on bool values."));
 
 	case ATTRTYPE_CHAR:
 	case ATTRTYPE_SHORT:
@@ -2072,9 +2084,12 @@ bool AnyScalar::binary_comp_op(const AnyScalar &b) const
     {
 	switch(b.atype)
 	{
-	case ATTRTYPE_INVALID: assert(0); throw(ConversionException(std::string("Invalid type for second operand of binary operator ")+OpNameArray[OpNum]+"."));
+	case ATTRTYPE_INVALID:
+	    assert(0);
+	    throw(ConversionException(std::string("Invalid type for second operand of binary operator ")+OpNameArray[OpNum]+"."));
 
-	case ATTRTYPE_BOOL: throw(ConversionException(std::string("Binary operator ")+OpNameArray[OpNum]+" is not permitted on bool values."));
+	case ATTRTYPE_BOOL:
+	    throw(ConversionException(std::string("Binary operator ")+OpNameArray[OpNum]+" is not permitted on bool values."));
 
 	case ATTRTYPE_CHAR:
 	case ATTRTYPE_SHORT:
