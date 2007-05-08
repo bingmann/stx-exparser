@@ -1,4 +1,8 @@
 // $Id$
+/** \file ExpressionParser.cc
+ * Implementation of the parser using a boost::spirit grammar and a different
+ * specializations of ParseNode.
+ */
 
 #include "ExpressionParser.h"
 
@@ -328,8 +332,7 @@ public:
     virtual std::string toString() const
     {
 	if (value.getType() == AnyScalar::ATTRTYPE_STRING) {
-	    // TODO: quote string!!!!
-	    return std::string("\"") + value.getString() + std::string("\"");
+	    return value.getStringQuoted();
 	}
 	return value.getString();
     }
@@ -837,18 +840,18 @@ class PNBinaryLogicExpr : public ParseNode
 {
 private:
     /// Pointers to the left of the two child parse trees.
-    const ParseNode 	*left;
+    ParseNode*		left;
 
     /// Pointers to the right of the two child parse trees.
-    const ParseNode	*right;
+    ParseNode*		right;
 
     /// Comparison operation to perform: left op right
     enum { OP_AND, OP_OR } op;
 
 public:
     /// Constructor from the parser: both operand subnodes and the operator id.
-    PNBinaryLogicExpr(const ParseNode* _left,
-		      const ParseNode* _right,
+    PNBinaryLogicExpr(ParseNode* _left,
+		      ParseNode* _right,
 		      std::string _op)
 	: ParseNode(),
 	  left(_left), right(_right)
@@ -958,17 +961,17 @@ public:
     }
 
     /// Detach left node
-    inline const ParseNode* detach_left()
+    inline ParseNode* detach_left()
     {
-	const ParseNode *n = left;
+	ParseNode *n = left;
 	left = NULL;
 	return n;
     }
 
     /// Detach right node
-    inline const ParseNode* detach_right()
+    inline ParseNode* detach_right()
     {
-	const ParseNode *n = right;
+	ParseNode *n = right;
 	right = NULL;
 	return n;
     }
@@ -988,7 +991,7 @@ typedef ParseTreeMatchT::const_tree_iterator TreeIterT;
 
 /// Build_expr is the constructor method to create a parse tree from the
 /// AST-tree returned by the spirit parser.
-static const ParseNode* build_expr(TreeIterT const& i)
+static ParseNode* build_expr(TreeIterT const& i)
 {
 #ifdef STX_DEBUG_PARSER
     std::cout << "In build_expr. i->value = " <<
@@ -1153,8 +1156,8 @@ static const ParseNode* build_expr(TreeIterT const& i)
 
 	// auto_ptr needed because of possible parse exceptions in build_expr.
 
-	std::auto_ptr<const ParseNode> left( build_expr(i->children.begin()) );
-	std::auto_ptr<const ParseNode> right( build_expr(i->children.begin()+1) );
+	std::auto_ptr<ParseNode> left( build_expr(i->children.begin()) );
+	std::auto_ptr<ParseNode> right( build_expr(i->children.begin()+1) );
 
 	bool constleft = left->evaluate_const(NULL);
 	bool constright = right->evaluate_const(NULL);
@@ -1245,7 +1248,7 @@ static const ParseNode* build_expr(TreeIterT const& i)
 
 /// build_attrlist constructs the vector holding the ParseNode parse tree for
 /// each requested attribute.
-std::vector<const class ParseNode*> build_exprlist(TreeIterT const &i)
+ParseTreeList build_exprlist(TreeIterT const &i)
 {
 #ifdef STX_DEBUG_PARSER
     std::cout << "In build_attrlist. i->value = " <<
@@ -1254,25 +1257,26 @@ std::vector<const class ParseNode*> build_exprlist(TreeIterT const &i)
 	" i->value.id = " << i->value.id().to_long() << std::endl;
 #endif
 
-    std::vector<const class ParseNode*> sellist;
+    ParseTreeList ptlist;
 
     for(TreeIterT ci = i->children.begin(); ci != i->children.end(); ++ci)
     {
-	const ParseNode *vas = build_expr(ci);
+	ParseNode *vas = build_expr(ci);
 
-	sellist.push_back(vas);
+	ptlist.push_back( ParseTree(vas) );
     }
 
-    return sellist;
+    return ptlist;
 }
 
-template <typename TreeInfo>
-static inline void debug_dump_xml(std::ostream &os, const std::string &input, const TreeInfo &info)
+/// Uses boost::spirit function to convert the parse tree into a XML document.
+static inline void tree_dump_xml(std::ostream &os, const std::string &input, const tree_parse_info<InputIterT> &info)
 {
-    // used by the xml dumper to label the nodes
+    // map used by the xml dumper to label the nodes
 
     std::map<parser_id, std::string> rule_names;
 
+    rule_names[boolean_const_id] = "boolean_const";
     rule_names[integer_const_id] = "integer_const";
     rule_names[double_const_id] = "double_const";
     rule_names[string_const_id] = "string_const";
@@ -1302,7 +1306,7 @@ static inline void debug_dump_xml(std::ostream &os, const std::string &input, co
 
 } // namespace Grammar
 
-const ParseNode* parseExpressionString(const std::string &input)
+const ParseTree parseExpression(const std::string &input)
 {
     // instance of the grammar
     Grammar::ExpressionGrammar g;
@@ -1327,10 +1331,10 @@ const ParseNode* parseExpressionString(const std::string &input)
 	throw(BadSyntaxException(oss.str()));
     }
 
-    return Grammar::build_expr(info.trees.begin());
+    return ParseTree( Grammar::build_expr(info.trees.begin()) );
 }
 
-std::string parseExpressionStringXML(const std::string &input)
+std::string parseExpressionXML(const std::string &input)
 {
     // instance of the grammar
     Grammar::ExpressionGrammar g;
@@ -1356,11 +1360,11 @@ std::string parseExpressionStringXML(const std::string &input)
     }
 
     std::ostringstream oss;
-    Grammar::debug_dump_xml(oss, input, info);
+    Grammar::tree_dump_xml(oss, input, info);
     return oss.str();
 }
 
-std::vector<const class ParseNode*> parseExpressionListString(const std::string &input)
+ParseTreeList parseExpressionList(const std::string &input)
 {
     // instance of the grammar
     Grammar::ExpressionGrammar g;
@@ -1371,7 +1375,7 @@ std::vector<const class ParseNode*> parseExpressionListString(const std::string 
 
     Grammar::tree_parse_info<Grammar::InputIterT> info =
 	boost::spirit::ast_parse(input.begin(), input.end(),
-				 g.use_parser<1>(),	// use first entry point: exprlist
+				 g.use_parser<1>(),	// use second entry point: exprlist
 				 boost::spirit::space_p);
 
     if (!info.full)
@@ -1388,17 +1392,29 @@ std::vector<const class ParseNode*> parseExpressionListString(const std::string 
     return Grammar::build_exprlist(info.trees.begin());
 }
 
-std::string ExpressionSelectorListtoString(const std::vector<const class ParseNode*> &el)
+std::vector<AnyScalar> ParseTreeList::evaluate(const class SymbolTable &st) const
+{
+    std::vector<AnyScalar> vl;
+
+    for(parent_type::const_iterator i = parent_type::begin(); i != parent_type::end(); i++)
+    {
+	vl.push_back( i->evaluate(st) );
+    }
+
+    return vl;
+}
+
+std::string ParseTreeList::toString() const
 {
     std::string sl;
 
-    for(std::vector<const class ParseNode*>::const_iterator i = el.begin(); i != el.end(); i++) {
-
-	if (i != el.begin()) {
+    for(parent_type::const_iterator i = parent_type::begin(); i != parent_type::end(); i++)
+    {
+	if (i != parent_type::begin()) {
 	    sl += ", ";
 	}
 
-	sl += (*i)->toString();
+	sl += i->toString();
     }
 
     return sl;

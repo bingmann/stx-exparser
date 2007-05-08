@@ -63,11 +63,12 @@ void WMain::OnButtonEvaluate(wxCommandEvent &)
     // parse text into parse tree
     wxString text = textctrlExpression->GetValue();
 
-    const stx::ParseNode* pn = NULL;
+    stx::ParseTree pt;
+
     try
     {
-	pn = stx::parseExpressionString( std::string(text.mb_str()) );
-	std::string strexpr = pn->toString();
+	pt = stx::parseExpression( std::string(text.mb_str()) );
+	std::string strexpr = pt.toString();
 	textctrlStringExpression->SetValue( wxString(strexpr.data(), wxConvUTF8, strexpr.size()) );
     }
     catch (stx::ExpressionParserException &e)
@@ -100,13 +101,13 @@ void WMain::OnButtonEvaluate(wxCommandEvent &)
     }
 
     // fill in xml tree
-    std::string xmlstr = stx::parseExpressionStringXML( std::string(text.mb_str()) );
+    std::string xmlstr = stx::parseExpressionXML( std::string(text.mb_str()) );
     textctrlXmlTree->SetValue( wxString(xmlstr.data(), wxConvUTF8, xmlstr.size()) );
 
     // evaluate parse tree with variables table
     try
     {
-	stx::AnyScalar val = pn->evaluate(vartable);
+	stx::AnyScalar val = pt.evaluate(vartable);
 
 	textctrlResultType->SetValue( wxString(val.getTypeString().c_str(), wxConvUTF8) );
 	textctrlResultValue->SetValue( wxString(val.getString().c_str(), wxConvUTF8) );

@@ -1,4 +1,9 @@
 // $Id$
+/** \file ExpressionParser.h
+ * Definition of a the public interface of the STX Expression Parser. It
+ * exports the abstract interface to a ParseNode tree root and the parse
+ * functions themselves.
+ */
 
 #ifndef _STX_ExpressionParser_H_
 #define _STX_ExpressionParser_H_
@@ -6,6 +11,8 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <assert.h>
+#include <boost/smart_ptr.hpp>
 #include "AnyScalar.h"
 
 /// STX - Some Template Extensions namespace
@@ -23,8 +30,7 @@ public:
 };
 
 /** \ingroup Exception
- * BadSyntaxException is an exception class thrown when the parser
- * recognizes a syntax error. */
+ * Exception class thrown when the parser recognizes a syntax error. */
 
 class BadSyntaxException : public ExpressionParserException
 {
@@ -36,8 +42,8 @@ public:
 };
 
 /** \ingroup Exception
- * UnknownSymbolException is an exception class thrown when the symbol table
- * cannot find a variable or function. */
+ * Exception class thrown when the symbol table cannot find a variable or
+ * function. */
 
 class UnknownSymbolException : public ExpressionParserException
 {
@@ -49,8 +55,8 @@ public:
 };
 
 /** \ingroup Exception
- * BadFunctionCallException is an exception class thrown when the symbol table
- * cannot find a variable or function. */
+ * Exception class thrown when the symbol table cannot correctly execute a
+ * function. */
 
 class BadFunctionCallException : public ExpressionParserException
 {
@@ -83,10 +89,11 @@ public:
 					const paramlist_type &paramlist) const = 0;
 };
 
-/// Class representing variables and functions placeholders within an
-/// expression. This base class contain two tables of variables and
-/// functions. Variables may be filled into the STL map by the program. The
-/// class also contains a set of basic mathematic functions.
+/** Class representing variables and functions placeholders within an
+ * expression. This base class contain two tables of variables and
+ * functions. Variables may be filled into the STL map by the program. The
+ * class also contains a set of basic mathematic functions.
+ */
 class BasicSymbolTable : public SymbolTable
 {
 public:
@@ -189,8 +196,8 @@ public:
 
 /** ParseNode is the abstract node interface of different parse nodes. From
  * these parse nodes the the ExpressionParser constructs a tree which can be
- * evaluated using different SymbolTable settings. */
-
+ * evaluated using different SymbolTable settings.
+ */
 class ParseNode
 {
 protected:
@@ -229,13 +236,77 @@ public:
     virtual ParseNode*	clone() const = 0;
 };
 
+/** ParseTree contains the root node of a parse tree. It correctly allocates
+ * and deletes parse node, because they themselves are not copy-constructable
+ * or assignable. Pimpl class pattern with exposed inner class. */
+class ParseTree
+{
+protected:
+    /// Enclosed smart ptr so that the parse tree is not cloned when ParseTree
+    /// instances are copied.
+    boost::shared_ptr<ParseNode>	rootnode;
+
+public:
+    /// Create NULL parse tree object from the root ParseNode. All functions
+    /// will assert() or segfault unless the tree is assigned.
+    ParseTree()
+	: rootnode(static_cast<ParseNode*>(NULL))
+    {
+    }
+
+    /// Create parse tree object from the root ParseNode.
+    ParseTree(ParseNode* pt)
+	: rootnode(pt)
+    {
+    }
+
+    /// Function to recursively evaluate the contained parse tree and retrieve
+    /// the calculated scalar value based on the given symbol table.
+    AnyScalar	evaluate(const class SymbolTable &st = BasicSymbolTable()) const
+    {
+	assert(rootnode.get() != NULL);
+	return rootnode->evaluate(st);
+    }
+
+    /// Return the parsed expression as a string, which can be parsed again.
+    std::string	toString() const
+    {
+	assert(rootnode.get() != NULL);
+	return rootnode->toString();
+    }
+};
+
 /// Parse the given input expression into a parse tree. The parse tree is
 /// represented by it's root node, which can be evaluated.
-const ParseNode* parseExpressionString(const std::string &input);
+const ParseTree parseExpression(const std::string &input);
 
 /// Parse the given input expression into a parse tree. The parse tree is then
 /// transformed into a XML tree for better visualisation.
-std::string parseExpressionStringXML(const std::string &input);
+std::string parseExpressionXML(const std::string &input);
+
+/** ParseTreeList contains the root parse nodes of a list of expressions. It
+ * correctly allocates and deletes the parse nodes, because they themselves are
+ * not copy-constructable or assignable. */
+class ParseTreeList : public std::vector<ParseTree>
+{
+protected:
+    /// typedef of our parent class
+    typedef std::vector<ParseTree>	parent_type;
+
+public:
+    /// Function to recursively evaluate all the contained parse trees and
+    /// retrieve each calculated scalar value for the given symbol table.
+    std::vector<AnyScalar>	evaluate(const class SymbolTable &st = BasicSymbolTable()) const;
+
+    /// Return the list of parsed expression as a string, which can be parsed
+    /// again.
+    std::string	toString() const;
+};
+
+/// Parse the given input as an expression list "expr1, expr2, ..." into a
+/// vector of parse trees. Each parse tree is represented by it's root node,
+/// which can be evaluated.
+ParseTreeList parseExpressionList(const std::string &input);
 
 } // namespace stx
 

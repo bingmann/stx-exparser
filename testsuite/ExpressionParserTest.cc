@@ -17,21 +17,21 @@ protected:
 
     inline stx::AnyScalar eval(const std::string &str)
     {
-	std::auto_ptr<const stx::ParseNode> pn (stx::parseExpressionString(str));
+	stx::ParseTree pt = stx::parseExpression(str);
 
 	// test reevaluation of the toString().
 	{
-	    std::string strexpr = pn->toString();
-	    std::auto_ptr<const stx::ParseNode> pn2 (stx::parseExpressionString(strexpr));
+	    std::string strexpr = pt.toString();
+	    stx::ParseTree pt2 = stx::parseExpression(strexpr);
 
-	    CPPUNIT_ASSERT( strexpr == pn2->toString() );
+	    CPPUNIT_ASSERT( strexpr == pt2.toString() );
 	}
 
 	stx::BasicSymbolTable bst;
 	bst.setVariable("a", 42);
 	bst.setVariable("e", 2.7183);
 
-	return pn->evaluate(bst);
+	return pt.evaluate(bst);
     }
 
     void test1()
@@ -56,6 +56,8 @@ protected:
 
 	CPPUNIT_ASSERT( eval("-5 + 4.5") == -0.5 );
 
+	CPPUNIT_ASSERT( eval(" \"newline \\n quoted \\\" a\\\\bc\" + \"def\" ") == "newline \n quoted \" a\\bcdef" );
+
 	CPPUNIT_ASSERT( eval("(0 < 1) && (4 > 2) && (1 = 1) && (2 == 2) && (2 != 4) && (1 <= 1) && (1 >= 1) && (2 =< 3) && (4 => 1)") == true );
 
 	CPPUNIT_ASSERT( eval("!(true AND false) || (NOT true OR FALSE)") == true );
@@ -69,7 +71,7 @@ protected:
 	CPPUNIT_ASSERT_THROW( eval("5 + COS(2,2)"), stx::BadFunctionCallException );
 
 	{
-	    std::string xmlstr = stx::parseExpressionStringXML("((integer)(5 * 1.5 >= 1)) + 5");
+	    std::string xmlstr = stx::parseExpressionXML("((integer)(5 * 1.5 >= 1)) + 5");
 	    CPPUNIT_ASSERT( xmlstr.size() == 1010 );
 	}
     }

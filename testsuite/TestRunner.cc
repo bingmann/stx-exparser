@@ -19,7 +19,8 @@ int main()
     runner.addTest( suite );
 
     // add brief output before running each test
-    runner.eventManager().addListener( new CppUnit::BriefTestProgressListener() );
+    CppUnit::BriefTestProgressListener proglistener;
+    runner.eventManager().addListener(&proglistener);
 
     // Change the default outputter to a compiler error format outputter
     runner.setOutputter( new CppUnit::TextOutputter( &runner.result(), std::cout ) );

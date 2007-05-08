@@ -1,4 +1,8 @@
 // $Id$
+/** \file AnyScalar.cc
+ * Implementation of the typed scalar value class AnyScalar used by the parser
+ * to represent values.
+ */
 
 #include "AnyScalar.h"
 
@@ -974,6 +978,68 @@ std::string AnyScalar::getString() const
     }
     assert(0);
     return false;
+}
+
+std::string AnyScalar::getStringQuoted() const
+{
+    std::string str = getString();
+    std::string os = "\"";
+
+    os.reserve(2 + str.size() + str.size() / 16);
+
+    // escape string s
+    for(std::string::const_iterator si = str.begin(); si != str.end(); ++si)
+    {
+	switch(*si)
+	{
+	case '\a':
+	    os += "\\a";
+	    break;
+
+	case '\b':
+	    os += "\\b";
+	    break;
+
+	case '\f':
+	    os += "\\f";
+	    break;
+
+	case '\n':
+	    os += "\\n";
+	    break;
+
+	case '\r':
+	    os += "\\r";
+	    break;
+
+	case '\t':
+	    os += "\\t";
+	    break;
+    
+	case '\v':
+	    os += "\\v";
+	    break;
+
+	case '\\':
+	    os += "\\\\";
+	    break;
+
+	case '"':
+	    os += "\\\"";
+	    break;
+
+	case '\'':
+	    os += "\\'";
+	    break;
+
+	default:
+	    os += *si;
+	    break;
+	}
+    }
+
+    os += "\"";
+    return os;
 }
 
 void AnyScalar::resetType(attrtype_t t)

@@ -2,12 +2,12 @@
 
 use STX::ExpressionParser;
 
-my $pn = STX::ExpressionParser::parseExpressionString(join(" ", @ARGV));
+my $pt = STX::ExpressionParser::parseExpression(join(" ", @ARGV));
 
-print "Parsed.toString(): ".$pn->toString()."\n";
+print "Parsed.toString(): ".$pt->toString()."\n";
 
 my $bst = STX::ExpressionParser::BasicSymbolTable->new();
 $bst->setVariables({ x => 42 });
 
-print "Evaluated: ".$pn->evaluate($bst)->getString()."\n";
+print "Evaluated: ".$pt->evaluate($bst)->getString()."\n";
 

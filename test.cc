@@ -16,13 +16,13 @@ int main(int argc, char *argv[])
 
     std::cout << "string: " << args << "\n";
 
-    const ParseNode* pn;
+    ParseTree pt;
 
     try
     {
-	pn = parseExpressionString(args);
+	pt = parseExpression(args);
 	
-	std::cout << "parsed: " << pn->toString() << "\n";
+	std::cout << "parsed: " << pt.toString() << "\n";
     }
     catch (ExpressionParserException &e)
     {
@@ -30,13 +30,12 @@ int main(int argc, char *argv[])
 	return 0;
     }
 
-
     BasicSymbolTable bst;
     bst.setVariable("x", 42);
 
     try
     {
-	AnyScalar val = pn->evaluate(bst);
+	AnyScalar val = pt.evaluate(bst);
 
 	std::cout << "evaluated: " << val << "\n";
     }
@@ -45,6 +44,4 @@ int main(int argc, char *argv[])
 	std::cout << "UnknownSymbolException: " << e.what() << "\n";
 	return 0;
     }
-
-    delete pn;
 }

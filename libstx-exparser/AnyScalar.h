@@ -1,4 +1,8 @@
 // $Id$
+/** \file AnyScalar.h
+ * Definition of a typed scalar value class AnyScalar used by the parser to
+ * represent values.
+ */
 
 #ifndef _STX_AnyScalar_H_
 #define _STX_AnyScalar_H_
@@ -615,6 +619,11 @@ public:
      * - string: return the string.
      */
     std::string		getString() const;
+
+    /** Return the value converted to a quoted string. This function never
+     * throws ConversionException. It calls getString() and adds " and escape
+     * sequences. */
+    std::string		getStringQuoted() const;
     
     // *** Unary Operators
     

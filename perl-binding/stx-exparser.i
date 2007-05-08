@@ -9,6 +9,7 @@ using namespace stx;
 %}
 
 %include "std_string.i"
+%include "std_vector.i"
 
 %exception {
     try {
