@@ -21,7 +21,7 @@ run-gcov: clean-gcov
 	lcov --directory . --zerocounters --path `pwd`
 	-$(MAKE) check
 	lcov --directory . --capture --output-file coverage/all.info
-	lcov -e coverage/all.info "/tdata/*" -o coverage/testsuite.info
+	lcov -r coverage/all.info "/usr/*" -o coverage/testsuite.info
 	genhtml -o coverage --num-spaces 8 coverage/testsuite.info --title "STX ExpressionParser Testsuite" --prefix `pwd`
 
 clean-gcov:

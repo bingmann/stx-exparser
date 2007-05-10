@@ -48,6 +48,8 @@ protected:
 
 	CPPUNIT_ASSERT( eval("((integer)(5 * 1.5 >= 1)) + 5") == 6 );
 
+	CPPUNIT_ASSERT( eval("(integer)(e)") == 2 );
+
 	CPPUNIT_ASSERT( eval(" logn(exp(21)) + sqrt(pow(21,2)) == 42 ") == true );
 
 	CPPUNIT_ASSERT( eval("10 > 5 AND 5.2 <= 42.2 OR 2 == 4") == true );

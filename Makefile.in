@@ -697,7 +697,7 @@ uninstall-am:
 @GCOV_TRUE@	lcov --directory . --zerocounters --path `pwd`
 @GCOV_TRUE@	-$(MAKE) check
 @GCOV_TRUE@	lcov --directory . --capture --output-file coverage/all.info
-@GCOV_TRUE@	lcov -e coverage/all.info "/tdata/*" -o coverage/testsuite.info
+@GCOV_TRUE@	lcov -r coverage/all.info "/usr/*" -o coverage/testsuite.info
 @GCOV_TRUE@	genhtml -o coverage --num-spaces 8 coverage/testsuite.info --title "STX ExpressionParser Testsuite" --prefix `pwd`
 
 @GCOV_TRUE@clean-gcov:

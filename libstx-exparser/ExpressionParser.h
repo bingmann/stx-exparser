@@ -231,9 +231,6 @@ public:
 
     /// Return the parsed expression as a string, which can be parsed again.
     virtual std::string toString() const = 0;
-
-    /// virtual copy construtor
-    virtual ParseNode*	clone() const = 0;
 };
 
 /** ParseTree contains the root node of a parse tree. It correctly allocates
