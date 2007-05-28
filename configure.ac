@@ -9,6 +9,21 @@ AC_CONFIG_AUX_DIR(scripts)
 
 AM_INIT_AUTOMAKE(foreign)
 
+# enable full optimization by configure switch
+AC_ARG_ENABLE(optimize,
+	AS_HELP_STRING([--enable-optimize],
+		       [Build with full optimization @<:@default=no@:>@]),
+        [ case "${enableval}" in
+          yes)
+                CFLAGS="$CFLAGS -O3 -DNDEBUG";
+                CXXFLAGS="$CXXFLAGS -O3 -DNDEBUG";
+          ;;
+          no) ;;
+          *) AC_MSG_ERROR(bad value ${enableval} for --enable-optimize) ;;
+          esac ],
+        [ optimize=false ])
+
+# set debug info flag if no optimization flags are set.
 if test "$CFLAGS" == ""; then
     CFLAGS="-g"
 fi

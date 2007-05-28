@@ -148,6 +148,13 @@ public:
     {
 	val._int = i;
     }
+    /// Construct a new AnyScalar object of type ATTRTYPE_INTEGER and set the
+    /// given integer value.
+    inline AnyScalar(long i)
+	: atype(ATTRTYPE_INTEGER)
+    {
+	val._int = i;
+    }
     /// Construct a new AnyScalar object of type ATTRTYPE_LONG and set the
     /// given long value.
     inline AnyScalar(long long l)
@@ -172,6 +179,13 @@ public:
     /// Construct a new AnyScalar object of type ATTRTYPE_DWORD and set the given
     /// unsigned value.
     inline AnyScalar(unsigned int i)
+	: atype(ATTRTYPE_DWORD)
+    {
+	val._uint = i;
+    }
+    /// Construct a new AnyScalar object of type ATTRTYPE_DWORD and set the given
+    /// unsigned value.
+    inline AnyScalar(unsigned long i)
 	: atype(ATTRTYPE_DWORD)
     {
 	val._uint = i;
@@ -202,7 +216,10 @@ public:
     inline AnyScalar(const char *s)
 	: atype(ATTRTYPE_STRING)
     {
-	val._string = new std::string(s);
+	if (s == NULL) 
+	    val._string = new std::string;
+	else
+	    val._string = new std::string(s);
     }
     /// Construct a new AnyScalar object of type ATTRTYPE_STRING and set the
     /// given string value.
@@ -336,6 +353,12 @@ public:
     inline attrtype_t	getType() const
     {
 	return atype;
+    }
+
+    /// Returns true if this object contains a boolean value.
+    inline bool		isBooleanType() const
+    {
+	return (atype == ATTRTYPE_BOOL);
     }
 
     /// Returns true if this object contains one of the integer types.

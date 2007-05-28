@@ -257,6 +257,12 @@ public:
     {
     }
 
+    /// Returns true if this object does not contain a parse tree.
+    inline bool	isEmpty() const
+    {
+	return (rootnode.get() == NULL);
+    }
+
     /// Function to recursively evaluate the contained parse tree and retrieve
     /// the calculated scalar value based on the given symbol table.
     AnyScalar	evaluate(const class SymbolTable &st = BasicSymbolTable()) const
