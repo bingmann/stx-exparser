@@ -1367,10 +1367,25 @@ std::string ParseTreeList::toString() const
     return sl;
 }
 
-/// *** BasicSymbolTable implementation
+/// *** SymbolTable, EmptySymbolTable and BasicSymbolTable implementation
 
 SymbolTable::~SymbolTable()
 {
+}
+
+EmptySymbolTable::~EmptySymbolTable()
+{
+}
+
+AnyScalar EmptySymbolTable::lookupVariable(const std::string &varname) const
+{
+    throw(UnknownSymbolException(std::string("Unknown variable ") + varname));
+}
+
+AnyScalar EmptySymbolTable::processFunction(const std::string &funcname,
+					    const paramlist_type &) const
+{
+    throw(UnknownSymbolException(std::string("Unknown function ") + funcname + "()"));
 }
 
 BasicSymbolTable::BasicSymbolTable()

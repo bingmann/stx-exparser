@@ -821,18 +821,6 @@ static inline std::ostream& operator<< (std::ostream &stream, const AnyScalar &a
     return stream << as.getString();
 }
 
-/** ConversionException is an exception class thrown by some combinations of
- * get and set in AnyScalar. \ingroup Exception */
-
-class ConversionException : public std::runtime_error
-{
-public:
-    /// Constructor of the exception takes the description string s.
-    inline ConversionException(const std::string &s) throw()
-	: std::runtime_error(s)
-    { }
-};
-
 } // namespace stx
 
 #endif // VGS_AnyScalar_H

@@ -18,8 +18,8 @@
 /// STX - Some Template Extensions namespace
 namespace stx {
 
-/** \ingroup Exception
- * Base class for other exceptions of the expression parser and evaluators. */
+/** Base class for other exceptions of the expression parser and
+ * evaluators. \ingroup Exception */
 class ExpressionParserException : public std::runtime_error
 {
 public:
@@ -29,8 +29,20 @@ public:
     { }
 };
 
-/** \ingroup Exception
- * Exception class thrown when the parser recognizes a syntax error. */
+/** ConversionException is an exception class thrown by some combinations of
+ * get and set in AnyScalar. \ingroup Exception */
+
+class ConversionException : public ExpressionParserException
+{
+public:
+    /// Constructor of the exception takes the description string s.
+    inline ConversionException(const std::string &s) throw()
+	: ExpressionParserException(s)
+    { }
+};
+
+/** Exception class thrown when the parser recognizes a syntax error.
+ * \ingroup Exception */
 
 class BadSyntaxException : public ExpressionParserException
 {
@@ -41,9 +53,8 @@ public:
     { }
 };
 
-/** \ingroup Exception
- * Exception class thrown when the symbol table cannot find a variable or
- * function. */
+/** Exception class thrown when the symbol table cannot find a variable or
+ * function. \ingroup Exception */
 
 class UnknownSymbolException : public ExpressionParserException
 {
@@ -54,9 +65,8 @@ public:
     { }
 };
 
-/** \ingroup Exception
- * Exception class thrown when the symbol table cannot correctly execute a
- * function. */
+/** Exception class thrown when the symbol table cannot correctly execute a
+ * function. \ingroup Exception */
 
 class BadFunctionCallException : public ExpressionParserException
 {
@@ -67,10 +77,10 @@ public:
     { }
 };
 
-/// Abstract class used for evaluation of variables and function placeholders
-/// within an expression. If you wish some standard mathematic function, then
-/// derive your SymbolTable class from BasicSymbolTable instead of directly
-/// from this one.
+/** Abstract class used for evaluation of variables and function placeholders
+ * within an expression. If you wish some standard mathematic function, then
+ * derive your SymbolTable class from BasicSymbolTable instead of directly from
+ * this one. */
 class SymbolTable
 {
 public:
@@ -87,6 +97,30 @@ public:
     /// expression.
     virtual AnyScalar	processFunction(const std::string &funcname,
 					const paramlist_type &paramlist) const = 0;
+};
+
+/** Concrete class used for evaluation of variables and function placeholders
+ * within an expression. This class will always throw an UnknownSymbolException
+ * for both lookup functions. It can be used as a base class for symbol tables
+ * without the standard functions included in BasicSymbolTable. */
+class EmptySymbolTable : public SymbolTable
+{
+public:
+    /// STL container type used for parameter lists: a vector
+    typedef std::vector<AnyScalar>	paramlist_type;
+
+    /// Required for virtual functions.
+    virtual ~EmptySymbolTable();
+
+    /// Return the (constant) value of a variable. In this dummy implementation
+    /// no variables are defined, it always throws an UnknownSymbolException.
+    virtual AnyScalar	lookupVariable(const std::string &varname) const;
+
+    /// Called when a program-defined function needs to be evaluated within an
+    /// expression. In this dummy implementation no functions are defined, it
+    /// always throws an UnknownSymbolException.
+    virtual AnyScalar	processFunction(const std::string &funcname,
+					const paramlist_type &paramlist) const;
 };
 
 /** Class representing variables and functions placeholders within an

@@ -5,6 +5,7 @@
  */
 
 #include "AnyScalar.h"
+#include "ExpressionParser.h"
 
 #include <stdlib.h>
 #include <functional>
