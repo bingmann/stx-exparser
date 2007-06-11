@@ -2,7 +2,7 @@
 
 noinst_PROGRAMS = exprcalc
 
-exprcalc_SOURCES = simple.cc
+exprcalc_SOURCES = exprcalc.cc
 
 exprcalc_LDADD = $(top_srcdir)/libstx-exparser/libstx-exparser.a
 

@@ -102,7 +102,7 @@ the working of the example.
 
 \section sec1 Detailed Example Code Guide
 
-\dontinclude simple/simple.cc
+\dontinclude simple/exprcalc.cc
 
 \skipline ExpressionParser
 
@@ -170,15 +170,15 @@ and will throw.
 
 The example can be found in the distribution in examples/simple/
 
-\include simple/simple.cc
+\include simple/exprcalc.cc
 
 
 
 
 \page example_csvfilter Example Application: CSV-File Record Filter
 
-The second example is a CSV-file filter. It will read a simple tab-delimited
-csv data file with column headers and apply the given filter expression to each
+The second example is a CSV-file filter. It will read a tab-delimited csv data
+file with column headers and apply the given filter expression to each
 line. Each line is taken as a record of variables named by the column
 header. For each line the expression is evaluated and if it returns a "true"
 boolean value then the line is copied to the output. if it returns a "false"

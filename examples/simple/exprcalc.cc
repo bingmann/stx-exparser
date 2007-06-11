@@ -1,8 +1,8 @@
 // $Id$
-/** \file simple.cc
- * File containing the first example application: A Simple Expression
- * Calculator. See the doxygen documentation for a detailed walk-through of the
- * code.
+/** \file exprcalc.cc
+ * File containing the first example application:
+ * A Simple Expression Calculator.
+ * See the doxygen documentation for a detailed walk-through of the code.
  */
 
 // Simple Expression Calculator Example
