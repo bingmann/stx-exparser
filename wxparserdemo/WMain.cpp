@@ -79,14 +79,6 @@ void WMain::OnButtonEvaluate(wxCommandEvent &)
 	textctrlResultValue->Clear();
 	return;
     }
-    catch (stx::ConversionException &e)
-    {
-	textctrlStringExpression->SetValue( wxT("Exception: ") + wxString(e.what(), wxConvUTF8) );
-	textctrlXmlTree->Clear();
-	textctrlResultType->Clear();
-	textctrlResultValue->Clear();
-	return;
-    }
 
     // load variable table
     VariableTable	vartable;
@@ -113,11 +105,6 @@ void WMain::OnButtonEvaluate(wxCommandEvent &)
 	textctrlResultValue->SetValue( wxString(val.getString().c_str(), wxConvUTF8) );
     }
     catch (stx::ExpressionParserException &e)
-    {
-	textctrlResultType->SetValue( wxT("exception") );
-	textctrlResultValue->SetValue( wxString(e.what(), wxConvUTF8) );
-    }
-    catch (stx::ConversionException &e)
     {
 	textctrlResultType->SetValue( wxT("exception") );
 	textctrlResultValue->SetValue( wxString(e.what(), wxConvUTF8) );

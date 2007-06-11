@@ -4,7 +4,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT(stx-exparser, 0.7)
-AC_CONFIG_SRCDIR([test.cc])
+AC_CONFIG_SRCDIR([libstx-exparser/ExpressionParser.cc])
 AC_CONFIG_AUX_DIR(scripts)
 
 AM_INIT_AUTOMAKE(foreign)
@@ -130,5 +130,8 @@ AC_CONFIG_FILES([Makefile
                  libstx-exparser/Makefile
 	         testsuite/Makefile
 		 wxparserdemo/Makefile
-		 perl-binding/Makefile])
+		 perl-binding/Makefile
+                 examples/Makefile
+		 examples/simple/Makefile
+                 examples/csvfilter/Makefile])
 AC_OUTPUT

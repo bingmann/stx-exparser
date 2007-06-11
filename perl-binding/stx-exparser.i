@@ -38,12 +38,16 @@ using namespace stx;
 %perlcode %{
 package STX::ExpressionParser::BasicSymbolTable;
 
-# Nicer Function to add a hash of variables to the symbol table
+# Nicer Function to add a hash of variables to the symbol table. A direct call
+# of the constructor new($$hashref{$k}) does not work right because of swig's
+# type switching.
 sub setVariables($\%) {
     my ($self,$hashref) = (@_);
 
     foreach my $k (keys %$hashref) {
-	$self->setVariable($k, STX::ExpressionParser::AnyScalar->new($$hashref{$k}));
+        my $v = STX::ExpressionParser::AnyScalar->new(STX::ExpressionParser::AnyScalar::ATTRTYPE_STRING);
+        $v->setString($$hashref{$k});
+	$self->setVariable($k, $v);
     }
 }
 

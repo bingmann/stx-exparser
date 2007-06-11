@@ -2,7 +2,7 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "AnyScalar.h"
+#include "ExpressionParser.h"
 
 #include <stdlib.h>
 #include <boost/lexical_cast.hpp>

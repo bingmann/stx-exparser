@@ -517,7 +517,7 @@ EXCLUDE_SYMBOLS        =
 # directories that contain example code fragments that are included (see 
 # the \include command).
 
-EXAMPLE_PATH           = 
+EXAMPLE_PATH           = examples/simple/ examples/csvfilter/
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the 
 # EXAMPLE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
@@ -982,12 +982,12 @@ GROUP_GRAPHS           = YES
 # collaboration diagrams in a style similar to the OMG's Unified Modeling 
 # Language.
 
-UML_LOOK               = YES
+UML_LOOK               = NO
 
 # If set to YES, the inheritance and collaboration graphs will show the 
 # relations between templates and their instances.
 
-TEMPLATE_RELATIONS     = NO
+TEMPLATE_RELATIONS     = YES
 
 # If the ENABLE_PREPROCESSING, SEARCH_INCLUDES, INCLUDE_GRAPH, and HAVE_DOT 
 # tags are set to YES then doxygen will generate a graph for each documented 
