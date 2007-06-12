@@ -31,6 +31,19 @@ WMain::WMain()
 	buttonAddVariable->SetBitmapLabel( wxBitmap(addrow) );
 	buttonDelVariable->SetBitmapLabel( wxBitmap(delrow) );
     }
+    // xpm program images
+    {
+	#include "img/progicon16.xpm"
+	#include "img/progicon32.xpm"
+	#include "img/progicon48.xpm"
+
+	wxIconBundle icons;
+	icons.AddIcon(wxIcon(progicon16_xpm));
+	icons.AddIcon(wxIcon(progicon32_xpm));
+	icons.AddIcon(wxIcon(progicon48_xpm));
+
+	SetIcons(icons);
+    }
 
     textctrlExpression->SetFocus();
 }

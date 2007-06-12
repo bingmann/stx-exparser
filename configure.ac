@@ -6,6 +6,7 @@ AC_PREREQ(2.59)
 AC_INIT(stx-exparser, 0.7)
 AC_CONFIG_SRCDIR([libstx-exparser/ExpressionParser.cc])
 AC_CONFIG_AUX_DIR(scripts)
+AC_CANONICAL_HOST
 
 AM_INIT_AUTOMAKE(foreign)
 
@@ -115,6 +116,14 @@ if test "$wxWin" != 1; then
 	equivalent variable.
     ])
 fi
+
+# Win32 tools to add icons to the demo program
+case "${host}" in
+*-*-cygwin* | *-*-mingw32*)
+    AC_CHECK_TOOL(RESCOMP, windres)
+    ;;
+esac
+AM_CONDITIONAL(GOT_RESCOMP, test x$RESCOMP != x)
 
 # Check for SWIG
 AC_PROG_SWIG(1.3.31)
