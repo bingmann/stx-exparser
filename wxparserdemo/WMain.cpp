@@ -45,6 +45,7 @@ WMain::WMain()
 	SetIcons(icons);
     }
 
+    SetSize(360, 480);
     textctrlExpression->SetFocus();
 }
 
