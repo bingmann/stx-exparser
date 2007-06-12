@@ -17,5 +17,5 @@ testsuite_SOURCES = TestTrue.cc
 
 endif
 
-AM_CXXFLAGS = -W -Wall -Wold-style-cast -I$(top_srcdir)/libstx-exparser @CPPUNIT_CFLAGS@
+AM_CXXFLAGS = -W -Wall -I$(top_srcdir)/libstx-exparser @CPPUNIT_CFLAGS@
 LDADD = @CPPUNIT_LIBS@ $(top_srcdir)/libstx-exparser/libstx-exparser.a

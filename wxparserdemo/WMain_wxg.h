@@ -49,6 +49,7 @@ protected:
     wxTextCtrl* textctrlXmlTree;
     wxPanel* notebook_1_pane_3;
     wxNotebook* notebookResults;
+    wxPanel* panel_Main;
     // end wxGlade
 }; // wxGlade: end class
 

@@ -131,7 +131,7 @@ AC_PROG_SWIG(1.3.31)
 SWIG_ENABLE_CXX
 AC_CHECK_PROG(PERL,perl,perl)
 
-AM_CONDITIONAL(HAVE_SWIG, test x"$SWIG" != x)
+AM_CONDITIONAL(HAVE_SWIG, test x"$SWIG_LIB" != x)
 
 # Checks for library functions.
 

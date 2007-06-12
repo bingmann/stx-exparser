@@ -7,15 +7,16 @@ WMain_wxg::WMain_wxg(wxWindow* parent, int id, const wxString& title, const wxPo
     wxFrame(parent, id, title, pos, size, wxDEFAULT_FRAME_STYLE)
 {
     // begin wxGlade: WMain_wxg::WMain_wxg
-    notebookResults = new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0);
+    panel_Main = new wxPanel(this, wxID_ANY);
+    notebookResults = new wxNotebook(panel_Main, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0);
     notebook_1_pane_3 = new wxPanel(notebookResults, wxID_ANY);
     notebook_1_pane_2 = new wxPanel(notebookResults, wxID_ANY);
     notebook_1_pane_1 = new wxPanel(notebookResults, wxID_ANY);
     sizer_5_staticbox = new wxStaticBox(notebook_1_pane_2, -1, wxT("Parsed Expression String"));
     sizer_6_staticbox = new wxStaticBox(notebook_1_pane_2, -1, wxT("Evaluation Result"));
-    sizer_2_staticbox = new wxStaticBox(this, -1, wxT("Expression"));
-    textctrlExpression = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_WORDWRAP);
-    buttonEvaluate = new wxButton(this, ID_BUTTON_EVALUATE, wxT("Evaluate"));
+    sizer_2_staticbox = new wxStaticBox(panel_Main, -1, wxT("Expression"));
+    textctrlExpression = new wxTextCtrl(panel_Main, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_WORDWRAP);
+    buttonEvaluate = new wxButton(panel_Main, ID_BUTTON_EVALUATE, wxT("Evaluate"));
     gridVariables = new wxGrid(notebook_1_pane_1, ID_GRID_VARIABLES);
     buttonAddVariable = new wxBitmapButton(notebook_1_pane_1, ID_BUTTON_ADD_VARIABLE, wxNullBitmap);
     buttonDelVariable = new wxBitmapButton(notebook_1_pane_1, ID_BUTTON_DEL_VARIABLE, wxNullBitmap);
@@ -34,7 +35,7 @@ void WMain_wxg::set_properties()
 {
     // begin wxGlade: WMain_wxg::set_properties
     SetTitle(wxT("wxParserDemo"));
-    SetSize(wxSize(442, 539));
+    SetSize(wxSize(450, 602));
     gridVariables->CreateGrid(5, 2);
     gridVariables->SetRowLabelSize(0);
     gridVariables->SetColLabelValue(0, wxT("Name"));
@@ -48,6 +49,7 @@ void WMain_wxg::set_properties()
 void WMain_wxg::do_layout()
 {
     // begin wxGlade: WMain_wxg::do_layout
+    wxBoxSizer* sizer_Top = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer* sizer_1 = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer* sizer_7 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_4 = new wxBoxSizer(wxVERTICAL);
@@ -82,7 +84,9 @@ void WMain_wxg::do_layout()
     notebookResults->AddPage(notebook_1_pane_2, wxT("Result"));
     notebookResults->AddPage(notebook_1_pane_3, wxT("XML Tree"));
     sizer_1->Add(notebookResults, 1, wxALL|wxEXPAND, 6);
-    SetSizer(sizer_1);
+    panel_Main->SetSizer(sizer_1);
+    sizer_Top->Add(panel_Main, 1, wxEXPAND, 0);
+    SetSizer(sizer_Top);
     Layout();
     Centre();
     // end wxGlade

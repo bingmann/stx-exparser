@@ -21697,7 +21697,7 @@ fi
 
 
 
- if test x"$SWIG" != x; then
+ if test x"$SWIG_LIB" != x; then
   HAVE_SWIG_TRUE=
   HAVE_SWIG_FALSE='#'
 else

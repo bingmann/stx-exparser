@@ -200,7 +200,7 @@ top_srcdir = @top_srcdir@
 @HAVE_CPPUNIT_FALSE@testsuite_SOURCES = TestTrue.cc
 @HAVE_CPPUNIT_TRUE@testsuite_SOURCES = TestRunner.cc AnyScalarTest.cc \
 @HAVE_CPPUNIT_TRUE@	ExpressionParserTest.cc
-AM_CXXFLAGS = -W -Wall -Wold-style-cast -I$(top_srcdir)/libstx-exparser @CPPUNIT_CFLAGS@
+AM_CXXFLAGS = -W -Wall -I$(top_srcdir)/libstx-exparser @CPPUNIT_CFLAGS@
 LDADD = @CPPUNIT_LIBS@ $(top_srcdir)/libstx-exparser/libstx-exparser.a
 all: all-am
 
