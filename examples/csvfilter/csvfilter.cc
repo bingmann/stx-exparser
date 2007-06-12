@@ -10,7 +10,6 @@
 #include "ExpressionParser.h"
 
 #include <iostream>
-#include <fstream>
 #include <string>
 #include <vector>
 #include <map>
@@ -20,7 +19,8 @@ const char delimiter = '\t';
 
 // read one line from instream and split it into tab (or otherwise) delimited
 // columns. returns the number of columns read, 0 if eof.
-unsigned int read_csvline(std::istream &instream, std::vector<std::string> &columns)
+unsigned int read_csvline(std::istream &instream,
+			  std::vector<std::string> &columns)
 {
     columns.clear();
 
@@ -68,7 +68,9 @@ public:
     virtual stx::AnyScalar lookupVariable(const std::string &varname) const
     {
 	// look if the variable name is defined by the CSV file
-	std::map<std::string, unsigned int>::const_iterator varfind = headersmap.find(varname);
+	std::map<std::string, unsigned int>::const_iterator
+	    varfind = headersmap.find(varname);
+
 	if (varfind == headersmap.end()) {
 	    // if not, let BasicSymbolTable check if it knows it
 	    return stx::BasicSymbolTable::lookupVariable(varname);
@@ -79,22 +81,16 @@ public:
 	if(varfind->second < datacolumns.size())
 	    return datacolumns[ varfind->second ];
 	else
-	    return "";	// happens when a data row has too few delimited fields.
+	    return "";	// happens when a data row has too few delimited
+			// fields.
     }
 };
 
 int main(int argc, char *argv[])
 {
-    // the first argument is taken to be the CSV filename
-    if (argc < 2) {
-	std::cerr << "Usage: " << argv[0] << " <csv-filename> <filter expression> ..." << "\n";
-	return 0;
-    }
-    std::string csvfilename = argv[1];
-
     // collect expression by joining all remaining input arguments
     std::string args;
-    for(int i = 2; i < argc; i++) {
+    for(int i = 1; i < argc; i++) {
 	if (!args.empty()) args += " ";
 	args += argv[i];
     }
@@ -114,24 +110,11 @@ int main(int argc, char *argv[])
 	return 0;
     }
 
-    // open the CSV file stream, either stdin or the given filename
-    std::ifstream csvfilestream;
-    if (csvfilename != "-")
-    {
-	csvfilestream.open(csvfilename.c_str());
-	if (!csvfilestream) {
-	    std::cerr << "Error opening CSV file " << csvfilename << "\n";
-	    return 0;
-	}
-    }
-
-    std::istream& csvfile = (csvfilename == "-") ? std::cin : csvfilestream;
-
     // read first line of CSV input as column headers
     std::cerr << "Reading CSV column headers from input\n";
     std::vector<std::string> headers;
 
-    if (read_csvline(csvfile, headers) == 0) {
+    if (read_csvline(std::cin, headers) == 0) {
 	std::cerr << "Error read column headers: no input\n";
 	return 0;
     }
@@ -155,7 +138,7 @@ int main(int argc, char *argv[])
     std::vector<std::string> datacolumns;
     CSVRowSymbolTable csvsymboltable(headersmap, datacolumns);
 
-    while( read_csvline(csvfile, datacolumns) > 0 )
+    while( read_csvline(std::cin, datacolumns) > 0 )
     {
         // evaluate the expression for each row using the headers/datacolumns
         // as variables
@@ -176,7 +159,8 @@ int main(int argc, char *argv[])
 	    }
 
 	    // output this data row to std::cout
-	    for(std::vector<std::string>::const_iterator coliter = datacolumns.begin();
+	    for(std::vector<std::string>::const_iterator
+		    coliter = datacolumns.begin();
 		coliter != datacolumns.end(); ++coliter)
 	    {
 		if (coliter != datacolumns.begin()) std::cout << delimiter;

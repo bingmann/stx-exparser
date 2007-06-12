@@ -1,3 +1,3 @@
 # $Id$
 
-SUBDIRS = simple csvfilter
+SUBDIRS = simple csvfilter csvtool

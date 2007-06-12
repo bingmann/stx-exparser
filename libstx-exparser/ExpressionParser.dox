@@ -84,10 +84,10 @@ into constant objects. This way repeated evaluation of the ParseTree is
 accelerated. At the end the top stx::ParseNode is returned in a stx::ParseTree
 enclosure.
 
-The stx::ParseTree's main method is \ref stx::ParseTree::evaluate "evaluate()" which takes a stx::SymbolTable
-and recursively evaluates the contained stx::ParseNode tree using the variable
-and functions contained in the symbol table. The result is returned as an
-AnyScalar object.
+The stx::ParseTree's main method is \ref stx::ParseTree::evaluate "evaluate()"
+which takes a stx::SymbolTable and recursively evaluates the contained
+stx::ParseNode tree using the variable and functions contained in the symbol
+table. The result is returned as an AnyScalar object.
 
 
 
@@ -220,7 +220,7 @@ the filter expression as variables. For each of the following data rows the
 expression is evaluated with variables set to the corresponding data fields.
 
 An example run of the csvfilter could be:
-\li <tt>./csvfilter City.csv 'Population > 1000000 && CountryCode = "USA"'</tt>
+\li <tt>./csvfilter 'Population > 1000000 && CountryCode = "USA"' < City.csv</tt>
 
 This will output the following debug information on stderr: 
 \code
@@ -345,7 +345,28 @@ Country.csv
 
 \include csvfilter/csvfilter.cc
 
-\page example_wxparserdemo
+
+
+
+\page example_csvtool Example Application: Enhanced CSV-File Record Filter and Sorter
+
+The csvtool example program is an extended version of the \ref
+example_csvfilter "csvfilter" program. It bufferes all matching lines from the
+csv after evaluation of the filter. This buffered table is then sorted using a
+"natural sort" relation and outputted to stdout. Offset and limit of the
+outputted region can be given.
+
+This tool is used on the expression parser's web site for an Online CSV Filter
+Demo: http://idlebox.net/2007/stx-exparser/csvfilter.htt/
+
+\section sec1_complete Complete Example Source Code
+
+\include csvtool/csvtool.cc
+
+
+
+
+\page example_wxparserdemo Demo Application: wxParserDemo
 
 
 */

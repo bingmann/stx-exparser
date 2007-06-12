@@ -133,5 +133,6 @@ AC_CONFIG_FILES([Makefile
 		 perl-binding/Makefile
                  examples/Makefile
 		 examples/simple/Makefile
-                 examples/csvfilter/Makefile])
+                 examples/csvfilter/Makefile
+                 examples/csvtool/Makefile])
 AC_OUTPUT
