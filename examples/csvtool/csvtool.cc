@@ -335,18 +335,18 @@ int main(int argc, char *argv[])
     std::cout << "\n";
 
     // output data rows from "offset" to "offset+limit"
-    unsigned int current = 0;
 
-    for(std::vector< std::vector<std::string> >::const_iterator recorditer = datarecords.begin();
-	recorditer != datarecords.end(); ++recorditer, ++current)
+    for(unsigned int current = offset;
+	current < offset + limit && current < datarecords.size();
+	++current)
     {
-	if (current < offset || current >= offset + limit) continue;
-	
+	std::vector<std::string> &currrecord = datarecords[current];
+
 	// output this data row to std::cout
-	for(std::vector<std::string>::const_iterator coliter = recorditer->begin();
-	    coliter != recorditer->end(); ++coliter)
+	for(std::vector<std::string>::const_iterator coliter = currrecord.begin();
+	    coliter != currrecord.end(); ++coliter)
 	{
-	    if (coliter != recorditer->begin()) std::cout << delimiter;
+	    if (coliter != currrecord.begin()) std::cout << delimiter;
 	    std::cout << *coliter;
 	}
 	std::cout << "\n";
