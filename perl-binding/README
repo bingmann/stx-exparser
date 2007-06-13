@@ -28,32 +28,15 @@ Evaluated: 85
 
 $ ./exprcalc.pl 'c + 1'
 Parsed.toString(): (c + 1)
-Evaluated: 100
--- Note that (c => "c") was processed as char integer! See below on these
--- type anomalies
+Cannot convert string to integer. at exprcalc.pl line 17.
 
-$ ./exprcalc.pl 'c * 5 + 3 + EXP( LOGN(2) ) + COS( PI() / 2 )'
-Parsed.toString(): ((((c * 5) + 3) + EXP(LOGN(2))) + COS((PI() / 2)))
-Evaluated: 500
+$ ./exprcalc.pl 'x * 5 + 3 + EXP( LOGN(2) ) + COS( PI() / 2 )'
+Parsed.toString(): ((((x * 5) + 3) + EXP(LOGN(2))) + COS((PI() / 2)))
+Evaluated: 215
 
-*** Strange Type Anomalies ***
-
-Two functions are added to the public interface of BasicSymbolTable:
+One function was added to the public interface of BasicSymbolTable:
 
 # Nicer Function to add a hash of variables to the symbol table. Directly calls
 # the constructor new($$hashref{$k})
 sub setVariables($\%);
-
-# Another nice function to add a hash of variables to the symbol table. Does
-# not use direct calls to the constructor new($$hashref{$k}). Instead each hash
-# value is converted to a string and processed by the parser as such. This
-# circumvents swig's type switching, which has strange results for single
-# character strings.
-sub setStringVariables($\%);
-
-Both set all hash elements in the symbol table. The first uses SWIG's type
-switching to select the nearest C++ type for the given hash values (e.g. 42
-becomes an AnyScalar of type integer, "abc" of type string, but also "a" of
-type char). The second converts all hash values into a string and the parser
-processes them as such.
 

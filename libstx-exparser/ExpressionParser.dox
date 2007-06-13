@@ -13,14 +13,14 @@ WHERE-clauses and become arbitrarily complex. At the same time the expression
 processing time is garanteed to be short enough to safely iterate over larger
 data sets.
 
-I originally wrote this parser framework for my study thesis. In the thesis
-millions of graph edges are processed and organized in an R-Tree search index
-structure. Each vertex and edge had a number of attributes like "color" or
-"importance". These attributes could then be used to filter expressions to
-determine which edges are returned by the graph server and displayed on a
-remote client. The attributes of the filtered edges could be used to calculate
-the returned data set using expressions similar to SQL column selection
-clauses.
+I originally wrote this parser framework for my study thesis (see
+http://idlebox.net/blogtags/study_thesis). In the thesis millions of graph
+edges are processed and organized in an R-Tree search index structure. Each
+vertex and edge had a number of attributes like "color" or "importance". These
+attributes could then be used to filter expressions to determine which edges
+are returned by the graph server and displayed on a remote client. The
+attributes of the filtered edges could be used to calculate the returned data
+set using expressions similar to SQL column selection clauses.
 
 \section sec2 Boost.Spirit
 
@@ -51,10 +51,10 @@ boolean logic operators are defined:
 
 The parser operates on following scalar types:
 \li boolean
-\li 8-bit '<tt>char</tt>' integer, 16-bit 'short', 32-bit integer and 64-bit 'long' integer
-\li 8-bit byte, 16-bit word, 32-bit dword and 64-bit qword.
-\li single and double precision floating point
-\li string
+\li 8-bit '<tt>char</tt>' integer, 16-bit '<tt>short</tt>', 32-bit '<tt>integer</tt>' and 64-bit '<tt>long</tt>' integer
+\li 8-bit '<tt>byte</tt>', 16-bit '<tt>word</tt>', 32-bit '<tt>dword</tt>' and 64-bit '<tt>qword</tt>' unsigned integers.
+\li single and double precision floating point.
+\li <tt>string</tt>
 
 These data types are processed by the library using the stx::AnyScalar
 class. It contains a (type, value) pair of one of the scalar type listed
@@ -62,7 +62,7 @@ above. These scalar values can then be added, subtracted, multiplied, divided
 or compared using member functions. If the two composed scalar objects are of
 unequal type, then the operation is calculated in the "higher" data type (very
 similar to C) and returned as such. So a small unsigned integer can be added to
-a larger integer or even a string. For an exact conversion table see \ref blah.
+a larger integer or even a string.
 
 The reason to include the smaller integer types is based on the original
 purpose of this library. In my study thesis the resulting values were
@@ -199,7 +199,7 @@ http://www.stat.fi/worldinfigures .
 
 The City.csv file starts like this:
 
-\code
+\verbatim
 ID	Name	CountryCode	District	Population
 1	Kabul	AFG	Kabol	1780000
 2	Qandahar	AFG	Qandahar	237500
@@ -212,7 +212,7 @@ ID	Name	CountryCode	District	Population
 9	Eindhoven	NLD	Noord-Brabant	201843
 10	Tilburg	NLD	Noord-Brabant	193238
 ...
-\endcode
+\endverbatim
 
 The csvfilter operates on tab (or otherwise delimited) files. The first line of
 the file is taken to be the column header; the header names can be used within
@@ -223,16 +223,16 @@ An example run of the csvfilter could be:
 \li <tt>./csvfilter 'Population > 1000000 && CountryCode = "USA"' < City.csv</tt>
 
 This will output the following debug information on stderr: 
-\code
+\verbatim
 Expression string: Population > 1000000 && CountryCode = "USA"
 Parsed expression: ((Population > 1000000) && (CountryCode = "USA"))
 Reading CSV column headers from input
 Read 5 column headers.
 Processed 4079 lines, copied 9 and skipped 4070 lines
-\endcode
+\endverbatim
 
 and the filtered CSV lines on stdout:
-\code
+\verbatim
 ID      Name    CountryCode     District        Population
 3793    New York        USA     New York        8008278
 3794    Los Angeles     USA     California      3694820
@@ -243,7 +243,7 @@ ID      Name    CountryCode     District        Population
 3799    San Diego       USA     California      1223400
 3800    Dallas  USA     Texas   1188580
 3801    San Antonio     USA     Texas   1144646
-\endcode
+\endverbatim
 
 \section sec1 Detailed Example Code Guide
 

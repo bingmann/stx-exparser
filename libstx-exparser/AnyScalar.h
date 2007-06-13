@@ -127,6 +127,9 @@ public:
     {
 	val._int = b;
     }
+
+#ifndef SWIG	// This constructor confuses SWIG into calling it with
+		// one-character strings
     /// Construct a new AnyScalar object of type ATTRTYPE_CHAR and set the given
     /// char value.
     inline AnyScalar(char c)
@@ -134,6 +137,7 @@ public:
     {
 	val._int = c;
     }
+#endif
     /// Construct a new AnyScalar object of type ATTRTYPE_SHORT and set the given
     /// short value.
     inline AnyScalar(short s)
@@ -667,7 +671,7 @@ public:
     // These will convert the two operands to the largest common type of the
     // same field.
 
-#ifndef SWIG
+#ifndef SWIG	// obviously too strange for SWIG
 private:
     /** Binary arithmetic template operator. Converts the two AnyScalars into the
      * largest type of their common field. If a string cannot be converted to a
@@ -744,7 +748,7 @@ public:
 	return (*this / b);
     }
 
-#ifndef SWIG
+#ifndef SWIG	// obviously too strange for SWIG
 private:
     /** Binary comparison template operator. Converts the two AnyScalars into the
      * largest type of their common field. If a string cannot be converted to a
