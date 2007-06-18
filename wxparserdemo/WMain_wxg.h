@@ -53,6 +53,7 @@ protected:
     wxNotebook* notebookResults;
     wxPanel* bottompane;
     wxSplitterWindow* splitterwindow;
+    wxPanel* panel_Main;
     // end wxGlade
 }; // wxGlade: end class
 

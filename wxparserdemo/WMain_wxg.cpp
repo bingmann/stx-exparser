@@ -7,7 +7,8 @@ WMain_wxg::WMain_wxg(wxWindow* parent, int id, const wxString& title, const wxPo
     wxFrame(parent, id, title, pos, size, wxDEFAULT_FRAME_STYLE)
 {
     // begin wxGlade: WMain_wxg::WMain_wxg
-    splitterwindow = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D|wxSP_BORDER);
+    panel_Main = new wxPanel(this, wxID_ANY);
+    splitterwindow = new wxSplitterWindow(panel_Main, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH);
     bottompane = new wxPanel(splitterwindow, wxID_ANY);
     notebookResults = new wxNotebook(bottompane, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0);
     notebook_1_pane_3 = new wxPanel(notebookResults, wxID_ANY);
@@ -50,8 +51,9 @@ void WMain_wxg::set_properties()
 void WMain_wxg::do_layout()
 {
     // begin wxGlade: WMain_wxg::do_layout
+    wxBoxSizer* sizer_Outside = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_Top = new wxBoxSizer(wxHORIZONTAL);
-    wxBoxSizer* sizer_1 = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer* sizer_1_copy = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer* sizer_7 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_4 = new wxBoxSizer(wxVERTICAL);
     wxStaticBoxSizer* sizer_6 = new wxStaticBoxSizer(sizer_6_staticbox, wxHORIZONTAL);
@@ -84,12 +86,14 @@ void WMain_wxg::do_layout()
     notebookResults->AddPage(notebook_1_pane_1, wxT("Variables"));
     notebookResults->AddPage(notebook_1_pane_2, wxT("Result"));
     notebookResults->AddPage(notebook_1_pane_3, wxT("XML Tree"));
-    sizer_1->Add(notebookResults, 1, wxTOP|wxEXPAND, 4);
-    bottompane->SetSizer(sizer_1);
+    sizer_1_copy->Add(notebookResults, 1, wxTOP|wxEXPAND, 4);
+    bottompane->SetSizer(sizer_1_copy);
     splitterwindow->SplitHorizontally(toppane, bottompane);
     sizer_Top->Add(splitterwindow, 1, wxALL|wxEXPAND, 4);
-    SetSizer(sizer_Top);
-    sizer_Top->Fit(this);
+    panel_Main->SetSizer(sizer_Top);
+    sizer_Outside->Add(panel_Main, 1, wxEXPAND, 0);
+    SetSizer(sizer_Outside);
+    sizer_Outside->Fit(this);
     Layout();
     Centre();
     // end wxGlade
