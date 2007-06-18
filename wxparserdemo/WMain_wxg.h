@@ -39,6 +39,7 @@ protected:
     wxStaticBox* sizer_2_staticbox;
     wxTextCtrl* textctrlExpression;
     wxButton* buttonEvaluate;
+    wxPanel* panel_1;
     wxPanel* toppane;
     wxGrid* gridVariables;
     wxBitmapButton* buttonAddVariable;
