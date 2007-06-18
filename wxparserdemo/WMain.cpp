@@ -22,7 +22,7 @@ WMain::WMain()
 
     gridVariables->SetLabelFont(fixedfont);
     gridVariables->SetDefaultCellFont(fixedfont);
-
+    
     // xpm images for the buttons
     {
 	#include "img/addrow.xpm"
@@ -45,6 +45,9 @@ WMain::WMain()
 
     SetSize(360, 480);
     textctrlExpression->SetFocus();
+
+    splitterwindow->SetSashSize(4);
+    splitterwindow->SetSashGravity(0.5);
 }
 
 class VariableTable : public stx::BasicSymbolTable
