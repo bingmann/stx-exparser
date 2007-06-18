@@ -7,6 +7,7 @@
 #define WMAIN_WXG_H
 
 // begin wxGlade: ::dependencies
+#include <wx/splitter.h>
 #include <wx/notebook.h>
 #include <wx/grid.h>
 // end wxGlade
@@ -38,6 +39,7 @@ protected:
     wxStaticBox* sizer_2_staticbox;
     wxTextCtrl* textctrlExpression;
     wxButton* buttonEvaluate;
+    wxPanel* toppane;
     wxGrid* gridVariables;
     wxBitmapButton* buttonAddVariable;
     wxBitmapButton* buttonDelVariable;
@@ -49,7 +51,8 @@ protected:
     wxTextCtrl* textctrlXmlTree;
     wxPanel* notebook_1_pane_3;
     wxNotebook* notebookResults;
-    wxPanel* panel_Main;
+    wxPanel* bottompane;
+    wxSplitterWindow* splitterwindow;
     // end wxGlade
 }; // wxGlade: end class
 
