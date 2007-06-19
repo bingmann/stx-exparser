@@ -42,7 +42,7 @@ enum parser_ids
     function_call_id,
     function_identifier_id,
 
-    attrname_id,
+    varname_id,
 
     atom_expr_id,
 
@@ -118,7 +118,7 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
 
 	    // *** Expression names
 
-            attrname
+            varname
                 = lexeme_d[ 
 		    token_node_d[ alpha_p >> *(alnum_p | ch_p('_')) ]
                     ]
@@ -130,7 +130,7 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
                 = constant
                 | inner_node_d[ ch_p('(') >> expr >> ch_p(')') ]
                 | function_call
-		| attrname
+		| varname
                 ;
 
             unary_expr
@@ -205,7 +205,7 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
 	    BOOST_SPIRIT_DEBUG_RULE(function_call);
 	    BOOST_SPIRIT_DEBUG_RULE(function_identifier);
 	    
-	    BOOST_SPIRIT_DEBUG_RULE(attrname);
+	    BOOST_SPIRIT_DEBUG_RULE(varname);
 
 	    BOOST_SPIRIT_DEBUG_RULE(atom_expr);
 
@@ -244,8 +244,8 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
 	/// are allowed.
         rule<ScannerT, parser_context<>, parser_tag<function_identifier_id> > 	function_identifier;
 
-	/// Rule to match an attribute name: alphanumeric with _
-        rule<ScannerT, parser_context<>, parser_tag<attrname_id> > 		attrname;
+	/// Rule to match a variable name: alphanumeric with _
+        rule<ScannerT, parser_context<>, parser_tag<varname_id> > 		varname;
 
 	/// Helper rule which implements () bracket grouping.
         rule<ScannerT, parser_context<>, parser_tag<atom_expr_id> > 		atom_expr;
@@ -337,20 +337,20 @@ public:
 class PNVariable : public ParseNode
 {
 private:
-    /// String name of the attribute
-    std::string		attrname;
+    /// String name of the variable
+    std::string		varname;
 
 public:
     /// Constructor from the string received from the parser.
-    PNVariable(std::string _attrname)
-	: ParseNode(), attrname(_attrname)
+    PNVariable(std::string _varname)
+	: ParseNode(), varname(_varname)
     {
     }
 
     /// Check the given symbol table for the actual value of this variable.
     virtual AnyScalar evaluate(const class SymbolTable &st) const
     {
-	return st.lookupVariable(attrname);
+	return st.lookupVariable(varname);
     }
 
     /// Returns false, because value isn't constant.
@@ -359,10 +359,10 @@ public:
 	return false;
     }
 
-    /// Nothing but the attribute name.
+    /// Nothing but the variable name.
     virtual std::string toString() const
     {
-	return attrname;
+	return varname;
     }
 };
 
@@ -414,7 +414,7 @@ public:
 	return false;
     }
 
-    /// Nothing but the attribute name.
+    /// Nothing but the function and it's parameters
     virtual std::string toString() const
     {
 	std::string str = funcname + "(";
@@ -603,7 +603,7 @@ private:
     /// Child tree of which the return value should be casted.
     const ParseNode*	operand;
 
-    /// Attribute type to cast the value to.
+    /// AnyScalar type to cast the value to.
     AnyScalar::attrtype_t	type;
 
 public:
@@ -1141,15 +1141,15 @@ static ParseNode* build_expr(TreeIterT const& i)
 	return node.release();
     }
 
-    // *** Attribute and Function name place-holder
+    // *** Variable and Function name place-holder
 
-    case attrname_id:
+    case varname_id:
     {
 	assert(i->children.size() == 0);
 
-	std::string attrname(i->value.begin(), i->value.end());
+	std::string varname(i->value.begin(), i->value.end());
 
-        return new PNVariable(attrname);
+        return new PNVariable(varname);
     }
 
     case function_identifier_id:
@@ -1193,12 +1193,12 @@ static ParseNode* build_expr(TreeIterT const& i)
     }
 }
 
-/// build_attrlist constructs the vector holding the ParseNode parse tree for
-/// each requested attribute.
+/// build_exprlist constructs the vector holding the ParseNode parse tree for
+/// each parse tree.
 ParseTreeList build_exprlist(TreeIterT const &i)
 {
 #ifdef STX_DEBUG_PARSER
-    std::cout << "In build_attrlist. i->value = " <<
+    std::cout << "In build_exprlist. i->value = " <<
         std::string(i->value.begin(), i->value.end()) <<
         " i->children.size() = " << i->children.size() << 
 	" i->value.id = " << i->value.id().to_long() << std::endl;
@@ -1232,7 +1232,7 @@ static inline void tree_dump_xml(std::ostream &os, const std::string &input, con
     rule_names[function_call_id] = "function_call";
     rule_names[function_identifier_id] = "function_identifier";
 
-    rule_names[attrname_id] = "attrname";
+    rule_names[varname_id] = "varname";
 
     rule_names[unary_expr_id] = "unary_expr";
     rule_names[mul_expr_id] = "mul_expr";
