@@ -46,8 +46,10 @@ WMain::WMain()
     SetSize(360, 480);
     textctrlExpression->SetFocus();
 
+    splitterwindow->SetMinimumPaneSize(20);
     splitterwindow->SetSashSize(4);
     splitterwindow->SetSashGravity(0.5);
+    splitterwindow->SetSashPosition( splitterwindow->GetSize().GetHeight() / 2 );
 }
 
 class VariableTable : public stx::BasicSymbolTable
