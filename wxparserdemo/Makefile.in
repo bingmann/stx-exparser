@@ -37,7 +37,7 @@ host_triplet = @host@
 @HAVE_WXWIDGETS_TRUE@bin_PROGRAMS = wxParserDemo$(EXEEXT)
 @GOT_RESCOMP_TRUE@@HAVE_WXWIDGETS_TRUE@am__append_1 = resources.o
 subdir = wxparserdemo
-DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -213,12 +213,15 @@ top_srcdir = @top_srcdir@
 @HAVE_WXWIDGETS_TRUE@	$(top_srcdir)/libstx-exparser/libstx-exparser.a \
 @HAVE_WXWIDGETS_TRUE@	$(am__append_1)
 @HAVE_WXWIDGETS_TRUE@EXTRA_DIST = wxParserDemo.wxg resources.rc \
+@HAVE_WXWIDGETS_TRUE@	README \
 @HAVE_WXWIDGETS_TRUE@	img/addrow.png img/addrow.xpm \
 @HAVE_WXWIDGETS_TRUE@	img/delrow.png img/delrow.xpm \
 @HAVE_WXWIDGETS_TRUE@	img/progicon.ico \
 @HAVE_WXWIDGETS_TRUE@	img/progicon16.png img/progicon16.xpm img/progicon16.ico \
-@HAVE_WXWIDGETS_TRUE@	img/progicon32.svg img/progicon32.png img/progicon32.xpm img/progicon32.ico \
-@HAVE_WXWIDGETS_TRUE@	img/progicon48.svg img/progicon48.png img/progicon48.xpm img/progicon48.ico
+@HAVE_WXWIDGETS_TRUE@	img/progicon32.xcf img/progicon32.png img/progicon32.xpm img/progicon32.ico \
+@HAVE_WXWIDGETS_TRUE@	screenshot/wxparserdemo1.png screenshot/wxparserdemo2.png \
+@HAVE_WXWIDGETS_TRUE@	screenshot/wxparserdemo3.png screenshot/wxparserdemo4.png \
+@HAVE_WXWIDGETS_TRUE@	screenshot/wxparserdemo5.png
 
 all: all-am
 
