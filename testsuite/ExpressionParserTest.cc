@@ -58,6 +58,8 @@ protected:
 
 	CPPUNIT_ASSERT( eval("-5 + 4.5") == -0.5 );
 
+	CPPUNIT_ASSERT( eval("-5 + 4.5 + (-a)") == -42.5 );
+
 	CPPUNIT_ASSERT( eval(" \"newline \\n quoted \\\" a\\\\bc\" + \"def\" ") == "newline \n quoted \" a\\bcdef" );
 
 	CPPUNIT_ASSERT( eval("(0 < 1) && (4 > 2) && (1 = 1) && (2 == 2) && (2 != 4) && (1 <= 1) && (1 >= 1) && (2 =< 3) && (4 => 1)") == true );
