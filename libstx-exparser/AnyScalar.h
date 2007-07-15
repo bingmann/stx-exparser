@@ -535,6 +535,23 @@ public:
     /// quoted: "str". This function resolves escape sequences like \n.
     bool		setStringQuoted(const std::string &s);
 
+
+    /** Change the type _and_ value of the current object to s. The current
+     * type is set if the given string can be converted to an integer or a
+     * floating point number. This was required because e.g. the usual input
+     * from files or perl are all untyped strings. The following input
+     * conversions are tested and yield the given types:
+     *
+     * - boolean: no boolean strings are matched!
+     * - int: input was readable by strtoll and is small enough.
+     * - long: input was readable by strtoll
+     * - double: input was readble by strtod
+     * - string: all above failed.
+     *
+     * @return reference to this for chaining.
+     */
+    AnyScalar&		setAutoString(const std::string &input);
+
     // *** Getters
 
     // Return the enclosed value in different types, converting if

@@ -82,8 +82,8 @@ protected:
 	CPPUNIT_ASSERT( t_string.setInteger(-20) );
 	CPPUNIT_ASSERT( t_string.getString() == "-20" );
 
-	CPPUNIT_ASSERT( t_string.setStringQuoted("\"bla\\n\\\\\\\"h\"") );
-	CPPUNIT_ASSERT( t_string.getString() == "bla\n\\\"h" );
+	CPPUNIT_ASSERT( t_string.setStringQuoted("\"bla\\n\\\\\\\"h\\a\\b\\f\\r\\t\\v\\'x\"") );
+	CPPUNIT_ASSERT( t_string.getString() == "bla\n\\\"h\a\b\f\r\t\v'x" );
 
 	AnyScalar t_other = t_string;
 	CPPUNIT_ASSERT( t_other.getType() == AnyScalar::ATTRTYPE_STRING );
@@ -108,6 +108,19 @@ protected:
 	CPPUNIT_ASSERT( (AnyScalar("abc") + AnyScalar("def")) == "abcdef" );
 
 	CPPUNIT_ASSERT( (AnyScalar("1.1") + AnyScalar(3.0)) == 4.1 );
+
+	{
+	    AnyScalar s;
+
+	    CPPUNIT_ASSERT( s.setAutoString("abc").getType() == AnyScalar::ATTRTYPE_STRING );
+	    CPPUNIT_ASSERT( s.setAutoString("0").getType() == AnyScalar::ATTRTYPE_INTEGER );
+	    CPPUNIT_ASSERT( s.setAutoString("10045123").getTypeString() == "integer" );
+	    CPPUNIT_ASSERT( s.setAutoString("10045123345343434").getType() == AnyScalar::ATTRTYPE_LONG );
+	    CPPUNIT_ASSERT( s.setAutoString("-4554454").getType() == AnyScalar::ATTRTYPE_INTEGER );
+	    CPPUNIT_ASSERT( s.setAutoString("-3402359829865").getTypeString() == "long" );
+	    CPPUNIT_ASSERT( s.setAutoString("-3402359829865.3334").getTypeString() == "double" );
+	    CPPUNIT_ASSERT( s.setAutoString("-34023598298abc65.3334").getTypeString() == "string" );
+	}
     }
 };
 

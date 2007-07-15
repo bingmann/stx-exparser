@@ -626,6 +626,53 @@ bool AnyScalar::setStringQuoted(const std::string &s)
     return setString(t);
 }
 
+AnyScalar& AnyScalar::setAutoString(const std::string &input)
+{
+    // - int: input was readable by strtoll and is small enough.
+    // - long: input was readable by strtoll
+    {
+	char *endptr;
+#ifndef _MSC_VER
+	long long l = strtoll(input.c_str(), &endptr, 10);
+#else
+	long long l = _strtoi64(input.c_str(), &endptr, 10);
+#endif
+	if (endptr != NULL && *endptr == 0)
+	{
+	    if (INT_MIN <= l && l <= INT_MAX)
+	    {
+		resetType(ATTRTYPE_INTEGER);
+		val._int = l;
+		return *this;
+	    }
+	    else
+	    {
+		resetType(ATTRTYPE_LONG);
+		val._long = l;
+		return *this;
+	    }
+	}
+    }
+
+    // - double: input was readble by strtod
+    {
+	char *endptr;
+	double d = strtod(input.c_str(), &endptr);
+	if (endptr != NULL && *endptr == 0)
+	{
+	    resetType(ATTRTYPE_DOUBLE);
+	    val._double = d;
+	    return *this;
+	}
+    }
+
+    // - string: all above failed.
+    resetType(ATTRTYPE_STRING);
+    *val._string = input;
+
+    return *this;
+}
+
 bool AnyScalar::getBoolean() const
 {
     switch(atype)

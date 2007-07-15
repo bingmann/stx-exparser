@@ -106,7 +106,7 @@ void WMain::OnButtonEvaluate(wxCommandEvent &)
 	wxString c1 = gridVariables->GetCellValue(i, 1);
 
 	vartable.map.insert( VariableTable::map_type::value_type(std::string(c0.mb_str()),
-								 stx::AnyScalar(c1.mb_str())) );
+								 stx::AnyScalar().setAutoString( std::string(c1.mb_str()) )) );
     }
 
     // fill in xml tree

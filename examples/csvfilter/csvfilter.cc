@@ -76,13 +76,18 @@ public:
 	    return stx::BasicSymbolTable::lookupVariable(varname);
 	}
 
-	// return the variable value from the current vector. it is
-	// auto-converted into a stx::AnyScalar.
+	// return the variable value from the current vector. convert it to a
+	// stx::AnyScalar but use the automatic type recognition for input
+	// strings.
 	if(varfind->second < datacolumns.size())
-	    return datacolumns[ varfind->second ];
+	{
+	    return stx::AnyScalar().setAutoString( datacolumns[varfind->second] );
+	}
 	else
+	{
 	    return "";	// happens when a data row has too few delimited
 			// fields.
+	}
     }
 };
 
