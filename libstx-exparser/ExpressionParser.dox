@@ -15,7 +15,7 @@ WHERE-clauses and become arbitrarily complex. At the same time the expression
 processing time is guaranteed to be short enough to safely iterate over larger
 data sets.
 
-I originally wrote this parser framework for my study thesis (see
+Originally I wrote this parser framework for my study thesis (see
 http://idlebox.net/blogtags/study_thesis). In the thesis millions of graph
 edges are processed and organized in an R-Tree search index structure. Each
 vertex and edge had a number of attributes like "color" or "importance". These
@@ -183,7 +183,7 @@ The second example is a CSV-file filter. It will read a tab-delimited csv data
 file with column headers and apply the given filter expression to each
 line. Each line is taken as a record of variables named by the column
 header. For each line the expression is evaluated and if it returns a "true"
-boolean value then the line is copied to the output. if it returns a "false"
+boolean value, then the line is copied to the output; if it returns a "false"
 boolean, the line is skipped. In case the expression value is not a boolean,
 the value is printed on stderr.
 
@@ -193,13 +193,15 @@ directly on Excel-generated files.
 
 \section sec_exdata CSV sample files
 
-The distribution contains two sample CSV files for the csvfilter. Both are
+The distribution contains three sample CSV files for the csvfilter. Two are
 taken from MySQL's world sample database, which can be found at
 http://dev.mysql.com/doc/world-setup/en/world-setup.html . The data contained
 in the world database is originally Copyright Statistics Finland,
-http://www.stat.fi/worldinfigures .
+http://www.stat.fi/worldinfigures . The third CSV dataset contains some key
+statistic features extracted from the
+CIA World Factbook (https://www.cia.gov/library/publications/the-world-factbook/).
 
-The City.csv file starts like this:
+The mysql-world-city.csv file starts like this:
 
 \verbatim
 ID	Name	CountryCode	District	Population
@@ -216,13 +218,14 @@ ID	Name	CountryCode	District	Population
 ...
 \endverbatim
 
-The csvfilter operates on tab (or otherwise delimited) files. The first line of
-the file is taken to be the column header; the header names can be used within
-the filter expression as variables. For each of the following data rows the
-expression is evaluated with variables set to the corresponding data fields.
+The csvfilter operates on tab (or otherwise) delimited input streams. The first
+line of the file is taken to be the column header; the header names can be used
+within the filter expression as variables. For each of the following data rows
+the expression is evaluated with variables set to the corresponding data
+fields.
 
 An example run of the csvfilter could be:
-\li <tt>./csvfilter 'Population > 1000000 && CountryCode = "USA"' < City.csv</tt>
+\li <tt>./csvfilter 'Population > 1000000 && CountryCode = "USA"' < mysql-world-city.csv</tt>
 
 This will output the following debug information on stderr: 
 \verbatim
@@ -275,6 +278,8 @@ escaped delimiters or quoted fields are recognized.
 \until }
 \until }
 \until }
+\until }
+\until }
 
 This is the main meat of the example: the CSVRowSymbolTable is subclassed from
 stx::BasicSymbolTable. This symbol table is used to represent the possible
@@ -297,25 +302,19 @@ slower than the reference symbol table approach shown above.
 \until }
 \until }
 \until }
-\until }
 
-The first argument is the CSV file name to parse and is saved. Then the
-remaining arguments are collected and as shown in \ref example_exprcalc "the
-first example application". Then the parser gets put into action on the
-expression string and produces the stx::ParseTree. This time the parse tree
-will be used multiple times.
-
-\until istream
-
-Now the CSV file gets opened or the std::cin stream is used, if the file name
-given equals "-".
+As shown in \ref example_exprcalc "the first example application" all command
+line arguments are collected into a single string. Then the parser in put into
+action on the expression string and produces the stx::ParseTree. This time the
+parse tree will be used multiple times.
 
 \until headers.size()
 \until "\n";
 
-The first line of the CSV file is read and saved to become the column
-header. This header row is then inserted into the header map for faster lookup
-by the symbol table. The header row is also outputted to std::cout.
+The csvfilter reads the CSV file from the stdin stream. The first line is read
+and saved. It is considered to contain the column headers. This header row is
+inserted into the header map for faster lookup by the symbol table. The header
+row is also outputted to std::cout.
 
 The following loop then iterates over the data rows read from the CSV
 input. The symbol table is constructed only once and for each row the
@@ -342,8 +341,8 @@ calculation and the result is printed on std::cerr.
 \section sec1_complete Complete Example Source Code
 
 The example can be found in the distribution in examples/csvfilter/. That
-directory also contains two CSV files to test the csvfilter: City.csv and
-Country.csv
+directory also contains three CSV files to test the csvfilter:
+mysql-world-city.csv, mysql-world-country.csv and cia-world-factbook.csv
 
 \include csvfilter/csvfilter.cc
 
