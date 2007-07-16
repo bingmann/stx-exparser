@@ -2,7 +2,7 @@
 
 if HAVE_SWIG
 
-EXTRA_DIST = stx-exparser.i
+EXTRA_DIST = stx-exparser.i README exprcalc.pl
 BUILT_SOURCES = stx-exparser_wrap.cpp
 
 stx-exparser_wrap.cpp: stx-exparser.i
