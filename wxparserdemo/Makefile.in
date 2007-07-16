@@ -215,7 +215,7 @@ top_srcdir = @top_srcdir@
 @HAVE_WXWIDGETS_TRUE@	$(top_srcdir)/libstx-exparser/libstx-exparser.a \
 @HAVE_WXWIDGETS_TRUE@	$(am__append_1)
 @HAVE_WXWIDGETS_TRUE@EXTRA_DIST = wxParserDemo.wxg resources.rc \
-@HAVE_WXWIDGETS_TRUE@	README \
+@HAVE_WXWIDGETS_TRUE@	README AUTHORS COPYING \
 @HAVE_WXWIDGETS_TRUE@	img/addrow.png img/addrow.xpm \
 @HAVE_WXWIDGETS_TRUE@	img/delrow.png img/delrow.xpm \
 @HAVE_WXWIDGETS_TRUE@	img/progicon.ico \
@@ -238,9 +238,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  wxparserdemo/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  wxparserdemo/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  wxparserdemo/Makefile
+	  $(AUTOMAKE) --gnu  wxparserdemo/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

@@ -11,7 +11,7 @@ AM_CXXFLAGS = -I/usr/include @WX_CXXFLAGS@ -I$(top_srcdir)/libstx-exparser
 LDADD = @WX_LIBS@ $(top_srcdir)/libstx-exparser/libstx-exparser.a
 
 EXTRA_DIST = wxParserDemo.wxg resources.rc \
-	README \
+	README AUTHORS COPYING \
 	img/addrow.png img/addrow.xpm \
 	img/delrow.png img/delrow.xpm \
 	img/progicon.ico \
