@@ -16,6 +16,8 @@ nodist_ExpressionParser_la_SOURCES = stx-exparser_wrap.cpp
 
 ExpressionParser_la_LIBADD = ../libstx-exparser/libstx-exparser.a
 
+ExpressionParser_la_LDFLAGS = -module
+
 ExpressionParser_la_CXXFLAGS = -I$(top_srcdir)/libstx-exparser `perl -MExtUtils::Embed -e ccopts`
 
 all-local:

@@ -58,8 +58,8 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 ExpressionParser_la_OBJECTS = $(nodist_ExpressionParser_la_OBJECTS)
 ExpressionParser_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(ExpressionParser_la_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
+	$(ExpressionParser_la_CXXFLAGS) $(CXXFLAGS) \
+	$(ExpressionParser_la_LDFLAGS) $(LDFLAGS) -o $@
 @HAVE_SWIG_TRUE@am_ExpressionParser_la_rpath = -rpath $(libdir)
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/scripts/depcomp
@@ -210,6 +210,7 @@ top_srcdir = @top_srcdir@
 @HAVE_SWIG_TRUE@lib_LTLIBRARIES = ExpressionParser.la
 @HAVE_SWIG_TRUE@nodist_ExpressionParser_la_SOURCES = stx-exparser_wrap.cpp
 @HAVE_SWIG_TRUE@ExpressionParser_la_LIBADD = ../libstx-exparser/libstx-exparser.a
+@HAVE_SWIG_TRUE@ExpressionParser_la_LDFLAGS = -module
 @HAVE_SWIG_TRUE@ExpressionParser_la_CXXFLAGS = -I$(top_srcdir)/libstx-exparser `perl -MExtUtils::Embed -e ccopts`
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am

@@ -33,7 +33,7 @@ sub setVariables($\%) {
 
     foreach my $k (keys %$hashref) {
 	my $v = STX::ExpressionParser::AnyScalar->new();
-	$v->setAutoString($$hashref{$k});
+	$v->setAutoString("$$hashref{$k}");
 	$self->setVariable($k, $v);
     }
 }
