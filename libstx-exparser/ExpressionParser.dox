@@ -14,13 +14,13 @@ processing time is guaranteed to be fast enough to safely iterate over larger
 data sets.
 
 Originally I wrote this parser framework for my study thesis (see
-http://idlebox.net/blogtags/study_thesis). In the thesis millions of graph
-edges are processed and organized in an R-Tree search index structure. Each
-vertex and edge had a number of attributes like "color" or "importance". These
-attributes could then be used in filter expressions to determine which edges
-are returned by a graph server and displayed on a remote client. The attributes
-of the filtered edges could be used to calculate the returned data set using
-expressions similar to SQL column selection clauses.
+http://idlebox.net/blogtags/study_thesis_large_graphs). In the thesis millions
+of graph edges are processed and organized in an r-tree search index
+structure. Each vertex and edge had a number of attributes like "color" or
+"importance". These attributes could then be used in filter expressions to
+determine which edges are returned by a graph server and displayed on a remote
+client. The attributes of the filtered edges could be used to calculate the
+returned data set using expressions similar to SQL column selection clauses.
 
 Four instructive example applications are included in the package. See
 \ref sec_examples for more.

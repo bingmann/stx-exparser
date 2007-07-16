@@ -12,8 +12,16 @@ which can be used in the expression.
 The demo program uses the cross-platform wxWidgets toolkit and can be compiled
 on Linux, Windows and MacOSX.
 
+--- Website / License ---
+
+The current demo source and some compiled binaries can be downloaded from
+http://idlebox.net/2007/stx-exparser/
+
 Some binary executables for Linux and Windows can be downloaded from
 http://idlebox.net/2007/stx-exparser/demo.htt
+
+The demo's source code is released under the GNU General Public License v2
+(GPL) which can be found in the file COPYING.
 
 --- Short Usage Walk-Through ---
 
