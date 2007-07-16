@@ -6,7 +6,7 @@ graphical user interface to demonstrate the STX Expression Parser's functions.
 The demo allows the user to enter an expression string and press "Evaluate" to
 run the parser over it. If the expression could be parsed and evaluated
 correctly, the result's value and type are displayed. Otherwise an error
-message is shown. The demo also has a data input grid to specified variables,
+message is shown. The demo also has a data input grid to specify variables,
 which can be used in the expression.
 
 The demo program uses the cross-platform wxWidgets toolkit and can be compiled

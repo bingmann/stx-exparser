@@ -23,15 +23,17 @@
 
 #include "ExpressionParser.h"
 
-#include <iostream>
 #include <map>
 
 WMain::WMain()
     : WMain_wxg(NULL, -1, wxT(""))
 {
     // set fixed monospace fonts for most controls
+    
+    wxFont sysoemfont = wxSystemSettings::GetFont(wxSYS_OEM_FIXED_FONT);
 
-    wxFont fixedfont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+    wxFont fixedfont(sysoemfont.GetPointSize(),
+		     wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 
     textctrlExpression->SetFont(fixedfont);
     textctrlStringExpression->SetFont(fixedfont);
