@@ -3,6 +3,15 @@
 This directory contains a wxWidgets demo application. It is a user-friendly
 graphical user interface to demonstrate the STX Expression Parser's functions.
 
+The demo allows the user to enter an expression string and press "Evaluate" to
+run the parser over it. If the expression could be parsed and evaluated
+correctly, the result's value and type are displayed. Otherwise an error
+message is shown. The demo also has a data input grid to specified variables,
+which can be used in the expression.
+
+The demo program uses the cross-platform wxWidgets toolkit and can be compiled
+on Linux, Windows and MacOSX.
+
 Some binary executables for Linux and Windows can be downloaded from
 http://idlebox.net/2007/stx-exparser/demo.htt
 
