@@ -1315,6 +1315,7 @@ AnyScalar AnyScalar::binary_arith_op(const AnyScalar &b) const
 	case ATTRTYPE_INTEGER:
 	{
 	    Operator<int> op;
+	    if (OpName == '/' && b.val._int == 0) throw(ArithmeticException("Integer division by zero"));
 	    return AnyScalar( op(val._int, b.val._int) );
 	}
 
@@ -1323,18 +1324,21 @@ AnyScalar AnyScalar::binary_arith_op(const AnyScalar &b) const
 	case ATTRTYPE_DWORD:
 	{
 	    Operator<int> op;
+	    if (OpName == '/' && b.val._uint == 0) throw(ArithmeticException("Integer division by zero"));
 	    return AnyScalar( op(val._int, static_cast<signed int>(b.val._uint)) );
 	}
 
 	case ATTRTYPE_LONG:
 	{
 	    Operator<long long> op;
+	    if (OpName == '/' && b.val._long == 0) throw(ArithmeticException("Integer division by zero"));
 	    return AnyScalar( op(val._int, b.val._long) );
 	}
 	    
 	case ATTRTYPE_QWORD:
 	{
 	    Operator<long long> op;
+	    if (OpName == '/' && b.val._ulong == 0) throw(ArithmeticException("Integer division by zero"));
 	    return AnyScalar( op(static_cast<long long>(val._int), static_cast<long long>(b.val._ulong)) );
 	}
 	    
@@ -1359,7 +1363,10 @@ AnyScalar AnyScalar::binary_arith_op(const AnyScalar &b) const
 
 	    Operator<int> op;
 
-	    return AnyScalar( op(val._int, bc.getInteger()) );
+	    int bval = bc.getInteger();
+	    if (OpName == '/' && bval == 0) throw(ArithmeticException("Integer division by zero"));
+
+	    return AnyScalar( op(val._int, bval) );
 	}
 	}
 	break;
@@ -1383,6 +1390,7 @@ AnyScalar AnyScalar::binary_arith_op(const AnyScalar &b) const
 	case ATTRTYPE_INTEGER:
 	{
 	    Operator<int> op;
+	    if (OpName == '/' && b.val._int == 0) throw(ArithmeticException("Integer division by zero"));
 	    return AnyScalar( op(static_cast<signed int>(val._uint), b.val._int) );
 	}
 
@@ -1391,18 +1399,21 @@ AnyScalar AnyScalar::binary_arith_op(const AnyScalar &b) const
 	case ATTRTYPE_DWORD:
 	{
 	    Operator<unsigned int> op;
+	    if (OpName == '/' && b.val._uint == 0) throw(ArithmeticException("Integer division by zero"));
 	    return AnyScalar( op(val._uint, b.val._uint) );
 	}
 	    
 	case ATTRTYPE_LONG:
 	{
 	    Operator<long long> op;
+	    if (OpName == '/' && b.val._long == 0) throw(ArithmeticException("Integer division by zero"));
 	    return AnyScalar( op(static_cast<signed long long>(val._uint), b.val._long) );
 	}
 
 	case ATTRTYPE_QWORD:
 	{
 	    Operator<unsigned long long> op;
+	    if (OpName == '/' && b.val._ulong == 0) throw(ArithmeticException("Integer division by zero"));
 	    return AnyScalar( op(static_cast<unsigned long long>(val._uint), b.val._ulong) );
 	}
 	    
@@ -1427,7 +1438,10 @@ AnyScalar AnyScalar::binary_arith_op(const AnyScalar &b) const
 
 	    Operator<unsigned int> op;
 
-	    return AnyScalar( op(val._int, bc.getInteger()) );
+	    int bval = bc.getInteger();
+	    if (OpName == '/' && bval == 0) throw(ArithmeticException("Integer division by zero"));
+
+	    return AnyScalar( op(val._int, bval) );
 	}
 	}
 	break;
@@ -1449,6 +1463,7 @@ AnyScalar AnyScalar::binary_arith_op(const AnyScalar &b) const
 	case ATTRTYPE_INTEGER:
 	{
 	    Operator<long long> op;
+	    if (OpName == '/' && b.val._int == 0) throw(ArithmeticException("Integer division by zero"));
 	    return AnyScalar( op(val._long, static_cast<long long>(b.val._int)) );
 	}
 
@@ -1457,18 +1472,21 @@ AnyScalar AnyScalar::binary_arith_op(const AnyScalar &b) const
 	case ATTRTYPE_DWORD:
 	{
 	    Operator<long long> op;
+	    if (OpName == '/' && b.val._uint == 0) throw(ArithmeticException("Integer division by zero"));
 	    return AnyScalar( op(val._long, static_cast<signed long long>(b.val._uint)) );
 	}
 	    
 	case ATTRTYPE_LONG:
 	{
 	    Operator<long long> op;
+	    if (OpName == '/' && b.val._long == 0) throw(ArithmeticException("Integer division by zero"));
 	    return AnyScalar( op(val._long, b.val._long) );
 	}
 
 	case ATTRTYPE_QWORD:
 	{
 	    Operator<long long> op;
+	    if (OpName == '/' && b.val._ulong == 0) throw(ArithmeticException("Integer division by zero"));
 	    return AnyScalar( op(val._long, static_cast<signed long long>(b.val._ulong)) );
 	}
 	    
@@ -1493,7 +1511,10 @@ AnyScalar AnyScalar::binary_arith_op(const AnyScalar &b) const
 
 	    Operator<long long> op;
 
-	    return AnyScalar( op(val._long, bc.getLong()) );
+	    long long bval = bc.getLong();
+	    if (OpName == '/' && bval == 0) throw(ArithmeticException("Integer division by zero"));
+
+	    return AnyScalar( op(val._long, bval) );
 	}
 	}
 	break;
@@ -1515,6 +1536,7 @@ AnyScalar AnyScalar::binary_arith_op(const AnyScalar &b) const
 	case ATTRTYPE_INTEGER:
 	{
 	    Operator<long long> op;
+	    if (OpName == '/' && b.val._int == 0) throw(ArithmeticException("Integer division by zero"));
 	    return AnyScalar( op(static_cast<signed long long>(val._ulong), b.val._int) );
 	}
 
@@ -1523,18 +1545,21 @@ AnyScalar AnyScalar::binary_arith_op(const AnyScalar &b) const
 	case ATTRTYPE_DWORD:
 	{
 	    Operator<unsigned long long> op;
+	    if (OpName == '/' && b.val._uint == 0) throw(ArithmeticException("Integer division by zero"));
 	    return AnyScalar( op(val._ulong, static_cast<unsigned long long>(b.val._uint)) );
 	}
 	    
 	case ATTRTYPE_LONG:
 	{
 	    Operator<long long> op;
+	    if (OpName == '/' && b.val._long == 0) throw(ArithmeticException("Integer division by zero"));
 	    return AnyScalar( op(static_cast<signed long long>(val._ulong), b.val._long) );
 	}
 
 	case ATTRTYPE_QWORD:
 	{
 	    Operator<unsigned long long> op;
+	    if (OpName == '/' && b.val._ulong == 0) throw(ArithmeticException("Integer division by zero"));
 	    return AnyScalar( op(val._ulong, b.val._ulong) );
 	}
 	    
@@ -1559,7 +1584,10 @@ AnyScalar AnyScalar::binary_arith_op(const AnyScalar &b) const
 
 	    Operator<unsigned long long> op;
 
-	    return AnyScalar( op(val._ulong, bc.getLong()) );
+	    long long bval = bc.getLong();
+	    if (OpName == '/' && bval == 0) throw(ArithmeticException("Integer division by zero"));
+
+	    return AnyScalar( op(val._ulong, bval) );
 	}
 	}
 	break;
@@ -1716,6 +1744,7 @@ AnyScalar AnyScalar::binary_arith_op(const AnyScalar &b) const
 	case ATTRTYPE_INTEGER:
 	{
 	    Operator<int> op;
+	    if (OpName == '/' && b.val._int == 0) throw(ArithmeticException("Integer division by zero"));
 	    return AnyScalar( op(this->getInteger(), b.val._int) );
 	}
 
@@ -1724,18 +1753,21 @@ AnyScalar AnyScalar::binary_arith_op(const AnyScalar &b) const
 	case ATTRTYPE_DWORD:
 	{
 	    Operator<unsigned int> op;
-	    return AnyScalar( op(this->getUnsignedInteger(), b.val._int) );
+	    if (OpName == '/' && b.val._uint == 0) throw(ArithmeticException("Integer division by zero"));
+	    return AnyScalar( op(this->getUnsignedInteger(), b.val._uint) );
 	}
 	    
 	case ATTRTYPE_LONG:
 	{
 	    Operator<long long> op;
+	    if (OpName == '/' && b.val._long == 0) throw(ArithmeticException("Integer division by zero"));
 	    return AnyScalar( op(this->getLong(), b.val._long) );
 	}
 
 	case ATTRTYPE_QWORD:
 	{
 	    Operator<unsigned long long> op;
+	    if (OpName == '/' && b.val._ulong == 0) throw(ArithmeticException("Integer division by zero"));
 	    return AnyScalar( op(this->getUnsignedLong(), b.val._ulong) );
 	}
 

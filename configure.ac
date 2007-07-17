@@ -103,7 +103,7 @@ AM_OPTIONS_WXCONFIG
 
 AM_PATH_WXCONFIG(2.6.0, wxWin=1)
 
-AM_CONDITIONAL(HAVE_WXWIDGETS, test "$wxWin" != 0)
+AM_CONDITIONAL(HAVE_WXWIDGETS, test "$wxWin" == 1)
 
 if test "$wxWin" != 1; then
     AC_MSG_WARN([
@@ -127,7 +127,7 @@ esac
 AM_CONDITIONAL(GOT_RESCOMP, test x$RESCOMP != x)
 
 # Check for SWIG
-AC_PROG_SWIG(1.3.31)
+AC_PROG_SWIG(1.3.29)
 
 SWIG_ENABLE_CXX
 AC_CHECK_PROG(PERL,perl,perl)

@@ -21476,7 +21476,7 @@ echo "${ECHO_T}no (version $WX_VERSION is not new enough)" >&6; }
 
 
 
- if test "$wxWin" != 0; then
+ if test "$wxWin" == 1; then
   HAVE_WXWIDGETS_TRUE=
   HAVE_WXWIDGETS_FALSE='#'
 else
@@ -21664,7 +21664,7 @@ fi
                 { echo "$as_me:$LINENO: WARNING: cannot find 'swig' program. You should look at http://www.swig.org" >&5
 echo "$as_me: WARNING: cannot find 'swig' program. You should look at http://www.swig.org" >&2;}
                 SWIG='echo "Error: SWIG is not installed. You should look at http://www.swig.org" ; false'
-        elif test -n "1.3.31" ; then
+        elif test -n "1.3.29" ; then
                 { echo "$as_me:$LINENO: checking for SWIG version" >&5
 echo $ECHO_N "checking for SWIG version... $ECHO_C" >&6; }
                 swig_version=`$SWIG -version 2>&1 | grep 'SWIG Version' | sed 's/.*\([0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\).*/\1/g'`
@@ -21672,7 +21672,7 @@ echo $ECHO_N "checking for SWIG version... $ECHO_C" >&6; }
 echo "${ECHO_T}$swig_version" >&6; }
                 if test -n "$swig_version" ; then
                         # Calculate the required version number components
-                        required=1.3.31
+                        required=1.3.29
                         required_major=`echo $required | sed 's/[^0-9].*//'`
                         if test -z "$required_major" ; then
                                 required_major=0
@@ -21706,9 +21706,9 @@ echo "${ECHO_T}$swig_version" >&6; }
                         if test $available_major -ne $required_major \
                                 -o $available_minor -ne $required_minor \
                                 -o $available_patch -lt $required_patch ; then
-                                { echo "$as_me:$LINENO: WARNING: SWIG version >= 1.3.31 is required.  You have $swig_version.  You should look at http://www.swig.org" >&5
-echo "$as_me: WARNING: SWIG version >= 1.3.31 is required.  You have $swig_version.  You should look at http://www.swig.org" >&2;}
-                                SWIG='echo "Error: SWIG version >= 1.3.31 is required.  You have '"$swig_version"'.  You should look at http://www.swig.org" ; false'
+                                { echo "$as_me:$LINENO: WARNING: SWIG version >= 1.3.29 is required.  You have $swig_version.  You should look at http://www.swig.org" >&5
+echo "$as_me: WARNING: SWIG version >= 1.3.29 is required.  You have $swig_version.  You should look at http://www.swig.org" >&2;}
+                                SWIG='echo "Error: SWIG version >= 1.3.29 is required.  You have '"$swig_version"'.  You should look at http://www.swig.org" ; false'
                         else
                                 { echo "$as_me:$LINENO: SWIG executable is '$SWIG'" >&5
 echo "$as_me: SWIG executable is '$SWIG'" >&6;}

@@ -55,6 +55,7 @@ enum parser_ids
 {
     boolean_const_id = 1,
     integer_const_id,
+    long_const_id,
     double_const_id,
     string_const_id,
     constant_id,
@@ -101,6 +102,7 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
 	    constant
 		= double_const
 		| integer_const
+		| long_const
 		| boolean_const
 		| string_const
 		;
@@ -111,6 +113,12 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
 
 	    integer_const
 		= int_p
+		;
+
+	    // this is needed because spirit's int_parsers don't work with
+	    // these long numbers
+	    long_const
+		= token_node_d[ lexeme_d[ !( ch_p('+') | ch_p('-' ) ) >> +( range_p('0','9') ) ] ]
 		;
 
 	    double_const
@@ -219,6 +227,7 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
 
 	    BOOST_SPIRIT_DEBUG_RULE(boolean_const);
 	    BOOST_SPIRIT_DEBUG_RULE(integer_const);
+	    BOOST_SPIRIT_DEBUG_RULE(long_const);
 	    BOOST_SPIRIT_DEBUG_RULE(double_const);
 	    BOOST_SPIRIT_DEBUG_RULE(string_const);
 
@@ -253,7 +262,9 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
         rule<ScannerT, parser_context<>, parser_tag<boolean_const_id> > 	boolean_const;
 	/// Integer constant rule: "1234"
         rule<ScannerT, parser_context<>, parser_tag<integer_const_id> > 	integer_const;
-	/// Float constant rule: "1234"
+	/// Long integer constant rule: "12345452154"
+        rule<ScannerT, parser_context<>, parser_tag<long_const_id> > 		long_const;
+	/// Float constant rule: "1234.3"
         rule<ScannerT, parser_context<>, parser_tag<double_const_id> > 		double_const;
 	/// String constant rule: with quotes "abc"
         rule<ScannerT, parser_context<>, parser_tag<string_const_id> > 		string_const;
@@ -434,7 +445,7 @@ public:
 	return false;
     }
 
-    /// Nothing but the function and it's parameters
+    /// Nothing but the function and its parameters
     virtual std::string toString() const
     {
 	std::string str = funcname + "(";
@@ -983,6 +994,12 @@ static ParseNode* build_expr(TreeIterT const& i)
 			      std::string(i->value.begin(), i->value.end()));
     }
 
+    case long_const_id:
+    {
+	return new PNConstant(AnyScalar::ATTRTYPE_LONG,
+			      std::string(i->value.begin(), i->value.end()));
+    }
+
     case double_const_id:
     {
 	return new PNConstant(AnyScalar::ATTRTYPE_DOUBLE,
@@ -1245,6 +1262,7 @@ static inline void tree_dump_xml(std::ostream &os, const std::string &input, con
 
     rule_names[boolean_const_id] = "boolean_const";
     rule_names[integer_const_id] = "integer_const";
+    rule_names[long_const_id] = "long_const";
     rule_names[double_const_id] = "double_const";
     rule_names[string_const_id] = "string_const";
     rule_names[constant_id] = "constant";
