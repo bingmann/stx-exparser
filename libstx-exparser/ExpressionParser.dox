@@ -85,7 +85,7 @@ dependencies. The second purpose of this library release is to show a
 reasonably complex Spirit parser grammar. See \ref subsec_grammar for more
 details.
 
-\warning Compiling the library with <tt>gcc 3.x -O3</tt> can take very long and
+\warning Compiling the library with <tt>gcc 3.3 -O3</tt> can take very long and
 a huge amount of RAM. This is due to the complex template classes created by
 Boost.Spirit. Compilation with <tt>gcc 4.x</tt> is much faster.
 
@@ -113,7 +113,7 @@ The distribution contains two well documented example programs:
 \li \ref example_exprcalc "exprcalc: A Simple Expression Calculator"
 \li \ref example_csvfilter "csvfilter: A CSV-File Record Filter"
 
-and a third more complex (undocumented) example program:
+and a third more complex (less documented) example program:
 
 \li \ref example_csvtool "csvtool: An Enhanced CSV-File Record Filter and Sorter"
 
