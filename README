@@ -68,7 +68,7 @@ reasonably complex Spirit parser grammar. See "Spirit Grammar and ParseTree
 Processing" for more details.
 
 Warning:
-  Compiling the library with gcc 3.x -O3 can take very long and a huge amount
+  Compiling the library with gcc 3.3 -O3 can take very long and a huge amount
   of RAM. This is due to the complex template classes created by
   Boost.Spirit. Compilation with gcc 4.x is much faster.
 
@@ -99,7 +99,7 @@ The distribution contains two well documented example programs:
   * exprcalc: A Simple Expression Calculator
   * csvfilter: A CSV-File Record Filter
 
-and a third more complex (undocumented) example program:
+and a third more complex (less documented) example program:
 
   * csvtool: An Enhanced CSV-File Record Filter and Sorter
 
