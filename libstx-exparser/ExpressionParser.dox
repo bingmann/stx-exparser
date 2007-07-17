@@ -78,7 +78,7 @@ binary versions can be found at http://idlebox.net/2007/stx-exparser/demo.htt
 \section sec_boostspirit Compilation and Boost.Spirit
 
 The expression parser's grammar is implemented using the Boost.Spirit parser
-framework (see http://spirit.sourceforge.net/). Therefore Boost must be
+framework (see http://spirit.sourceforge.net). Therefore Boost must be
 installed to compile the expression parser library. But as Boost.Spirit is a
 set template includes, the resulting static library has no external
 dependencies. The second purpose of this library release is to show a
@@ -128,8 +128,8 @@ Furthermore a user-friendly graphical demonstration application is included:
 The parser operates on following scalar types:
 \li boolean
 \li 8-bit '<tt>char</tt>' integer, 16-bit '<tt>short</tt>', 32-bit '<tt>integer</tt>' and 64-bit '<tt>long</tt>' integer
-\li 8-bit '<tt>byte</tt>', 16-bit '<tt>word</tt>', 32-bit '<tt>dword</tt>' and 64-bit '<tt>qword</tt>' unsigned integers.
-\li single and double precision floating point (<tt>float</tt> and <tt>double</tt>).
+\li 8-bit '<tt>byte</tt>', 16-bit '<tt>word</tt>', 32-bit '<tt>dword</tt>' and 64-bit '<tt>qword</tt>' unsigned integers
+\li single and double precision floating point (<tt>float</tt> and <tt>double</tt>)
 \li <tt>string</tt>
 
 These data types are processed by the library using the stx::AnyScalar

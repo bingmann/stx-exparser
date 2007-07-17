@@ -60,7 +60,7 @@ for an instructive use of this library.
 --- Compilation and Boost.Spirit ---
 
 The expression parser's grammar is implemented using the Boost.Spirit parser
-framework (see http://spirit.sourceforge.net/). Therefore Boost must be
+framework (see http://spirit.sourceforge.net). Therefore Boost must be
 installed to compile the expression parser library. But as Boost.Spirit is a
 set template includes, the resulting static library has no external
 dependencies. The second purpose of this library release is to show a
