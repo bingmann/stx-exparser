@@ -1,5 +1,10 @@
         *** wxParserDemo - STX Expression Parser Demo Application ***
 
+Author: Timo Bingmann (Mail: tb a-with-circle idlebox dot net)
+Date: 2007-07-17
+
+--- Summary ---
+
 This directory contains a wxWidgets demo application. It is a user-friendly
 graphical user interface to demonstrate the STX Expression Parser's functions.
 

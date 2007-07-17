@@ -61,6 +61,18 @@ public:
     { }
 };
 
+/** ArithmeticException is an exception class thrown upon some arithmetic
+ * errors like integer divison by zero. \ingroup Exception */
+
+class ArithmeticException : public ExpressionParserException
+{
+public:
+    /// Constructor of the exception takes the description string s.
+    inline ArithmeticException(const std::string &s) throw()
+	: ExpressionParserException(s)
+    { }
+};
+
 /** Exception class thrown when the parser recognizes a syntax error.
  * \ingroup Exception */
 
@@ -334,7 +346,7 @@ public:
 };
 
 /// Parse the given input expression into a parse tree. The parse tree is
-/// represented by it's root node, which can be evaluated.
+/// represented by its root node, which can be evaluated.
 const ParseTree parseExpression(const std::string &input);
 
 /// Parse the given input expression into a parse tree. The parse tree is then
@@ -361,7 +373,7 @@ public:
 };
 
 /// Parse the given input as an expression list "expr1, expr2, ..." into a
-/// vector of parse trees. Each parse tree is represented by it's root node,
+/// vector of parse trees. Each parse tree is represented by its root node,
 /// which can be evaluated.
 ParseTreeList parseExpressionList(const std::string &input);
 

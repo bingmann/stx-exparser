@@ -1,7 +1,7 @@
              *** STX Expression Parser C++ Framework v0.7  ***
 
 Author: Timo Bingmann (Mail: tb a-with-circle idlebox dot net)
-Date: 2007-07-18
+Date: 2007-07-17
 
 --- Summary ---
 
@@ -55,7 +55,7 @@ workings of the library for a given expression string.
 Furthermore a number of example CSV data files can be browsed, sorted, analyzed
 and filtered using the csvtool example. See
 http://idlebox.net/2007/stx-exparser/csvfilter.htt
-for an instructive usage of this library.
+for an instructive use of this library.
 
 --- Compilation and Boost.Spirit ---
 

@@ -434,7 +434,7 @@ public:
 	return false;
     }
 
-    /// Nothing but the function and it's parameters
+    /// Nothing but the function and its parameters
     virtual std::string toString() const
     {
 	std::string str = funcname + "(";

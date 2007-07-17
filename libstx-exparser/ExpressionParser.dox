@@ -69,8 +69,8 @@ workings of the library for a given expression string.
 
 Furthermore a number of example CSV data files can be browsed, sorted, analyzed
 and filtered using the csvtool example. See
-http://idlebox.net/2007/stx-exparser/csvfilter.htt for an instructive example
-usage of this library.
+http://idlebox.net/2007/stx-exparser/csvfilter.htt for an instructive use 
+of this library.
 
 A wxWidgets demo program is located in the directory wxparserdemo. Compiled
 binary versions can be found at http://idlebox.net/2007/stx-exparser/demo.htt
@@ -171,6 +171,9 @@ table. The result is returned as an stx::AnyScalar object.
 After this abstract design discussion it is probably best to read the first
 \ref example_exprcalc. It contains a comprehensible walk-through of the
 libraries interface function and classes.
+
+\author Timo Bingmann
+\date 2007-07-17
 
 
 
