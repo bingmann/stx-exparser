@@ -10,11 +10,11 @@ stx-exparser_wrap.cpp: stx-exparser.i
 
 CLEANFILES = stx-exparser_wrap.cpp ExpressionParser.pm STX/ExpressionParser.pm ExpressionParser.so
 
-lib_LTLIBRARIES = ExpressionParser.la
+noinst_LTLIBRARIES = ExpressionParser.la
 
 nodist_ExpressionParser_la_SOURCES = stx-exparser_wrap.cpp
 
-ExpressionParser_la_LIBADD = ../libstx-exparser/libstx-exparser.a
+ExpressionParser_la_LIBADD = ../libstx-exparser/libstx-exparser.la
 
 ExpressionParser_la_LDFLAGS = -module
 

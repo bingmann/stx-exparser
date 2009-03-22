@@ -54,7 +54,7 @@ am__wxParserDemo_SOURCES_DIST = WMain.cpp WMain.h WMain_wxg.cpp \
 @HAVE_WXWIDGETS_TRUE@	WMain_wxg.$(OBJEXT)
 wxParserDemo_OBJECTS = $(am_wxParserDemo_OBJECTS)
 wxParserDemo_LDADD = $(LDADD)
-@HAVE_WXWIDGETS_TRUE@wxParserDemo_DEPENDENCIES = $(top_srcdir)/libstx-exparser/libstx-exparser.a \
+@HAVE_WXWIDGETS_TRUE@wxParserDemo_DEPENDENCIES = $(top_srcdir)/libstx-exparser/libstx-exparser.la \
 @HAVE_WXWIDGETS_TRUE@	$(am__append_1)
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/scripts/depcomp
@@ -216,7 +216,7 @@ top_srcdir = @top_srcdir@
 @HAVE_WXWIDGETS_TRUE@AM_CFLAGS = -I/usr/include
 @HAVE_WXWIDGETS_TRUE@AM_CXXFLAGS = -I/usr/include @WX_CXXFLAGS@ -I$(top_srcdir)/libstx-exparser
 @HAVE_WXWIDGETS_TRUE@LDADD = @WX_LIBS@ \
-@HAVE_WXWIDGETS_TRUE@	$(top_srcdir)/libstx-exparser/libstx-exparser.a \
+@HAVE_WXWIDGETS_TRUE@	$(top_srcdir)/libstx-exparser/libstx-exparser.la \
 @HAVE_WXWIDGETS_TRUE@	$(am__append_1)
 @HAVE_WXWIDGETS_TRUE@EXTRA_DIST = wxParserDemo.wxg resources.rc \
 @HAVE_WXWIDGETS_TRUE@	README AUTHORS COPYING \

@@ -4,6 +4,9 @@ SUBDIRS = libstx-exparser testsuite examples wxparserdemo perl-binding
 
 EXTRA_DIST = Doxyfile doxygen.css
 
+pkgdatadir = $(libdir)/pkgconfig
+pkgdata_DATA = stx-exparser.pc
+
 if GCOV
 
 clean-local:

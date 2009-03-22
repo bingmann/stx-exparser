@@ -42,17 +42,9 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES =
-am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
-am__vpath_adj = case $$p in \
-    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
-    *) f=$$p;; \
-  esac;
-am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
-am__installdirs = "$(DESTDIR)$(libdir)"
-libLTLIBRARIES_INSTALL = $(INSTALL)
-LTLIBRARIES = $(lib_LTLIBRARIES)
+LTLIBRARIES = $(noinst_LTLIBRARIES)
 @HAVE_SWIG_TRUE@ExpressionParser_la_DEPENDENCIES =  \
-@HAVE_SWIG_TRUE@	../libstx-exparser/libstx-exparser.a
+@HAVE_SWIG_TRUE@	../libstx-exparser/libstx-exparser.la
 @HAVE_SWIG_TRUE@nodist_ExpressionParser_la_OBJECTS =  \
 @HAVE_SWIG_TRUE@	ExpressionParser_la-stx-exparser_wrap.lo
 ExpressionParser_la_OBJECTS = $(nodist_ExpressionParser_la_OBJECTS)
@@ -60,7 +52,7 @@ ExpressionParser_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) \
 	$(ExpressionParser_la_CXXFLAGS) $(CXXFLAGS) \
 	$(ExpressionParser_la_LDFLAGS) $(LDFLAGS) -o $@
-@HAVE_SWIG_TRUE@am_ExpressionParser_la_rpath = -rpath $(libdir)
+@HAVE_SWIG_TRUE@am_ExpressionParser_la_rpath =
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/scripts/depcomp
 am__depfiles_maybe = depfiles
@@ -211,9 +203,9 @@ top_srcdir = @top_srcdir@
 @HAVE_SWIG_TRUE@EXTRA_DIST = stx-exparser.i README exprcalc.pl
 @HAVE_SWIG_TRUE@BUILT_SOURCES = stx-exparser_wrap.cpp
 @HAVE_SWIG_TRUE@CLEANFILES = stx-exparser_wrap.cpp ExpressionParser.pm STX/ExpressionParser.pm ExpressionParser.so
-@HAVE_SWIG_TRUE@lib_LTLIBRARIES = ExpressionParser.la
+@HAVE_SWIG_TRUE@noinst_LTLIBRARIES = ExpressionParser.la
 @HAVE_SWIG_TRUE@nodist_ExpressionParser_la_SOURCES = stx-exparser_wrap.cpp
-@HAVE_SWIG_TRUE@ExpressionParser_la_LIBADD = ../libstx-exparser/libstx-exparser.a
+@HAVE_SWIG_TRUE@ExpressionParser_la_LIBADD = ../libstx-exparser/libstx-exparser.la
 @HAVE_SWIG_TRUE@ExpressionParser_la_LDFLAGS = -module
 @HAVE_SWIG_TRUE@ExpressionParser_la_CXXFLAGS = -I$(top_srcdir)/libstx-exparser `perl -MExtUtils::Embed -e ccopts`
 all: $(BUILT_SOURCES)
@@ -250,28 +242,10 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
-install-libLTLIBRARIES: $(lib_LTLIBRARIES)
-	@$(NORMAL_INSTALL)
-	test -z "$(libdir)" || $(MKDIR_P) "$(DESTDIR)$(libdir)"
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
-	  if test -f $$p; then \
-	    f=$(am__strip_dir) \
-	    echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) '$$p' '$(DESTDIR)$(libdir)/$$f'"; \
-	    $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) "$$p" "$(DESTDIR)$(libdir)/$$f"; \
-	  else :; fi; \
-	done
 
-uninstall-libLTLIBRARIES:
-	@$(NORMAL_UNINSTALL)
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
-	  p=$(am__strip_dir) \
-	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f '$(DESTDIR)$(libdir)/$$p'"; \
-	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/$$p"; \
-	done
-
-clean-libLTLIBRARIES:
-	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+clean-noinstLTLIBRARIES:
+	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
+	@list='$(noinst_LTLIBRARIES)'; for p in $$list; do \
 	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
 	  test "$$dir" != "$$p" || dir=.; \
 	  echo "rm -f \"$${dir}/so_locations\""; \
@@ -401,9 +375,6 @@ check: $(BUILT_SOURCES)
 @HAVE_SWIG_FALSE@all-local:
 all-am: Makefile $(LTLIBRARIES) all-local
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)"; do \
-	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
-	done
 install: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) install-am
 install-exec: install-exec-am
@@ -434,8 +405,8 @@ maintainer-clean-generic:
 @HAVE_SWIG_FALSE@clean-local:
 clean: clean-am
 
-clean-am: clean-generic clean-libLTLIBRARIES clean-libtool clean-local \
-	mostlyclean-am
+clean-am: clean-generic clean-libtool clean-local \
+	clean-noinstLTLIBRARIES mostlyclean-am
 
 distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
@@ -457,7 +428,7 @@ install-data-am:
 
 install-dvi: install-dvi-am
 
-install-exec-am: install-libLTLIBRARIES
+install-exec-am:
 
 install-html: install-html-am
 
@@ -489,23 +460,23 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-libLTLIBRARIES
+uninstall-am:
 
 .MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am all-local check check-am clean \
-	clean-generic clean-libLTLIBRARIES clean-libtool clean-local \
-	ctags distclean distclean-compile distclean-generic \
-	distclean-libtool distclean-tags distdir dvi dvi-am html \
-	html-am info info-am install install-am install-data \
-	install-data-am install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am install-info \
-	install-info-am install-libLTLIBRARIES install-man install-pdf \
+	clean-generic clean-libtool clean-local \
+	clean-noinstLTLIBRARIES ctags distclean distclean-compile \
+	distclean-generic distclean-libtool distclean-tags distdir dvi \
+	dvi-am html html-am info info-am install install-am \
+	install-data install-data-am install-dvi install-dvi-am \
+	install-exec install-exec-am install-html install-html-am \
+	install-info install-info-am install-man install-pdf \
 	install-pdf-am install-ps install-ps-am install-strip \
 	installcheck installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-am uninstall-libLTLIBRARIES
+	tags uninstall uninstall-am
 
 
 @HAVE_SWIG_TRUE@stx-exparser_wrap.cpp: stx-exparser.i

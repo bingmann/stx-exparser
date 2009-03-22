@@ -55,7 +55,6 @@ AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_RANLIB
 
-AC_DISABLE_STATIC
 AC_PROG_LIBTOOL
 
 AC_LANG([C++])
@@ -137,12 +136,13 @@ AM_CONDITIONAL(HAVE_SWIG, test x"$SWIG_LIB" != x)
 # Checks for library functions.
 
 AC_CONFIG_FILES([Makefile
-                 libstx-exparser/Makefile
-	         testsuite/Makefile
+		stx-exparser.pc
+		libstx-exparser/Makefile
+		 testsuite/Makefile
 		 wxparserdemo/Makefile
 		 perl-binding/Makefile
-                 examples/Makefile
+		 examples/Makefile
 		 examples/simple/Makefile
-                 examples/csvfilter/Makefile
-                 examples/csvtool/Makefile])
+		 examples/csvfilter/Makefile
+		 examples/csvtool/Makefile])
 AC_OUTPUT

@@ -47,7 +47,7 @@ PROGRAMS = $(noinst_PROGRAMS)
 am_csvfilter_OBJECTS = csvfilter.$(OBJEXT)
 csvfilter_OBJECTS = $(am_csvfilter_OBJECTS)
 csvfilter_DEPENDENCIES =  \
-	$(top_srcdir)/libstx-exparser/libstx-exparser.a
+	$(top_srcdir)/libstx-exparser/libstx-exparser.la
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/scripts/depcomp
 am__depfiles_maybe = depfiles
@@ -196,7 +196,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 csvfilter_SOURCES = csvfilter.cc
-csvfilter_LDADD = $(top_srcdir)/libstx-exparser/libstx-exparser.a
+csvfilter_LDADD = $(top_srcdir)/libstx-exparser/libstx-exparser.la
 AM_CFLAGS = -W -Wall -I$(top_srcdir)/libstx-exparser
 AM_CXXFLAGS = -W -Wall -Wold-style-cast -I$(top_srcdir)/libstx-exparser
 EXTRA_DIST = mysql-world-city.csv mysql-world-country.csv cia-world-factbook.csv

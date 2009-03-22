@@ -47,7 +47,7 @@ PROGRAMS = $(noinst_PROGRAMS)
 am_exprcalc_OBJECTS = exprcalc.$(OBJEXT)
 exprcalc_OBJECTS = $(am_exprcalc_OBJECTS)
 exprcalc_DEPENDENCIES =  \
-	$(top_srcdir)/libstx-exparser/libstx-exparser.a
+	$(top_srcdir)/libstx-exparser/libstx-exparser.la
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/scripts/depcomp
 am__depfiles_maybe = depfiles
@@ -196,7 +196,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 exprcalc_SOURCES = exprcalc.cc
-exprcalc_LDADD = $(top_srcdir)/libstx-exparser/libstx-exparser.a
+exprcalc_LDADD = $(top_srcdir)/libstx-exparser/libstx-exparser.la
 AM_CFLAGS = -W -Wall -I$(top_srcdir)/libstx-exparser
 AM_CXXFLAGS = -W -Wall -Wold-style-cast -I$(top_srcdir)/libstx-exparser
 all: all-am
