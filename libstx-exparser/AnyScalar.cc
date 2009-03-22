@@ -28,6 +28,7 @@
 #include "ExpressionParser.h"
 
 #include <stdlib.h>
+#include <limits.h>
 #include <functional>
 #include <algorithm>
 

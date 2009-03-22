@@ -1,5 +1,5 @@
 /* XPM */
-static char *delrow[] = {
+static const char *delrow[] = {
 /* columns rows colors chars-per-pixel */
 "16 16 10 1",
 "  c #A50101",

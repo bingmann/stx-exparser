@@ -25,6 +25,7 @@
  */
 
 #include "ExpressionParser.h"
+#include <string.h>
 
 #include <boost/spirit/core.hpp>
 
