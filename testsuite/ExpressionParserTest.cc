@@ -57,6 +57,12 @@ protected:
     {
 	using namespace stx;
 
+	CPPUNIT_ASSERT( eval("2 ^ 2").getInteger() == 4 );
+
+	CPPUNIT_ASSERT( eval("2.89 ^ 0").getInteger() == 1 );
+
+	CPPUNIT_ASSERT( eval("0 ^ 0").getInteger() == 1 );
+
 	CPPUNIT_ASSERT( eval("5 + 4.5") == 9.5 );
 
 	CPPUNIT_ASSERT( eval(" \"abc\" + \"def\" ") == "abcdef" );
@@ -64,6 +70,8 @@ protected:
 	CPPUNIT_ASSERT( eval("5 * 6 + 7 * 2 - 2") == 42 );
 
 	CPPUNIT_ASSERT( eval("(integer)(5 * 1.5)") == 7 );
+
+	CPPUNIT_ASSERT( eval("(integer)(2 ^ 0.5)") == 1 );
 
 	CPPUNIT_ASSERT( eval("((integer)(5 * 1.5 >= 1)) + 5") == 6 );
 
@@ -74,6 +82,10 @@ protected:
 	CPPUNIT_ASSERT( eval("10 > 5 AND 5.2 <= 42.2 OR 2 == 4") == true );
 
 	CPPUNIT_ASSERT( eval("(a * 2 + 4) / 2 == 44") == true );
+
+	CPPUNIT_ASSERT( eval("(a * 2 + 4) / 2 == 44") == true );
+
+	CPPUNIT_ASSERT( eval("(a ^ 2 + 4) / 2 == 884") == true );
 
 	CPPUNIT_ASSERT( eval("-5 + 4.5") == -0.5 );
 

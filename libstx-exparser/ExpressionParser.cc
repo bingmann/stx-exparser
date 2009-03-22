@@ -71,6 +71,7 @@ enum parser_ids
     unary_expr_id,
     mul_expr_id,
     add_expr_id,
+    pow_expr_id,
 
     cast_expr_id,
     cast_spec_id,
@@ -183,9 +184,14 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
 		= root_node_d[ !cast_spec ] >> unary_expr
 		;
 
+	    pow_expr
+	        = cast_expr
+	        >> *( root_node_d[ch_p('^')] >> cast_expr )
+	        ;
+
             mul_expr
-                = cast_expr
-		>> *( root_node_d[ch_p('*') | ch_p('/')] >> cast_expr )
+                = pow_expr
+		>> *( root_node_d[ch_p('*') | ch_p('/')] >> pow_expr )
                 ;
 
 	    add_expr
@@ -240,6 +246,7 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
 	    BOOST_SPIRIT_DEBUG_RULE(atom_expr);
 
 	    BOOST_SPIRIT_DEBUG_RULE(unary_expr);
+            BOOST_SPIRIT_DEBUG_RULE(pow_expr);
 	    BOOST_SPIRIT_DEBUG_RULE(mul_expr);
 	    BOOST_SPIRIT_DEBUG_RULE(add_expr);
 
@@ -284,6 +291,10 @@ struct ExpressionGrammar : public grammar<ExpressionGrammar>
 
 	/// Unary operator rule: recognizes + - ! and "not".
         rule<ScannerT, parser_context<>, parser_tag<unary_expr_id> > 		unary_expr;
+
+	/// Binary operator rule taking precedent before mul_expr:
+        /// recognizes ^
+        rule<ScannerT, parser_context<>, parser_tag<pow_expr_id> > 		pow_expr;
 	/// Binary operator rule taking precedent before add_expr:
 	/// recognizes * and /
         rule<ScannerT, parser_context<>, parser_tag<mul_expr_id> > 		mul_expr;
@@ -589,6 +600,9 @@ public:
 	else if (op == '/') {
 	    return (vl / vr);
 	}
+        else if (op ==	'^') {
+            return AnyScalar(std::pow(vl.getDouble(),vr.getDouble()));
+        }
 
 	assert(0);
 	return 0;
@@ -616,6 +630,9 @@ public:
 	}
 	else if (op == '/') {
 	    *dest = vl / vr;
+	}
+        else if (op ==	'^') {
+            *dest = std::pow(vl.getDouble(),vr.getDouble());
 	}
 
 	return (bl && br);
@@ -1040,6 +1057,9 @@ static ParseNode* build_expr(TreeIterT const& i)
     }
 
     case add_expr_id:
+
+    case pow_expr_id:
+
     case mul_expr_id:
     {
 	char arithop = *i->value.begin();
@@ -1274,6 +1294,7 @@ static inline void tree_dump_xml(std::ostream &os, const std::string &input, con
     rule_names[varname_id] = "varname";
 
     rule_names[unary_expr_id] = "unary_expr";
+    rule_names[pow_expr_id] = "pow_expr";
     rule_names[mul_expr_id] = "mul_expr";
     rule_names[add_expr_id] = "add_expr";
 
